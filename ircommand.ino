@@ -1,17 +1,21 @@
 /*
-   IRrecord: record and play back IR signals as a minimal
+   Much credit to Ken Shirriff. The bulk of this code adapted from https://github.com/z3t0/Arduino-IRremote/blob/master/examples/IRrecord/IRrecord.ino
+
+   ircommand: Record an IR signal when tasked via the serial USB port. Return IR signal via serial USB port.
+              Send IR signal when tasked via the serial USB port.
+
    An IR detector/demodulator must be connected to the input RECV_PIN.
    An IR LED must be connected to the output PWM pin 3.
    A button must be connected between the input SEND_BUTTON_PIN and ground.
    A visible LED can be connected to STATUS_PIN to provide status.
 
-   The logic is:
+   With the proper circuit attached you can also:
    If the button is pressed, send the IR code.
    If an IR code is received, record it.
 
-   Version 0.11 September, 2009
-   Copyright 2009 Ken Shirriff
-   http://arcfn.com
+   Version 0.1 August 2020
+   Copyright 2020 Rob Hughes
+   http://robhughes.net
 */
 
 #include <IRremote.h>
@@ -34,22 +38,42 @@ decode_results results;
 #define Serial SerialUSB
 #endif
 
+// qsort requires you to create a sort function
+int sort_desc(const void *cmp1, const void *cmp2)
+{
+  // Need to cast the void * to int *
+  int a = *((int *)cmp1);
+  int b = *((int *)cmp2);
+  // The comparison
+  return a > b ? -1 : (a < b ? 1 : 0);
+  // A simpler, probably faster way:
+  //return b - a;
+}
+
 void setup() {
   Serial.begin(115200);
 #if defined(__AVR_ATmega32U4__)
   while (!Serial); //delay for Leonardo, but this loops forever for Maple Serial
 #endif
   // Just to know which program is running on my Arduino
-  //Serial.println(F("START " __FILE__ " from " __DATE__));
+  Serial.println(F("START " __FILE__ " from " __DATE__));
 
   irrecv.enableIRIn(); // Start the receiver
   pinMode(SEND_BUTTON_PIN, INPUT_PULLUP);
   pinMode(STATUS_PIN, OUTPUT);
 
-  //Serial.print(F("Ready to receive IR signals at pin "));
-  //Serial.println(IR_RECEIVE_PIN);
-  //Serial.print(F("Ready to send IR signals at pin "));
-  //Serial.println(IR_SEND_PIN);
+  Serial.print(F("Ready to receive IR signals at pin "));
+  Serial.println(IR_RECEIVE_PIN);
+  Serial.print(F("Ready to send IR signals at pin "));
+  Serial.println(IR_SEND_PIN);
+
+  // The array
+  int lt[6] = {35, 15, 80, 2, 40, 110};
+  // Number of items in the array
+  int lt_length = sizeof(lt) / sizeof(lt[0]);
+  // qsort - last parameter is a function pointer to the sort function
+  qsort(lt, lt_length, sizeof(lt[0]), sort_desc);
+  // lt is now sorted
 }
 
 // Storage for the recorded code
@@ -58,6 +82,24 @@ unsigned long codeValue; // The code value if not raw
 unsigned int rawCodes[RAW_BUFFER_LENGTH]; // The durations if raw
 int codeLen; // The length of the code
 int toggle = 0; // The RC5/6 toggle state
+
+#define MAX_CAPTURE_ATTEMPTS 20
+
+// For various reasons attempting to continuously capture the same IR signal over a short period of time
+// may result in different IR signals being recognized. We will capture up to MAX_CAPTURE_ATTEMPTS signals
+// and then look for the most recognized signal to achieve consensus and use that as the final IR signal
+// to return to the caller
+
+// Vars to record various IR signal captures to get consensus
+int codeTypes[MAX_CAPTURE_ATTEMPTS]; // The code types
+unsigned long codeValues[MAX_CAPTURE_ATTEMPTS]; // The code value if not raw
+int codeLens[MAX_CAPTURE_ATTEMPTS]; // The length of the code
+unsigned int numSignalsCaptured; // how many signals did we actually capture
+
+int codeTypesRaw[MAX_CAPTURE_ATTEMPTS]; // The code types
+unsigned int rawCodess[MAX_CAPTURE_ATTEMPTS][RAW_BUFFER_LENGTH]; // The durations if raw
+int codeLensRaw[MAX_CAPTURE_ATTEMPTS]; // The length of the code
+unsigned int numSignalsCapturedRaw; // how many raw signals did we actually capture
 
 // Stores the code for later playback
 // Most of this code is just logging
@@ -163,6 +205,56 @@ void sendCode(int repeat) {
   }
 }
 
+int getMostFrequentNumber(unsigned long arr[], unsigned int n)
+{
+  unsigned long uniqueNumbers[n]; // array of unique numbers
+  int uniqueNumbersCount[n]; // frequency of earch unique number
+
+  if (n <= 0) {
+    return 0;
+  }
+
+  int numUniqueNumbers = 1; // number of unique numbers
+
+  // NOTE: in the below logic 0 should never be a valid unique number
+  // Sorting the given array
+  int arr_length = *(&arr + 1) - arr;
+  //int arr_length = sizeof(arr) / sizeof(arr[0]);
+  // qsort - last parameter is a function pointer to the sort function
+
+  Serial.print("IRC: DEBUG: unique_number(): arr_length = ");
+  Serial.println(arr_length);
+  
+  qsort(arr, arr_length, sizeof(arr[0]), sort_desc);
+
+  for (int i = 0; i < n; i++) { // initialize working arrays
+    uniqueNumbersCount[i] = 0;
+    uniqueNumbers[i] = 0;
+  }
+  // Finding unique numbers
+  uniqueNumbers[0] = arr[0]; // first entry has to be unique
+  uniqueNumbersCount[0] = 1;
+  for (int i = 0; i < n; i++) {
+    if (arr[i] == arr[i + 1]) { // duplicate number
+      uniqueNumbersCount[numUniqueNumbers - 1]++;
+    }
+    else { // we are seeing a new number
+      numUniqueNumbers++;
+      uniqueNumbers[numUniqueNumbers - 1] = arr[i + 1];
+      uniqueNumbersCount[numUniqueNumbers - 1]++;
+    }
+  } // end for
+
+  for (int i = 0; i < numUniqueNumbers; i++) {
+    Serial.print("IRC: DEBUG: Count of number ");
+    Serial.print(uniqueNumbers[i], HEX);
+    Serial.print(" is ");
+    Serial.println(uniqueNumbersCount[i]);
+  }
+  
+  return uniqueNumbers[0];
+} // end unique_number()
+
 int lastButtonState;
 
 void loopKSdemo() {
@@ -207,45 +299,72 @@ void loop() {
     //Serial.println("IRC: got here01");
     String data = Serial.readStringUntil('\n');
     if (data.equals("captureir")) {
-      Serial.println("IRC: got here02");
-      //      if (irrecv.decode(&results)) {
-      //        digitalWrite(STATUS_PIN, HIGH);
-      //        storeCode(&results);
-      //        irrecv.resume(); // resume receiver
-      //        digitalWrite(STATUS_PIN, LOW);
-      //      }
-      for (int i = 0; i < 10; i++) {
+      Serial.println("IRC: got here01");
+      numSignalsCaptured = 0;
+      numSignalsCapturedRaw = 0;
+      for (int i = 0; i < MAX_CAPTURE_ATTEMPTS; i++) {
         if (irrecv.decode(&results)) {
-          Serial.println("IRC: got here01");
+          //Serial.println("IRC: got here02");
           digitalWrite(STATUS_PIN, HIGH);
           storeCode(&results);
           digitalWrite(STATUS_PIN, LOW);
 
           Serial.print("IRC: Got IR signal: codeType=");
+          Serial.println(codeType, DEC);
+
           if (codeType == UNKNOWN) {
             Serial.print("raw");
             Serial.print(" codeValue=?");
+            for (int ndx = 0; ndx < codeLen; ndx++) {
+              rawCodess[numSignalsCapturedRaw][ndx] = rawCodes[ndx];
+              numSignalsCapturedRaw++;
+            }
+            codeTypesRaw[numSignalsCapturedRaw] = codeType;
+            codeLensRaw[numSignalsCapturedRaw] = codeLen;
+            numSignalsCapturedRaw++;
           } else {
             Serial.print(codeType, HEX);
             Serial.print(" codeValue=");
             Serial.print(codeValue, HEX);
+            codeValues[numSignalsCaptured] = codeValue;
+            codeTypes[numSignalsCaptured] = codeType;
+            codeLens[numSignalsCaptured] = codeLen;
+            numSignalsCaptured++;
           }
           Serial.print(" codeLen=");
           Serial.println(codeLen, DEC);
-          //irrecv.disableIRIn(); // Disnable receiver
-          //irrecv.enableIRIn(); // Re-enable receiver
+
           irrecv.resume(); // resume receiver
-          break;
-        } else {
+        } // if we got an IR signal
+        else { // else wait and try again
           Serial.println("IRC: DEBUG: wait 50ms and try again");
           delay(50);
-        }
-        //Serial.println("IRC: No IR signal detected.");
-        irrecv.decode(&results); // clear out any buffered input???
-      } // end for
-    }
+        } // end if
 
-  }
+      } // end for
+
+      if ((numSignalsCaptured == 0) && (numSignalsCapturedRaw == 0)) {
+        Serial.println("IRC: No IR signal detected.");
+      } // end if
+      else { // we captured at least one signal
+        if (numSignalsCaptured > 0) {
+          for (int ndx = 0; ndx < numSignalsCaptured; ndx++) {
+            Serial.print("IRC: DEBUG: Consensus IR Signal: codeType=");
+            Serial.print(codeTypes[ndx], HEX);
+            Serial.print(" codeValue=");
+            Serial.print(codeValues[ndx], HEX);
+            Serial.print(" codeLen=");
+            Serial.println(codeLens[ndx], DEC);
+          }
+          int codeValueConsensus = getMostFrequentNumber(codeValues, numSignalsCaptured);
+          Serial.print("IRC: DEBUG: Final consensus code value is: ");
+          Serial.println(codeValueConsensus);
+        } // if at least one non-raw value
+
+      } // end else
+    } // if (data.equals("captureir"))
+  } // else if (Serial.available() > 0)
+
   lastButtonState = buttonState;
 } // loop()
 

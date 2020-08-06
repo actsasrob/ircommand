@@ -31,7 +31,7 @@ if __name__ == '__main__':
 
 import sys, select
 
-print(" ou have two seconds to answer!\n")
+print("You have two seconds to answer!\n")
 
 while True:
     print("1: send captureir to serial: ")
