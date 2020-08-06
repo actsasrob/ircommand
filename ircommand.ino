@@ -204,7 +204,7 @@ void loop() {
     digitalWrite(STATUS_PIN, LOW);
     delay(50); // Wait a bit between retransmissions
   } else if (Serial.available() > 0) {
-    Serial.println("IRC: got here01");
+    //Serial.println("IRC: got here01");
     String data = Serial.readStringUntil('\n');
     if (data.equals("captureir")) {
       Serial.println("IRC: got here02");
@@ -232,6 +232,8 @@ void loop() {
           }
           Serial.print(" codeLen=");
           Serial.println(codeLen, DEC);
+          //irrecv.disableIRIn(); // Disnable receiver
+          //irrecv.enableIRIn(); // Re-enable receiver
           irrecv.resume(); // resume receiver
           break;
         } else {
@@ -239,6 +241,7 @@ void loop() {
           delay(50);
         }
         //Serial.println("IRC: No IR signal detected.");
+        irrecv.decode(&results); // clear out any buffered input???
       } // end for
     }
 
