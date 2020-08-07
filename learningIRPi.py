@@ -1,6 +1,17 @@
 #!/usr/bin/env python3
 import serial
 import time
+import sys, select
+
+# A code type of -1 (UNKNOWN, returned by the IRremote arduino library,)is used for unknown protocols which are then stored as raw mark and space numeric sequences.
+# If we see a code type of -1 we'll treat the IR signal as raw
+# From https://github.com/z3t0/Arduino-IRremote/blob/master/src/IRremote.h
+#typedef enum {
+#    UNKNOWN = -1,
+#    UNUSED = 0,
+#...
+#}
+
 
 if __name__ == '__main__':
     ser = serial.Serial('/dev/ttyACM0', 115200, timeout=1)
@@ -29,23 +40,54 @@ if __name__ == '__main__':
     #    while True:
     #        line = ser.readline().decode('utf-8').rstrip()
 
-import sys, select
 
-print("You have two seconds to answer!\n")
+IRC_CAPTURE_IR_RESPONSE_PREFIX = "IRC: captureirresponse:"
+ 
+#print("You have two seconds to answer!\n"
+#while True:
+#    print("1: send captureir to serial: ")
+#    i, o, e = select.select( [sys.stdin], [], [], 2 )
+#
+#    if (i):
+#        line = sys.stdin.readline().strip()
+#        if line == '1':
+#            print("DEBUG: Ask IRCommand to capture an IR signal\n")
+#            ser.write(b"captureir\n")
+#    else:
+#        while True:
+#           line = ser.readline().decode('utf-8').rstrip()
+#           if line != "":
+#               if line.startswith(IRC_CAPTURE_IR_RESPONSE_PREFIX, beg=0, end=len(IRC_CAPTURE_IR_RESPONSE_PREFIX)):
+#                   process_irc_capture_ir_response(line)
+#               print(line)
+#           else:
+#               break
 
-while True:
-    print("1: send captureir to serial: ")
-    i, o, e = select.select( [sys.stdin], [], [], 2 )
+def  process_irc_capture_ir_response(message):
+    print("process_irc_capture_ir_response(): " + message + "\n")
+    return 1
 
-    if (i):
-        line = sys.stdin.readline().strip()
-        if line == '1':
-            print("DEBUG: Ask IRCommand to capture an IR signal\n")
-            ser.write(b"captureir\n")
-    else:
-        while True:
-           line = ser.readline().decode('utf-8').rstrip()
-           if line != "":
-               print(line)
-           else:
-               break
+def main():
+    print("You have two seconds to answer!\n")
+    while True:
+        print("1: send captureir to serial: ")
+        i, o, e = select.select( [sys.stdin], [], [], 2 )
+    
+        if (i):
+            line = sys.stdin.readline().strip()
+            if line == '1':
+                print("DEBUG: Ask IRCommand to capture an IR signal\n")
+                ser.write(b"captureir\n")
+        else:
+            while True:
+               line = ser.readline().decode('utf-8').rstrip()
+               if line != "":
+                   if line.startswith(IRC_CAPTURE_IR_RESPONSE_PREFIX, 0, len(IRC_CAPTURE_IR_RESPONSE_PREFIX)):
+                       process_irc_capture_ir_response(line)
+                   else:
+                       print(line)
+               else:
+                   break
+
+if __name__ == '__main__':
+    main()

@@ -38,7 +38,27 @@ decode_results results;
 #define Serial SerialUSB
 #endif
 
-String IRCDEBUG = "IRC: DEBUG: ";
+String IRCDBG = "IRC: DEBUG: ";
+String NO_IR_SIGNAL_DETECTED = "IRC: captureirresponse: No IR signal detected.";
+
+/**
+   Set IRCDBG to 1 for debug output. 0 to disable debug output
+*/
+#define IRCDEBUG  1
+
+#if IRCDEBUG
+#  define IRCDEBUG_PRINT(...)    Serial.print(__VA_ARGS__)
+#  define IRCDEBUG_PRINTLN(...)  Serial.println(__VA_ARGS__)
+#else
+/**
+   If IRCDEBUG, print the arguments, otherwise do nothing.
+*/
+#  define IRCDEBUG_PRINT(...) void()
+/**
+   If IRCDEBUG, print the arguments as a line, otherwise do nothing.
+*/
+#  define IRCDEBUG_PRINTLN(...) void()
+#endif
 
 // qsort requires you to create a sort function
 int sort_desc(const void *cmp1, const void *cmp2)
@@ -58,16 +78,18 @@ void setup() {
   while (!Serial); //delay for Leonardo, but this loops forever for Maple Serial
 #endif
   // Just to know which program is running on my Arduino
-  Serial.println(F("START " __FILE__ " from " __DATE__));
+  IRCDEBUG_PRINTLN(IRCDBG + F("START " __FILE__ " from " __DATE__));
 
   irrecv.enableIRIn(); // Start the receiver
   pinMode(SEND_BUTTON_PIN, INPUT_PULLUP);
   pinMode(STATUS_PIN, OUTPUT);
 
-  Serial.print(F("Ready to receive IR signals at pin "));
-  Serial.println(IR_RECEIVE_PIN);
-  Serial.print(F("Ready to send IR signals at pin "));
-  Serial.println(IR_SEND_PIN);
+  IRCDEBUG_PRINT(IRCDBG + F("Ready to receive IR signals at pin "));
+  IRCDEBUG_PRINTLN(IR_RECEIVE_PIN);
+  IRCDEBUG_PRINT(IRCDBG + F("Ready to send IR signals at pin "));
+  IRCDEBUG_PRINTLN(IR_SEND_PIN);
+  //IRCDEBUG_PRINT(IRCDBG + F("RAW_BUFFER_LENGTH="));
+  //IRCDEBUG_PRINTLN(RAW_BUFFER_LENGTH);
 
   // The array
   int lt[6] = {35, 15, 80, 2, 40, 110};
@@ -85,7 +107,7 @@ unsigned int rawCodes[RAW_BUFFER_LENGTH]; // The durations if raw
 int codeLen; // The length of the code
 int toggle = 0; // The RC5/6 toggle state
 
-#define MAX_CAPTURE_ATTEMPTS 15
+#define MAX_CAPTURE_ATTEMPTS 10
 
 // For various reasons attempting to continuously capture the same IR signal over a short period of time
 // may result in different IR signals being recognized. We will capture up to MAX_CAPTURE_ATTEMPTS signals
@@ -106,11 +128,11 @@ unsigned int numSignalsCapturedRaw; // how many raw signals did we actually capt
 // Stores the code for later playback
 // Most of this code is just logging
 void storeCode(decode_results *results) {
-  Serial.println(IRCDEBUG + "storeCode() here01");
+  IRCDEBUG_PRINTLN(IRCDBG + "storeCode() here01");
   codeType = results->decode_type;
   //  int count = results->rawlen;
   if (codeType == UNKNOWN) {
-    Serial.println(IRCDEBUG + "storeCode() Received unknown code, saving as raw");
+    IRCDEBUG_PRINTLN(IRCDBG + "storeCode() Received unknown code, saving as raw");
     codeLen = results->rawlen - 1;
     // To store raw codes:
     // Drop first value (gap)
@@ -120,42 +142,42 @@ void storeCode(decode_results *results) {
       if (i % 2) {
         // Mark
         rawCodes[i - 1] = results->rawbuf[i] * MICROS_PER_TICK - MARK_EXCESS_MICROS;
-        Serial.print(" m");
+        IRCDEBUG_PRINT(" m");
       } else {
         // Space
         rawCodes[i - 1] = results->rawbuf[i] * MICROS_PER_TICK + MARK_EXCESS_MICROS;
-        Serial.print(" s");
+        IRCDEBUG_PRINT(" s");
       }
-      Serial.print(rawCodes[i - 1], DEC);
+      IRCDEBUG_PRINT(rawCodes[i - 1], DEC);
     }
-    Serial.println("");
+    IRCDEBUG_PRINTLN("");
   } else {
     if (codeType == NEC) {
-      Serial.print(IRCDEBUG + "storeCode() Received NEC: ");
+      IRCDEBUG_PRINT(IRCDBG + "storeCode() Received NEC: ");
       if (results->value == REPEAT) {
         // Don't record a NEC repeat value as that's useless.
-        Serial.println(IRCDEBUG + "storeCode() repeat; ignoring.");
+        IRCDEBUG_PRINTLN(IRCDBG + "storeCode() repeat; ignoring.");
         codeType = UNKNOWN;
         return;
       }
     } else if (codeType == SONY) {
-      Serial.print(IRCDEBUG + "storeCode() Received SONY: ");
+      IRCDEBUG_PRINT(IRCDBG + "storeCode() Received SONY: ");
     } else if (codeType == SAMSUNG) {
-      Serial.print(IRCDEBUG + "storeCode() Received SAMSUNG: ");
+      IRCDEBUG_PRINT(IRCDBG + "storeCode() Received SAMSUNG: ");
     } else if (codeType == PANASONIC) {
-      Serial.print(IRCDEBUG + "storeCode() Received PANASONIC: ");
+      IRCDEBUG_PRINT(IRCDBG + "storeCode() Received PANASONIC: ");
     } else if (codeType == JVC) {
-      Serial.print(IRCDEBUG + "storeCode() Received JVC: ");
+      IRCDEBUG_PRINT(IRCDBG + "storeCode() Received JVC: ");
     } else if (codeType == RC5) {
-      Serial.print(IRCDEBUG + "storeCode() Received RC5: ");
+      IRCDEBUG_PRINT(IRCDBG + "storeCode() Received RC5: ");
     } else if (codeType == RC6) {
-      Serial.print(IRCDEBUG + "storeCode() Received RC6: ");
+      IRCDEBUG_PRINT(IRCDBG + "storeCode() Received RC6: ");
     } else {
-      Serial.print(IRCDEBUG + "storeCode() Unexpected codeType ");
-      Serial.print(codeType, DEC);
-      Serial.println("");
+      IRCDEBUG_PRINT(IRCDBG + "storeCode() Unexpected codeType ");
+      IRCDEBUG_PRINT(codeType, DEC);
+      IRCDEBUG_PRINTLN("");
     }
-    Serial.println(results->value, HEX);
+    IRCDEBUG_PRINTLN(results->value, HEX);
     codeValue = results->value;
     codeLen = results->bits;
   }
@@ -165,24 +187,24 @@ void sendCode(int repeat) {
   if (codeType == NEC) {
     if (repeat) {
       irsend.sendNEC(REPEAT, codeLen);
-      Serial.println(IRCDEBUG + "sendCode() Sent NEC repeat");
+      IRCDEBUG_PRINTLN(IRCDBG + "sendCode() Sent NEC repeat");
     } else {
       irsend.sendNEC(codeValue, codeLen);
-      Serial.print(IRCDEBUG + "sendCode() Sent NEC ");
-      Serial.println(codeValue, HEX);
+      IRCDEBUG_PRINT(IRCDBG + "sendCode() Sent NEC ");
+      IRCDEBUG_PRINT(codeValue, HEX);
     }
   } else if (codeType == SONY) {
     irsend.sendSony(codeValue, codeLen);
-    Serial.print(IRCDEBUG + "sendCode() Sent Sony ");
-    Serial.println(codeValue, HEX);
+    IRCDEBUG_PRINT(IRCDBG + "sendCode() Sent Sony ");
+    IRCDEBUG_PRINTLN(codeValue, HEX);
   } else if (codeType == PANASONIC) {
     irsend.sendPanasonic(codeValue, codeLen);
-    Serial.print(IRCDEBUG + "sendCode() Sent Panasonic");
-    Serial.println(codeValue, HEX);
+    IRCDEBUG_PRINT(IRCDBG + "sendCode() Sent Panasonic");
+    IRCDEBUG_PRINTLN(codeValue, HEX);
   } else if (codeType == JVC) {
     irsend.sendJVC(codeValue, codeLen, false);
-    Serial.print(IRCDEBUG + "sendCode() Sent JVC");
-    Serial.println(codeValue, HEX);
+    IRCDEBUG_PRINT(IRCDBG + "sendCode() Sent JVC");
+    IRCDEBUG_PRINTLN(codeValue, HEX);
   } else if (codeType == RC5 || codeType == RC6) {
     if (!repeat) {
       // Flip the toggle bit for a new button press
@@ -192,18 +214,18 @@ void sendCode(int repeat) {
     codeValue = codeValue & ~(1 << (codeLen - 1));
     codeValue = codeValue | (toggle << (codeLen - 1));
     if (codeType == RC5) {
-      Serial.print(IRCDEBUG + "sendCode() Sent RC5 ");
-      Serial.println(codeValue, HEX);
+      IRCDEBUG_PRINT(IRCDBG + "sendCode() Sent RC5 ");
+      IRCDEBUG_PRINTLN(codeValue, HEX);
       irsend.sendRC5(codeValue, codeLen);
     } else {
       irsend.sendRC6(codeValue, codeLen);
-      Serial.print(IRCDEBUG + "sendCode() Sent RC6 ");
-      Serial.println(codeValue, HEX);
+      IRCDEBUG_PRINT(IRCDBG + "sendCode() Sent RC6 ");
+      IRCDEBUG_PRINTLN(codeValue, HEX);
     }
   } else if (codeType == UNKNOWN /* i.e. raw */) {
     // Assume 38 KHz
     irsend.sendRaw(rawCodes, codeLen, 38);
-    Serial.println(IRCDEBUG + "sendCode() Sent raw");
+    IRCDEBUG_PRINTLN(IRCDBG + "sendCode() Sent raw");
   }
 }
 
@@ -233,8 +255,8 @@ unsigned long getMostFrequentNumber(unsigned long arr[], unsigned int n)
   int numUniqueNumbers = 1; // number of unique numbers
 
 
-//  Serial.print(IRCDEBUG + "getMostFrequentNumber() n = ");
-//  Serial.println(n);
+  //  IRCDEBUG_PRINT(IRCDBG + "getMostFrequentNumber() n = ");
+  //  IRCDEBUG_PRINTLN(n);
 
   // Sort the input array
   qsort(arr, n, sizeof(arr[0]), sort_desc);
@@ -258,10 +280,10 @@ unsigned long getMostFrequentNumber(unsigned long arr[], unsigned int n)
   } // end for
 
   //  for (int i = 0; i < numUniqueNumbers; i++) {
-  //    Serial.print(IRCDEBUG + "getMostFrequentNumber() Count of number x");
-  //    Serial.print(uniqueNumbers[i], HEX);
-  //    Serial.print(" is ");
-  //    Serial.println(uniqueNumbersCount[i]);
+  //    IRCDEBUG_PRINT(IRCDBG + "getMostFrequentNumber() Count of number x");
+  //    IRCDEBUG_PRINT(uniqueNumbers[i], HEX);
+  //    IRCDEBUG_PRINT(" is ");
+  //    IRCDEBUG_PRINTLN(uniqueNumbersCount[i]);
   //  }
 
   retVal = uniqueNumbers[0];
@@ -282,10 +304,10 @@ unsigned long getMostFrequentNumber(unsigned long arr[], unsigned int n)
 
 int getBestRawCodessIndex()
 {
-  int retVal = -1;
+  int retVal = numSignalsCapturedRaw - 1;
 
   return retVal;
-  
+
 } // end getBestRawCodessIndex()
 
 int lastButtonState;
@@ -296,42 +318,43 @@ void loop()
   int buttonState = digitalRead(SEND_BUTTON_PIN); // Button pin is active LOW
   if (lastButtonState == LOW && buttonState == HIGH)
   {
-    Serial.println(IRCDEBUG + "loop() Released");
+    IRCDEBUG_PRINTLN(IRCDBG + "loop() Released");
     irrecv.enableIRIn(); // Re-enable receiver
   }
 
   if (buttonState == LOW)
   {
-    Serial.println(IRCDEBUG + "Pressed, sending");
+    IRCDEBUG_PRINTLN(IRCDBG + "loop() Pressed, sending");
     digitalWrite(STATUS_PIN, HIGH);
     sendCode(lastButtonState == buttonState);
     digitalWrite(STATUS_PIN, LOW);
     delay(50); // Wait a bit between retransmissions
   } else if (Serial.available() > 0)
   {
-    //Serial.println("IRC: got here01");
+    //IRCDEBUG_PRINTLN("IRC: got here01");
     String data = Serial.readStringUntil('\n');
     if (data.equals("captureir"))
     {
-      Serial.println(IRCDEBUG + "got here01");
+      //IRCDEBUG_PRINTLN(IRCDBG + " loop() got here02");
       numSignalsCaptured = 0;
       numSignalsCapturedRaw = 0;
       for (int i = 0; i < MAX_CAPTURE_ATTEMPTS; i++)
       {
         if (irrecv.decode(&results))
         {
-          //Serial.println(IRCDEBUG + "got here02");
+          //IRCDEBUG_PRINTLN(IRCDBG + " loop() got here03");
           digitalWrite(STATUS_PIN, HIGH);
           storeCode(&results);
           digitalWrite(STATUS_PIN, LOW);
 
-          Serial.print(IRCDEBUG + "Got IR signal: codeType=");
-          Serial.println(codeType, DEC);
+          //IRCDEBUG_PRINT(IRCDBG + " loop() Got IR signal: codeType=");
+          //IRCDEBUG_PRINTLN(codeType, DEC);
 
           if (codeType == UNKNOWN)
           {
-            Serial.print("raw");
-            Serial.print(" codeValue=?");
+            IRCDEBUG_PRINT(IRCDBG + " loop() codeType=raw");
+            IRCDEBUG_PRINT(" codeLen=");
+            IRCDEBUG_PRINTLN(codeLen, DEC);
             for (int ndx = 0; ndx < codeLen; ndx++)
             {
               rawCodess[numSignalsCapturedRaw][ndx] = rawCodes[ndx];
@@ -343,22 +366,23 @@ void loop()
           }
           else
           {
-            Serial.print(codeType, HEX);
-            Serial.print(" codeValue=");
-            Serial.print(codeValue, HEX);
+            IRCDEBUG_PRINT(IRCDBG + " loop() codeType=");
+            IRCDEBUG_PRINT(codeType, HEX);
+            IRCDEBUG_PRINT(" codeValue=");
+            IRCDEBUG_PRINT(codeValue, HEX);
+            IRCDEBUG_PRINT(" codeLen=");
+            IRCDEBUG_PRINTLN(codeLen, DEC);
             codeValues[numSignalsCaptured] = codeValue;
             codeTypes[numSignalsCaptured] = codeType;
             codeLens[numSignalsCaptured] = codeLen;
             numSignalsCaptured++;
           }
-          Serial.print(" codeLen=");
-          Serial.println(codeLen, DEC);
 
           irrecv.resume(); // resume receiver
         } // if we got an IR signal
         else
         { // else wait and try again
-          Serial.println(IRCDEBUG + "wait 50ms and try again");
+          IRCDEBUG_PRINTLN(IRCDBG + "wait 50ms and try again");
           delay(50);
         } // end if
 
@@ -366,7 +390,7 @@ void loop()
 
       if ((numSignalsCaptured == 0) && (numSignalsCapturedRaw == 0))
       {
-        Serial.println("IRC: No IR signal detected.");
+        IRCDEBUG_PRINTLN(NO_IR_SIGNAL_DETECTED);
       } // end if
       else
       { // we captured at least one signal
@@ -374,22 +398,64 @@ void loop()
         { // prefer non-raw values over raw values
           for (int ndx = 0; ndx < numSignalsCaptured; ndx++)
           {
-            Serial.print(IRCDEBUG + "Consensus IR Signal: codeType=");
-            Serial.print(codeTypes[ndx], HEX);
-            Serial.print(" codeValue=");
-            Serial.print(codeValues[ndx], HEX);
-            Serial.print(" codeLen=");
-            Serial.println(codeLens[ndx], DEC);
+            IRCDEBUG_PRINT(IRCDBG + " loop() Consensus IR Signal: codeType=");
+            IRCDEBUG_PRINT(codeTypes[ndx], HEX);
+            IRCDEBUG_PRINT(" codeValue=");
+            IRCDEBUG_PRINT(codeValues[ndx], HEX);
+            IRCDEBUG_PRINT(" codeLen=");
+            IRCDEBUG_PRINTLN(codeLens[ndx], DEC);
           }
           unsigned long codeValueConsensus = getMostFrequentNumber(codeValues, numSignalsCaptured);
-          Serial.print(IRCDEBUG + "Final consensus code value is: x");
-          Serial.println(codeValueConsensus, HEX);
+          if (codeValueConsensus == 0) // something went wrong
+          {
+            IRCDEBUG_PRINTLN(NO_IR_SIGNAL_DETECTED);
+          }
+          else // we have a final consensus value
+          {
+            IRCDEBUG_PRINT(IRCDBG + " loop() Final consensus code value is: x");
+            IRCDEBUG_PRINTLN(codeValueConsensus, HEX);
+            // look up first matching code value in list of captured IR signals to get code type and length
+            for (int ndx = 0; ndx < numSignalsCaptured; ndx++)
+            {
+              if (codeValues[ndx] == codeValueConsensus)
+              {
+                codeValue = codeValueConsensus;
+                codeType = codeTypes[ndx];
+                codeLen = codeLens[ndx];
+//                String ircresponse = "";
+//                ircresponse = "IRC: captureirresponse: codeType=" + codeType;
+//                ircresponse = ircresponse + " codeLen=" + codeLen;
+//                ircresponse = ircresponse + " codeValue=" + codeValue;
+//                Serial.println(ircresponse);
+
+                Serial.print("IRC: 1captureirresponse1: codeType=" + codeType);
+                Serial.print(" codeLen=" + codeLen);
+                Serial.println(" codeValue=" + codeValue);
+              } // end if
+            } // end for
+          } // end else
         }
         else
         { // more raw values than non-raw values
           int bestRawValuessIndex = getBestRawCodessIndex();
-        }
 
+          codeType = -1;
+          codeLen = codeLensRaw[bestRawValuessIndex];
+          //          ircresponse = "IRC: captureirresponse: codeType=" + codeType;
+          //          ircresponse = ircresponse + " codeLen=" + codeLen;
+          //          ircresponse = ircresponse + " rawCodes=";
+          //          Serial.print(ircresponse);
+          Serial.print("IRC: captureirresponse: codeType=" + codeType);
+          Serial.print(" codeLen=" + codeLen);
+          //          for (int ndx = 0; ndx < codeLen; ndx++)
+          //          {
+          //            rawCodes[ndx] = rawCodess[bestRawValuessIndex][ndx];
+          //            //ircresponse = ircresponse + " rawCodes=" + rawCodes[ndx];
+          //            Serial.print(rawCodes[ndx]);
+          //            Serial.print(" ");
+          //          } // end for
+          Serial.println("");
+        } // end else we captured at least one signal
       } // end else
     } // if (data.equals("captureir"))
   } // else if (Serial.available() > 0)
