@@ -18,6 +18,10 @@
    http://robhughes.net
 */
 
+/* TODO:
+   ircommand is responding multiple times to the same captureir request
+*/
+
 #include <IRremote.h>
 
 #if defined(ESP32)
@@ -39,7 +43,13 @@ decode_results results;
 #endif
 
 String IRCDBG = "IRC: DEBUG: ";
+// Request strings
+String CAPTUREIR = "captureir"; // capture an IR signal and return via Serial port
+String SENDIR = "sendir"; // send IR signal received from caller
+
+// Response string
 String NO_IR_SIGNAL_DETECTED = "IRC: captureirresponse: No IR signal detected.";
+String IRC_CAPTURE_IR_RESPONSE_PREFIX = "IRC: captureirresponse: codeType=";
 
 /**
    Set IRCDBG to 1 for debug output. 0 to disable debug output
@@ -90,14 +100,6 @@ void setup() {
   IRCDEBUG_PRINTLN(IR_SEND_PIN);
   //IRCDEBUG_PRINT(IRCDBG + F("RAW_BUFFER_LENGTH="));
   //IRCDEBUG_PRINTLN(RAW_BUFFER_LENGTH);
-
-  // The array
-  int lt[6] = {35, 15, 80, 2, 40, 110};
-  // Number of items in the array
-  int lt_length = sizeof(lt) / sizeof(lt[0]);
-  // qsort - last parameter is a function pointer to the sort function
-  qsort(lt, lt_length, sizeof(lt[0]), sort_desc);
-  // lt is now sorted
 }
 
 // Storage for the recorded code
@@ -333,7 +335,7 @@ void loop()
   {
     //IRCDEBUG_PRINTLN("IRC: got here01");
     String data = Serial.readStringUntil('\n');
-    if (data.equals("captureir"))
+    if (data.equals(CAPTUREIR))
     {
       //IRCDEBUG_PRINTLN(IRCDBG + " loop() got here02");
       numSignalsCaptured = 0;
@@ -350,7 +352,7 @@ void loop()
           //IRCDEBUG_PRINT(IRCDBG + " loop() Got IR signal: codeType=");
           //IRCDEBUG_PRINTLN(codeType, DEC);
 
-          if (codeType == UNKNOWN)
+          if (codeType == -1)
           {
             IRCDEBUG_PRINT(IRCDBG + " loop() codeType=raw");
             IRCDEBUG_PRINT(" codeLen=");
@@ -358,7 +360,6 @@ void loop()
             for (int ndx = 0; ndx < codeLen; ndx++)
             {
               rawCodess[numSignalsCapturedRaw][ndx] = rawCodes[ndx];
-              numSignalsCapturedRaw++;
             }
             codeTypesRaw[numSignalsCapturedRaw] = codeType;
             codeLensRaw[numSignalsCapturedRaw] = codeLen;
@@ -398,7 +399,7 @@ void loop()
         { // prefer non-raw values over raw values
           for (int ndx = 0; ndx < numSignalsCaptured; ndx++)
           {
-            IRCDEBUG_PRINT(IRCDBG + " loop() Consensus IR Signal: codeType=");
+            IRCDEBUG_PRINT(IRCDBG + " loop() Candidate:1 IR Signal: codeType=");
             IRCDEBUG_PRINT(codeTypes[ndx], HEX);
             IRCDEBUG_PRINT(" codeValue=");
             IRCDEBUG_PRINT(codeValues[ndx], HEX);
@@ -422,15 +423,18 @@ void loop()
                 codeValue = codeValueConsensus;
                 codeType = codeTypes[ndx];
                 codeLen = codeLens[ndx];
-//                String ircresponse = "";
-//                ircresponse = "IRC: captureirresponse: codeType=" + codeType;
-//                ircresponse = ircresponse + " codeLen=" + codeLen;
-//                ircresponse = ircresponse + " codeValue=" + codeValue;
-//                Serial.println(ircresponse);
+                //                String ircresponse = "";
+                //                ircresponse = "IRC: captureirresponse: codeType=" + codeType;
+                //                ircresponse = ircresponse + " codeLen=" + codeLen;
+                //                ircresponse = ircresponse + " codeValue=" + codeValue;
+                //                Serial.println(ircresponse);
 
-                Serial.print("IRC: 1captureirresponse1: codeType=" + codeType);
-                Serial.print(" codeLen=" + codeLen);
-                Serial.println(" codeValue=" + codeValue);
+                Serial.print("IRC: captureirresponse: codeType=");
+                Serial.print(codeType);
+                Serial.print(" codeLen=");
+                Serial.print(codeLen);
+                Serial.print(" codeValue=");
+                Serial.println(codeValue);
               } // end if
             } // end for
           } // end else
@@ -438,26 +442,51 @@ void loop()
         else
         { // more raw values than non-raw values
           int bestRawValuessIndex = getBestRawCodessIndex();
+          //IRCDEBUG_PRINT(IRCDBG + " loop() bestRawValuessIndex=");
+          //IRCDEBUG_PRINTLN(bestRawValuessIndex);
 
           codeType = -1;
           codeLen = codeLensRaw[bestRawValuessIndex];
-          //          ircresponse = "IRC: captureirresponse: codeType=" + codeType;
+          Serial.print(IRC_CAPTURE_IR_RESPONSE_PREFIX);
+          Serial.print(codeType); // UNKNOWN/raw
+          Serial.print(" codeLen=");
+          Serial.print(codeLen);
+          Serial.print(" rawCodes=");
+          //          ircresponse = "IRC_CAPTURE_IR_RESPONSE_PREFIX" + codeType;
           //          ircresponse = ircresponse + " codeLen=" + codeLen;
           //          ircresponse = ircresponse + " rawCodes=";
           //          Serial.print(ircresponse);
-          Serial.print("IRC: captureirresponse: codeType=" + codeType);
-          Serial.print(" codeLen=" + codeLen);
-          //          for (int ndx = 0; ndx < codeLen; ndx++)
-          //          {
-          //            rawCodes[ndx] = rawCodess[bestRawValuessIndex][ndx];
-          //            //ircresponse = ircresponse + " rawCodes=" + rawCodes[ndx];
-          //            Serial.print(rawCodes[ndx]);
-          //            Serial.print(" ");
-          //          } // end for
+
+          for (int ndx = 0; ndx < codeLen; ndx++)
+          {
+            rawCodes[ndx] = rawCodess[bestRawValuessIndex][ndx];
+            Serial.print(rawCodes[ndx]);
+            Serial.print(" ");
+          } // end for
           Serial.println("");
         } // end else we captured at least one signal
       } // end else
-    } // if (data.equals("captureir"))
+    } // if (data.equals(CAPTUREIR))
+    else if (data.startsWith(SENDIR))
+    {
+      IRCDEBUG_PRINT(IRCDBG + " loop() received sendir request:");
+      IRCDEBUG_PRINTLN(data);
+      String rawsendirPrefix = SENDIR + " codeType=-1";
+      if (data.startsWith(rawsendirPrefix)) // send IR with raw codes
+      {
+        // "sendir codeType=-1 codeLen=XXX rawCodes=2500 500..."
+        // "012345678901234567890123456789
+        
+      } // end if
+      else // send IR with non-raw value
+      {
+        // "sendir codeType=4 codeLen=20 codeValue=691090"
+        // "012345678901234567890123456789
+        String codeTypeStr = data.substring(16, 19);
+        IRCDEBUG_PRINT(IRCDBG + " loop() codeTypeStr=");
+        IRCDEBUG_PRINTLN(codeTypeStr);
+      } // end else
+    } // else if sendir
   } // else if (Serial.available() > 0)
 
   lastButtonState = buttonState;
