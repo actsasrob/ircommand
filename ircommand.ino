@@ -19,7 +19,8 @@
 */
 
 /* TODO:
-   ircommand is responding multiple times to the same captureir request
+   IRCommand stops capturing new IR signals after sending an IR signal based on Raspberry Pi request but not circuit button press.
+   Logic to handle parse raw codes sent from Raspberry Pi.
 */
 
 #include <IRremote.h>
@@ -82,6 +83,62 @@ int sort_desc(const void *cmp1, const void *cmp2)
   //return b - a;
 }
 
+/*
+   Utility function to get next numeric substring from input string starting at startIndex.
+   Note: Will not recognize negative numbers. Will only handle numbers in the range 0 - 2,147,483,647
+         that can be returned as a long. Numbers containing commas will be treated as separate numbers
+   Inputs:
+     String str - The source string
+     int startIndex - zero based index where to start looking for next numeric substring
+     int *lastIndex - pointer to var containing last index used to search for numeric chars
+                      i.e. upon function return it will be the index of the first char after the last numeric
+                           sequence found or will equal the length of the input string indicating the entire
+                           string has been searched
+   Returns:
+     -1 - no numeric substring was found
+     long number - the next numeric substring converted to long
+*/
+long getNextNumberFromString(String str, int startIndex, int *lastIndex)
+{
+  long retVal = -1; // default to no numeric substring found
+  String workString = "";
+  *lastIndex = startIndex;
+  int strLength = str.length();
+  int stage = 0; // 0 - looking for first numeric char, 1 - found numeric string
+
+  while (*lastIndex < strLength)
+  {
+    String tmpString = str.substring(*lastIndex, *lastIndex + 1);
+    *lastIndex = *lastIndex + 1;
+
+    if (tmpString >= "0" && tmpString <= "9") // numeric char found
+    {
+      if (stage == 0) // move to stage 1 and start keeping chars
+      {
+        stage = 1;
+      } // end if
+      workString += tmpString;
+    }
+    else // non-numeric char found
+    {
+      if (stage == 1) // we found the entire numeric string
+      {
+        break;
+      } // end if
+    } // end else
+
+  } // end while
+
+  if (workString.length() > 0)
+  {
+    char tmpBuf[11];
+    workString.toCharArray(tmpBuf, 11);
+    retVal = atol(tmpBuf);
+  } // end if
+
+  return retVal;
+} // end getNextNumberFromString()
+
 void setup() {
   Serial.begin(115200);
 #if defined(__AVR_ATmega32U4__)
@@ -98,8 +155,20 @@ void setup() {
   IRCDEBUG_PRINTLN(IR_RECEIVE_PIN);
   IRCDEBUG_PRINT(IRCDBG + F("Ready to send IR signals at pin "));
   IRCDEBUG_PRINTLN(IR_SEND_PIN);
-  //IRCDEBUG_PRINT(IRCDBG + F("RAW_BUFFER_LENGTH="));
-  //IRCDEBUG_PRINTLN(RAW_BUFFER_LENGTH);
+
+  // "sendir codeType=4 codeLen=20 codeValue=691090"
+  // "012345678901234567890123456789
+  //  String data = "sendir codeType=4 codeLen=20 codeValue=691090";
+  //  int lastIndex;
+  //  int theCodeType = getNextNumberFromString(data, 16, &lastIndex);
+  //  IRCDEBUG_PRINT(IRCDBG + "setup() theCodeType=");
+  //  IRCDEBUG_PRINTLN(theCodeType);
+  //  int theCodeLen = getNextNumberFromString(data, lastIndex, &lastIndex);
+  //  IRCDEBUG_PRINT(IRCDBG + "setup() theCodeLen=");
+  //  IRCDEBUG_PRINTLN(theCodeLen);
+  //  unsigned long theCodeValue = getNextNumberFromString(data, lastIndex, &lastIndex);
+  //  IRCDEBUG_PRINT(IRCDBG + "setup() theCodeValue=");
+  //  IRCDEBUG_PRINTLN(theCodeValue);
 }
 
 // Storage for the recorded code
@@ -129,7 +198,7 @@ unsigned int numSignalsCapturedRaw; // how many raw signals did we actually capt
 
 // Stores the code for later playback
 // Most of this code is just logging
-void storeCode(decode_results *results) {
+void storeCode(decode_results * results) {
   IRCDEBUG_PRINTLN(IRCDBG + "storeCode() here01");
   codeType = results->decode_type;
   //  int count = results->rawlen;
@@ -304,6 +373,12 @@ unsigned long getMostFrequentNumber(unsigned long arr[], unsigned int n)
 //int codeLensRaw[MAX_CAPTURE_ATTEMPTS]; // The length of the code
 //unsigned int numSignalsCapturedRaw; // how many raw signals did we actually capture
 
+/*
+   Utility function to find the best raw IR signal from the captured signals
+   TODO: Needs to be implemented. There seems to be an issue with the IRremote library where the last IR signal captured
+   on previous capture attempts is returned as the first IR signal on the next IR capture attempt. Possibly the signal remains
+   in a buffer somewhere. As a workaround, return the last captured signal to atleast avoid the first signal
+*/
 int getBestRawCodessIndex()
 {
   int retVal = numSignalsCapturedRaw - 1;
@@ -476,15 +551,27 @@ void loop()
       {
         // "sendir codeType=-1 codeLen=XXX rawCodes=2500 500..."
         // "012345678901234567890123456789
-        
+
       } // end if
       else // send IR with non-raw value
       {
         // "sendir codeType=4 codeLen=20 codeValue=691090"
         // "012345678901234567890123456789
-        String codeTypeStr = data.substring(16, 19);
-        IRCDEBUG_PRINT(IRCDBG + " loop() codeTypeStr=");
-        IRCDEBUG_PRINTLN(codeTypeStr);
+        int lastIndex;
+        codeType = getNextNumberFromString(data, 16, &lastIndex);
+        IRCDEBUG_PRINT(IRCDBG + "loop() sendir processing codeType=");
+        IRCDEBUG_PRINTLN(codeType);
+        codeLen = getNextNumberFromString(data, lastIndex, &lastIndex);
+        IRCDEBUG_PRINT(IRCDBG + "loop() sendir processing codeLen=");
+        IRCDEBUG_PRINTLN(codeLen);
+        codeValue = getNextNumberFromString(data, lastIndex, &lastIndex);
+        IRCDEBUG_PRINT(IRCDBG + "loop() sendir processing codeValue=");
+        IRCDEBUG_PRINT(codeValue);
+        IRCDEBUG_PRINT(" x");
+        IRCDEBUG_PRINTLN(codeValue, HEX);
+        digitalWrite(STATUS_PIN, HIGH);
+        sendCode(lastButtonState == buttonState);
+        digitalWrite(STATUS_PIN, LOW);
       } // end else
     } // else if sendir
   } // else if (Serial.available() > 0)
