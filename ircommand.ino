@@ -19,8 +19,7 @@
 */
 
 /* TODO:
-   IRCommand stops capturing new IR signals after sending an IR signal based on Raspberry Pi request but not circuit button press.
-   Logic to handle parse raw codes sent from Raspberry Pi.
+
 */
 
 #include <IRremote.h>
@@ -79,8 +78,6 @@ int sort_desc(const void *cmp1, const void *cmp2)
   unsigned long b = *((unsigned long *)cmp2);
   // The comparison
   return a > b ? -1 : (a < b ? 1 : 0);
-  // A simpler, probably faster way:
-  //return b - a;
 }
 
 /*
@@ -89,7 +86,7 @@ int sort_desc(const void *cmp1, const void *cmp2)
          that can be returned as a long. Numbers containing commas will be treated as separate numbers
    Inputs:
      String str - The source string
-     int startIndex - zero based index where to start looking for next numeric substring
+     int startIndex - zero-based index where to start looking for next numeric substring
      int *lastIndex - pointer to var containing last index used to search for numeric chars
                       i.e. upon function return it will be the index of the first char after the last numeric
                            sequence found or will equal the length of the input string indicating the entire
@@ -169,6 +166,22 @@ void setup() {
   //  unsigned long theCodeValue = getNextNumberFromString(data, lastIndex, &lastIndex);
   //  IRCDEBUG_PRINT(IRCDBG + "setup() theCodeValue=");
   //  IRCDEBUG_PRINTLN(theCodeValue);
+//  String data = "sendir codeType=-1 codeLen=67 rawCodes=8800 4600 400 700 400 1800 450 700 350 800 350 1850 400 650 450 1800 400 1850 400 1800 400 750 400 1850 350 1850 400 700 400 1800 400 1800 450 700 400 750 350 1850 350 1850 400 750 400 1800 400 700 400 700 450 700 400 1850 350 750 400 700 400 1800 400 700 400 1850 400 1800 450 1800 400";
+//  int lastIndex;
+//  theCodeType = UNKNOWN;
+//  IRCDEBUG_PRINT(IRCDBG + "setup() sendir raw processing theCodeType=");
+//  IRCDEBUG_PRINTLN(theCodeType);
+//  theCodeLen = getNextNumberFromString(data, 27, &lastIndex);
+//  IRCDEBUG_PRINT(IRCDBG + "setup() sendir raw processing theCodeLen=");
+//  IRCDEBUG_PRINTLN(theCodeLen);
+//  IRCDEBUG_PRINT(IRCDBG + "loop() sendir raw processing rawCodes=");
+//  for (int ndx = 0; ndx < codeLen; ndx++)
+//  {
+//    /*rawCodes[ndx]*/ theRawCode = getNextNumberFromString(data, lastIndex, &lastIndex);
+//    IRCDEBUG_PRINT(theRawCode);
+//    IRCDEBUG_PRINT(" ");
+//  }
+//  IRCDEBUG_PRINTLN();
 }
 
 // Storage for the recorded code
@@ -316,7 +329,7 @@ void sendCode(int repeat) {
 unsigned long getMostFrequentNumber(unsigned long arr[], unsigned int n)
 {
   unsigned long uniqueNumbers[n]; // array of unique numbers
-  int uniqueNumbersCount[n]; // frequency of earch unique number
+  int uniqueNumbersCount[n]; // frequency of each unique number
   unsigned long retVal = 0; // defaults to an error occurred
 
   if (n <= 0) {
@@ -377,7 +390,7 @@ unsigned long getMostFrequentNumber(unsigned long arr[], unsigned int n)
    Utility function to find the best raw IR signal from the captured signals
    TODO: Needs to be implemented. There seems to be an issue with the IRremote library where the last IR signal captured
    on previous capture attempts is returned as the first IR signal on the next IR capture attempt. Possibly the signal remains
-   in a buffer somewhere. As a workaround, return the last captured signal to atleast avoid the first signal
+   in a buffer somewhere. As a workaround, return the last captured signal to atleast avoid the first signal when possible
 */
 int getBestRawCodessIndex()
 {
@@ -551,7 +564,21 @@ void loop()
       {
         // "sendir codeType=-1 codeLen=XXX rawCodes=2500 500..."
         // "012345678901234567890123456789
-
+        int lastIndex;
+        codeType = UNKNOWN;
+        IRCDEBUG_PRINT(IRCDBG + "loop() sendir raw processing codeType=");
+        IRCDEBUG_PRINTLN(codeType);
+        codeLen = getNextNumberFromString(data, 27, &lastIndex);
+        IRCDEBUG_PRINT(IRCDBG + "loop() sendir raw processing codeLen=");
+        IRCDEBUG_PRINTLN(codeLen);
+        IRCDEBUG_PRINT(IRCDBG + "loop() sendir raw processing rawCodes=");
+        for (int ndx = 0; ndx < codeLen; ndx++)
+        {
+          rawCodes[ndx] = getNextNumberFromString(data, lastIndex, &lastIndex);
+          IRCDEBUG_PRINT(rawCodes[ndx]);
+          IRCDEBUG_PRINT(" ");
+        } // end for
+        IRCDEBUG_PRINTLN();
       } // end if
       else // send IR with non-raw value
       {
@@ -569,10 +596,12 @@ void loop()
         IRCDEBUG_PRINT(codeValue);
         IRCDEBUG_PRINT(" x");
         IRCDEBUG_PRINTLN(codeValue, HEX);
-        digitalWrite(STATUS_PIN, HIGH);
-        sendCode(lastButtonState == buttonState);
-        digitalWrite(STATUS_PIN, LOW);
       } // end else
+
+      digitalWrite(STATUS_PIN, HIGH);
+      sendCode(0); // TODO: Handle repeat
+      digitalWrite(STATUS_PIN, LOW);
+      irrecv.enableIRIn(); // Re-enable receiver
     } // else if sendir
   } // else if (Serial.available() > 0)
 
