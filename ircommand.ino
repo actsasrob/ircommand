@@ -1,24 +1,43 @@
 /*
-   Much credit to Ken Shirriff. The bulk of this code adapted from https://github.com/z3t0/Arduino-IRremote/blob/master/examples/IRrecord/IRrecord.ino
-
-   ircommand: Record an IR signal when tasked via the serial USB port. Return IR signal via serial USB port.
-              Send IR signal when tasked via the serial USB port.
-
+   IRrecord: record and play back IR signals as a minimal
    An IR detector/demodulator must be connected to the input RECV_PIN.
    An IR LED must be connected to the output PWM pin 3.
    A button must be connected between the input SEND_BUTTON_PIN and ground.
    A visible LED can be connected to STATUS_PIN to provide status.
 
-   With the proper circuit attached you can also:
+   The logic is:
    If the button is pressed, send the IR code.
    If an IR code is received, record it.
 
-   Version 0.1 August 2020
-   Copyright 2020 Rob Hughes
-   http://robhughes.net
+   Version 0.11 September, 2009
+   Copyright 2009 Ken Shirriff
+   http://arcfn.com
+*/
+
+/*
+  Much credit to Ken Shirriff. The bulk of this code adapted from
+  https://github.com/z3t0/Arduino-IRremote/blob/master/examples/IRrecord/IRrecord.ino
+
+  ircommand: Record an IR signal when tasked via the serial USB port. Return captured IR signal via serial USB port.
+             Send IR signal when tasked via the serial USB port.
+
+             ircommand allows the arduino to be tasked via the serial USB port and to store multiple captured IR signals off
+             the arduino.
+             A value added benefit is that ircommand attempts gain consensus on the IR signal captured by capturing
+             multiple signals and them selecting the best (work in progress) signal from the captured signals.
 */
 
 /* TODO:
+    Add support for:
+    RC5 toggle bit
+    AIWA_RC_T501 add support
+    SANYO add support once supported by IRremote
+    MITSUBISHI add support once supported by IRremote
+    SHARP  add support
+    SHARP_ALT  add support
+    LEGO_PF add support
+    BOSEWAVE add support
+    MAGIQUEST add support
 
 */
 
@@ -166,22 +185,22 @@ void setup() {
   //  unsigned long theCodeValue = getNextNumberFromString(data, lastIndex, &lastIndex);
   //  IRCDEBUG_PRINT(IRCDBG + "setup() theCodeValue=");
   //  IRCDEBUG_PRINTLN(theCodeValue);
-//  String data = "sendir codeType=-1 codeLen=67 rawCodes=8800 4600 400 700 400 1800 450 700 350 800 350 1850 400 650 450 1800 400 1850 400 1800 400 750 400 1850 350 1850 400 700 400 1800 400 1800 450 700 400 750 350 1850 350 1850 400 750 400 1800 400 700 400 700 450 700 400 1850 350 750 400 700 400 1800 400 700 400 1850 400 1800 450 1800 400";
-//  int lastIndex;
-//  theCodeType = UNKNOWN;
-//  IRCDEBUG_PRINT(IRCDBG + "setup() sendir raw processing theCodeType=");
-//  IRCDEBUG_PRINTLN(theCodeType);
-//  theCodeLen = getNextNumberFromString(data, 27, &lastIndex);
-//  IRCDEBUG_PRINT(IRCDBG + "setup() sendir raw processing theCodeLen=");
-//  IRCDEBUG_PRINTLN(theCodeLen);
-//  IRCDEBUG_PRINT(IRCDBG + "loop() sendir raw processing rawCodes=");
-//  for (int ndx = 0; ndx < codeLen; ndx++)
-//  {
-//    /*rawCodes[ndx]*/ theRawCode = getNextNumberFromString(data, lastIndex, &lastIndex);
-//    IRCDEBUG_PRINT(theRawCode);
-//    IRCDEBUG_PRINT(" ");
-//  }
-//  IRCDEBUG_PRINTLN();
+  //  String data = "sendir codeType=-1 codeLen=67 rawCodes=8800 4600 400 700 400 1800 450 700 350 800 350 1850 400 650 450 1800 400 1850 400 1800 400 750 400 1850 350 1850 400 700 400 1800 400 1800 450 700 400 750 350 1850 350 1850 400 750 400 1800 400 700 400 700 450 700 400 1850 350 750 400 700 400 1800 400 700 400 1850 400 1800 450 1800 400";
+  //  int lastIndex;
+  //  theCodeType = UNKNOWN;
+  //  IRCDEBUG_PRINT(IRCDBG + "setup() sendir raw processing theCodeType=");
+  //  IRCDEBUG_PRINTLN(theCodeType);
+  //  theCodeLen = getNextNumberFromString(data, 27, &lastIndex);
+  //  IRCDEBUG_PRINT(IRCDBG + "setup() sendir raw processing theCodeLen=");
+  //  IRCDEBUG_PRINTLN(theCodeLen);
+  //  IRCDEBUG_PRINT(IRCDBG + "loop() sendir raw processing rawCodes=");
+  //  for (int ndx = 0; ndx < codeLen; ndx++)
+  //  {
+  //    /*rawCodes[ndx]*/ theRawCode = getNextNumberFromString(data, lastIndex, &lastIndex);
+  //    IRCDEBUG_PRINT(theRawCode);
+  //    IRCDEBUG_PRINT(" ");
+  //  }
+  //  IRCDEBUG_PRINTLN();
 }
 
 // Storage for the recorded code
@@ -208,6 +227,69 @@ int codeTypesRaw[MAX_CAPTURE_ATTEMPTS]; // The code types
 unsigned int rawCodess[MAX_CAPTURE_ATTEMPTS][RAW_BUFFER_LENGTH]; // The durations if raw
 int codeLensRaw[MAX_CAPTURE_ATTEMPTS]; // The length of the code
 unsigned int numSignalsCapturedRaw; // how many raw signals did we actually capture
+
+//+=============================================================================
+// Display encoding type
+//
+void encoding(int theCodeType) {
+  switch (theCodeType) {
+    default:
+    case UNKNOWN:
+      Serial.print("UNKNOWN");
+      break;
+    case NEC:
+      Serial.print("NEC");
+      break;
+    case SONY:
+      Serial.print("SONY");
+      break;
+    case RC5:
+      Serial.print("RC5");
+      break;
+    case RC6:
+      Serial.print("RC6");
+      break;
+    case DISH:
+      Serial.print("DISH");
+      break;
+    case SHARP:
+      Serial.print("SHARP");
+      break;
+    case SHARP_ALT:
+      Serial.print("SHARP_ALT");
+      break;
+    case JVC:
+      Serial.print("JVC");
+      break;
+    case SANYO:
+      Serial.print("SANYO");
+      break;
+    case MITSUBISHI:
+      Serial.print("MITSUBISHI");
+      break;
+    case SAMSUNG:
+      Serial.print("SAMSUNG");
+      break;
+    case LG:
+      Serial.print("LG");
+      break;
+    case WHYNTER:
+      Serial.print("WHYNTER");
+      break;
+    case AIWA_RC_T501:
+      Serial.print("AIWA_RC_T501");
+      break;
+    case PANASONIC:
+      Serial.print("PANASONIC");
+      break;
+    case DENON:
+      Serial.print("Denon");
+      break;
+    case BOSEWAVE:
+      Serial.print("BOSEWAVE");
+      break;
+  }
+}
 
 // Stores the code for later playback
 // Most of this code is just logging
@@ -248,6 +330,14 @@ void storeCode(decode_results * results) {
       IRCDEBUG_PRINT(IRCDBG + "storeCode() Received SONY: ");
     } else if (codeType == SAMSUNG) {
       IRCDEBUG_PRINT(IRCDBG + "storeCode() Received SAMSUNG: ");
+    } else if (codeType == WHYNTER) {
+      IRCDEBUG_PRINT(IRCDBG + "storeCode() Received WHYNTER: ");
+    } else if (codeType == LG) {
+      IRCDEBUG_PRINT(IRCDBG + "storeCode() Received LG: ");
+    } else if (codeType == DISH) {
+      IRCDEBUG_PRINT(IRCDBG + "storeCode() Received DISH: ");
+    } else if (codeType == DENON) {
+      IRCDEBUG_PRINT(IRCDBG + "storeCode() Received DENON: ");
     } else if (codeType == PANASONIC) {
       IRCDEBUG_PRINT(IRCDBG + "storeCode() Received PANASONIC: ");
     } else if (codeType == JVC) {
@@ -281,6 +371,34 @@ void sendCode(int repeat) {
     irsend.sendSony(codeValue, codeLen);
     IRCDEBUG_PRINT(IRCDBG + "sendCode() Sent Sony ");
     IRCDEBUG_PRINTLN(codeValue, HEX);
+  } else if (codeType == RC5) { // TODO: need to handle toggle???
+        irsend.sendRC5(codeValue, codeLen);
+    IRCDEBUG_PRINT(IRCDBG + "sendCode() Sent RC5 ");
+    IRCDEBUG_PRINTLN(codeValue, HEX);
+  } else if (codeType == RC6) { 
+        irsend.sendRC6(codeValue, codeLen);
+    IRCDEBUG_PRINT(IRCDBG + "sendCode() Sent RC6 ");
+    IRCDEBUG_PRINTLN(codeValue, HEX);
+  } else if (codeType == SAMSUNG) {
+            irsend.sendSAMSUNG(codeValue, codeLen);
+    IRCDEBUG_PRINT(IRCDBG + "sendCode() Sent SAMSUNG ");
+    IRCDEBUG_PRINTLN(codeValue, HEX);
+  } else if (codeType == WHYNTER) {
+             irsend.sendWhynter(codeValue, codeLen);
+    IRCDEBUG_PRINT(IRCDBG + "sendCode() Sent Whynter ");
+    IRCDEBUG_PRINTLN(codeValue, HEX);   
+  } else if (codeType == LG) {
+    irsend.sendLG(codeValue, codeLen);
+    IRCDEBUG_PRINT(IRCDBG + "sendCode() Sent LG ");
+    IRCDEBUG_PRINTLN(codeValue, HEX);  
+  } else if (codeType == DISH) {
+    irsend.sendDISH(codeValue, codeLen);
+    IRCDEBUG_PRINT(IRCDBG + "sendCode() Sent DISHLG ");
+    IRCDEBUG_PRINTLN(codeValue, HEX);  
+  } else if (codeType == DENON) {
+    irsend.sendDenon(codeValue, codeLen);
+    IRCDEBUG_PRINT(IRCDBG + "sendCode() Sent Denon ");
+    IRCDEBUG_PRINTLN(codeValue, HEX); 
   } else if (codeType == PANASONIC) {
     irsend.sendPanasonic(codeValue, codeLen);
     IRCDEBUG_PRINT(IRCDBG + "sendCode() Sent Panasonic");
@@ -456,9 +574,15 @@ void loop()
           else
           {
             IRCDEBUG_PRINT(IRCDBG + " loop() codeType=");
-            IRCDEBUG_PRINT(codeType, HEX);
-            IRCDEBUG_PRINT(" codeValue=");
+            IRCDEBUG_PRINT(codeType, DEC);
+            IRCDEBUG_PRINT(" (");
+            encoding(codeType);
+            IRCDEBUG_PRINT(") ");
+            IRCDEBUG_PRINT(" codeValue=x");
             IRCDEBUG_PRINT(codeValue, HEX);
+            IRCDEBUG_PRINT(" (");
+            IRCDEBUG_PRINT(codeValue, DEC);
+            IRCDEBUG_PRINT(") ");
             IRCDEBUG_PRINT(" codeLen=");
             IRCDEBUG_PRINTLN(codeLen, DEC);
             codeValues[numSignalsCaptured] = codeValue;
@@ -501,8 +625,6 @@ void loop()
           }
           else // we have a final consensus value
           {
-            IRCDEBUG_PRINT(IRCDBG + " loop() Final consensus code value is: x");
-            IRCDEBUG_PRINTLN(codeValueConsensus, HEX);
             // look up first matching code value in list of captured IR signals to get code type and length
             for (int ndx = 0; ndx < numSignalsCaptured; ndx++)
             {
@@ -516,7 +638,18 @@ void loop()
                 //                ircresponse = ircresponse + " codeLen=" + codeLen;
                 //                ircresponse = ircresponse + " codeValue=" + codeValue;
                 //                Serial.println(ircresponse);
-
+                IRCDEBUG_PRINT(IRCDBG + " loop() Final consensus codeType=");
+                IRCDEBUG_PRINT(codeType, DEC);
+                IRCDEBUG_PRINT(" (");
+                encoding(codeType);
+                IRCDEBUG_PRINT(") ");
+                IRCDEBUG_PRINT(" codeValue=x");
+                IRCDEBUG_PRINT(codeValue, HEX);
+                IRCDEBUG_PRINT(" (");
+                IRCDEBUG_PRINT(codeValue, DEC);
+                IRCDEBUG_PRINT(") ");
+                IRCDEBUG_PRINT(" codeLen=");
+                IRCDEBUG_PRINTLN(codeLen, DEC);
                 Serial.print("IRC: captureirresponse: codeType=");
                 Serial.print(codeType);
                 Serial.print(" codeLen=");
@@ -586,21 +719,34 @@ void loop()
         // "012345678901234567890123456789
         int lastIndex;
         codeType = getNextNumberFromString(data, 16, &lastIndex);
-        IRCDEBUG_PRINT(IRCDBG + "loop() sendir processing codeType=");
-        IRCDEBUG_PRINTLN(codeType);
         codeLen = getNextNumberFromString(data, lastIndex, &lastIndex);
-        IRCDEBUG_PRINT(IRCDBG + "loop() sendir processing codeLen=");
-        IRCDEBUG_PRINTLN(codeLen);
         codeValue = getNextNumberFromString(data, lastIndex, &lastIndex);
-        IRCDEBUG_PRINT(IRCDBG + "loop() sendir processing codeValue=");
-        IRCDEBUG_PRINT(codeValue);
-        IRCDEBUG_PRINT(" x");
-        IRCDEBUG_PRINTLN(codeValue, HEX);
+
+        IRCDEBUG_PRINT(IRCDBG + " loop() sendir processing codeType=");
+        IRCDEBUG_PRINT(codeType, DEC);
+        IRCDEBUG_PRINT(" (");
+        encoding(codeType);
+        IRCDEBUG_PRINT(") ");
+        IRCDEBUG_PRINT(" codeValue=x");
+        IRCDEBUG_PRINT(codeValue, HEX);
+        IRCDEBUG_PRINT(" (");
+        IRCDEBUG_PRINT(codeValue, DEC);
+        IRCDEBUG_PRINT(") ");
+        IRCDEBUG_PRINT(" codeLen=");
+        IRCDEBUG_PRINTLN(codeLen, DEC);
       } // end else
 
       digitalWrite(STATUS_PIN, HIGH);
-      sendCode(0); // TODO: Handle repeat
+      sendCode(0);
       digitalWrite(STATUS_PIN, LOW);
+      delay(50); // Wait a bit between retransmissions
+      if (codeType == NEC) // generate repeat signals for NEC protocol
+      {
+        sendCode(1);
+        delay(50); // Wait a bit between retransmissions
+        sendCode(1);
+      } // end if
+
       irrecv.enableIRIn(); // Re-enable receiver
     } // else if sendir
   } // else if (Serial.available() > 0)
