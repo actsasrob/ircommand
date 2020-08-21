@@ -328,31 +328,45 @@ void storeCode(decode_results * results) {
       }
     } else if (codeType == SONY) {
       IRCDEBUG_PRINT(IRCDBG + "storeCode() Received SONY: ");
+      codeValue = results->value;
     } else if (codeType == SAMSUNG) {
       IRCDEBUG_PRINT(IRCDBG + "storeCode() Received SAMSUNG: ");
+      codeValue = results->value;
     } else if (codeType == WHYNTER) {
       IRCDEBUG_PRINT(IRCDBG + "storeCode() Received WHYNTER: ");
+      codeValue = results->value;
     } else if (codeType == LG) {
       IRCDEBUG_PRINT(IRCDBG + "storeCode() Received LG: ");
+      codeValue = results->value;
     } else if (codeType == DISH) {
       IRCDEBUG_PRINT(IRCDBG + "storeCode() Received DISH: ");
-    } else if (codeType == DENON) {
+      codeValue = results->value;
+    } else if (codeType == SHARP) {
+      IRCDEBUG_PRINT(IRCDBG + "storeCode() Received SHARP: ");
+      codeValue = (results->address << 10) | (results->value << 2) | 2;
+    } else if(codeType == DENON) {
       IRCDEBUG_PRINT(IRCDBG + "storeCode() Received DENON: ");
+      codeValue = results->value;
     } else if (codeType == PANASONIC) {
       IRCDEBUG_PRINT(IRCDBG + "storeCode() Received PANASONIC: ");
+      codeValue = results->value;
     } else if (codeType == JVC) {
       IRCDEBUG_PRINT(IRCDBG + "storeCode() Received JVC: ");
+      codeValue = results->value;
     } else if (codeType == RC5) {
       IRCDEBUG_PRINT(IRCDBG + "storeCode() Received RC5: ");
+      codeValue = results->value;
     } else if (codeType == RC6) {
       IRCDEBUG_PRINT(IRCDBG + "storeCode() Received RC6: ");
+      codeValue = results->value;
     } else {
       IRCDEBUG_PRINT(IRCDBG + "storeCode() Unexpected codeType ");
       IRCDEBUG_PRINT(codeType, DEC);
       IRCDEBUG_PRINTLN("");
     }
-    IRCDEBUG_PRINTLN(results->value, HEX);
-    codeValue = results->value;
+    //IRCDEBUG_PRINTLN(results->value, HEX);
+    //codeValue = results->value;
+    IRCDEBUG_PRINTLN(codeValue, HEX);
     codeLen = results->bits;
   }
 }
@@ -393,8 +407,12 @@ void sendCode(int repeat) {
     IRCDEBUG_PRINTLN(codeValue, HEX);  
   } else if (codeType == DISH) {
     irsend.sendDISH(codeValue, codeLen);
-    IRCDEBUG_PRINT(IRCDBG + "sendCode() Sent DISHLG ");
+    IRCDEBUG_PRINT(IRCDBG + "sendCode() Sent DISH ");
     IRCDEBUG_PRINTLN(codeValue, HEX);  
+  } else if (codeType == SHARP) {
+    irsend.sendSharpRaw(codeValue, codeLen);
+    IRCDEBUG_PRINT(IRCDBG + "sendCode() Sent Sharp ");
+    IRCDEBUG_PRINTLN(codeValue, HEX); 
   } else if (codeType == DENON) {
     irsend.sendDenon(codeValue, codeLen);
     IRCDEBUG_PRINT(IRCDBG + "sendCode() Sent Denon ");
