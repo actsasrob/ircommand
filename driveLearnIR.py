@@ -6,6 +6,15 @@ import sys, select
 
 LIR_CMD_SIZE = 10
 
+LastIRSignal = ""
+
+def sendLIRSignal():
+    global LastIRSignal
+
+    tmpStr = LastIRSignal + " FF "
+    ser.write(tmpStr.encode())
+    print("SendLIRSignal: DEBUG: Sent: " + tmpStr)
+
 def sendLIR(command):
     tmpList = list(command[0:(LIR_CMD_SIZE - 1)])
     theLength = len(tmpList)
@@ -29,6 +38,8 @@ def sendLIR(command):
     ser.write(tmpStr.encode())
 
 def main():
+    global LastIRSignal
+
     while True:
         prompt = "Enter LearnIR command sequence followed by <ENTER> key to send:"
         print(prompt)
@@ -42,7 +53,14 @@ def main():
             while True: # read/print/process anything coming from Serial port
                line = ser.readline().decode('utf-8').rstrip()
                if line != "":
-                   print(line) # probably IRCommand debug output
+                   if line.startswith("LIR:"):
+                       print("IR signal from LearnIR: " + line)
+                       LastIRSignal = line
+                   elif line.startswith("I>"):
+                       print("LearnIR ready to send IR signal: " + line)
+                       sendLIRSignal()
+                   else:
+                       print(line) # Possibly LearnIR debug output
                else:
                    break
 
