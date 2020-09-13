@@ -6,8 +6,14 @@ Usage::
 """
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import logging
+import serial
 import threading
 import time
+
+LIR_CMD_SIZE = 10
+
+ReceivedIRSignal = ""
+SendIRSignal = ""
 
 class S(BaseHTTPRequestHandler):
     def _set_headers(self):
@@ -49,11 +55,57 @@ def run(server_class=HTTPServer, handler_class=S, port=8080):
     httpd.server_close()
     logging.info('Stopping httpd...\n')
 
+### Start: thread to handle LearnIR device I/O
+def sendLIRSignal():
+    global SendIRSignal
+
+    tmpStr = SendIRSignal + " FF "
+    ser.write(tmpStr.encode())
+    logging.info("SendLIRSignal: DEBUG: Sent: " + tmpStr)
+
+def sendLIR(command):
+    tmpList = list(command[0:(LIR_CMD_SIZE - 1)])
+    theLength = len(tmpList)
+    if theLength < LIR_CMD_SIZE - 1:
+        for x in range(theLength, LIR_CMD_SIZE - 1):
+            tmpList.append('_')
+    checksum = ord(tmpList[0]) 
+    logging.debug("sendLIR: DEBUG: checksum=" + "ord(" + str(tmpList[0]) + ")=" + str(checksum))
+    for x in range(1, LIR_CMD_SIZE - 1):
+        checksum1 = checksum ^ ord(tmpList[x])
+        logging.debug("sendLIR: DEBUG: " + str(checksum) + " xor " + str(tmpList[x]) + "=" + str(checksum1))
+        checksum = checksum1
+    tmpList.append(chr(checksum))
+    tmpStr1=""
+    tmpStr=tmpStr1.join(tmpList)
+    logging.info("sendLIR: DEBUG command=" + tmpStr + " checksum=" + str(checksum) + " chr(" + str(checksum) + ")=" + str(chr(checksum)) +"\n")
+
+
 def handle_LearnIR_IO_thread(name):
-    logging.info("Thread %s: starting", name)
-    while True:
-        time.sleep(2)
-        logging.info("Thread %s: still working", name)
+    logging.info("handle_LearnIR_IO_thread %s: starting", name)
+    global SendIRSignal
+
+    ser = serial.Serial('/dev/ttyUSB0', 115200, timeout=1)
+    ser.flush()
+
+    while True:  # Alternate between reading/writing LearnIR serial port
+       line = ser.readline().decode('utf-8').rstrip()
+       if line != "": # read/print/process anything coming from Serial port
+           if line.startswith("LIR: "):
+               logging.info("IR signal from LearnIR: " + line)
+               ReceivedIRSignal = line[len("LIR: "):]
+           elif line.startswith("I>"):
+               logging.info("LearnIR ready to send IR signal: " + line)
+               sendLIRSignal()
+               sendIRSignal = ""
+           else:
+               logging.info("from LearnIR: " + line) # Possibly LearnIR debug output
+       elif (SendIRSignal != ""):
+           sendLIR("I")
+       else:
+           time.sleep(0.5)
+
+### End: thread to handle LearnIR device I/O
 
 if __name__ == '__main__':
     from sys import argv
