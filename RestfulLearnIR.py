@@ -6,18 +6,27 @@ Usage::
 """
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import logging
+import queue
 import serial
 import threading
 import time
 
 LIR_CMD_SIZE = 10
 
+KeepRunning = True
+
 ReceivedIRSignal = ""
-WaitingForIRSignal = 0 # 0 - waiting, 1 - not waiting
-SendIRSignal = ""
+WaitingForIRSignal = False # True - waiting, False - not waiting
+
+#SendIRSignal = ""
+
+SendIRSignalQueue = queue.LifoQueue()
+WaitingToSend = False # False - not waiting, True - waiting
 
 ser = serial.Serial('/dev/ttyUSB0', 115200, timeout=1)
 ser.flush()
+
+ReceiveLock = threading.Lock()
 
 def sendLIR(command):
     tmpList = list(command[0:(LIR_CMD_SIZE - 1)])
@@ -37,7 +46,7 @@ def sendLIR(command):
     ser.write(tmpStr.encode())
     logging.debug("sendLIR: DEBUG command=" + tmpStr + " checksum=" + str(checksum) + " chr(" + str(checksum) + ")=" + str(chr(checksum)) +"\n")
 
-class S(BaseHTTPRequestHandler):
+class httpServer(BaseHTTPRequestHandler):
     def _set_headers(self):
         self.send_response(200)
         self.send_header('Content-type', 'text/html')
@@ -47,7 +56,7 @@ class S(BaseHTTPRequestHandler):
         global ReceivedIRSignal
         global WaitingForIRSignal
 
-        WaitingForIRSignal = 1 
+        WaitingForIRSignal = True 
 
         logging.info("GET request,\nPath: %s\nHeaders:\n%s\n", str(self.path), str(self.headers))
         self._set_headers()
@@ -58,31 +67,35 @@ class S(BaseHTTPRequestHandler):
         while (x < 5) and (ReceivedIRSignal == ""):
             x+=0.5
             time.sleep(0.5)
+        ReceiveLock.acquire()
         if ReceivedIRSignal != "": 
             self.wfile.write(bytes(ReceivedIRSignal, "utf-8"))
         else:
             self.wfile.write(bytes("error", "utf-8"))
         ReceivedIRSignal = ""
+        ReceiveLock.release()
         self.wfile.write(bytes("</body></html>", "utf-8"))
 
     def do_POST(self):
         '''Send IR signal contained in post request body'''
-        global SendIRSignal
+        global SendIRSignalQueue
         content_length = int(self.headers['Content-Length']) # <--- Gets the size of data
         post_data = self.rfile.read(content_length) # <--- Gets the data itself
-        print(b"post_data=" + post_data)
         logging.info("POST request,\nPath: %s\nHeaders:\n%s\n\nBody:\n%s\n", str(self.path), str(self.headers), post_data.decode('utf-8'))
-        SendIRSignal = post_data
-        sendLIR("I")
+        #SendIRSignal = post_data
+        SendIRSignalQueue.put(post_data)
+        #sendLIR("I")
         self._set_headers()
         #self.wfile.write("POST request for {}".format(self.path).encode('utf-8'))
-        self.wfile.write(bytes("received post request:<br>{}".format(post_data), "utf-8"))
+        #self.wfile.write(bytes("received post request:<br>{}".format(post_data), "utf-8"))
     
 
     def do_PUT(self):
         self.do_POST()
 
-def run(server_class=HTTPServer, handler_class=S, port=8080):
+def run(server_class=HTTPServer, handler_class=httpServer, port=8080):
+    global KeepRunning
+
     server_address = ('', port)
     httpd = server_class(server_address, handler_class)
     logging.info('Starting httpd...\n')
@@ -90,42 +103,56 @@ def run(server_class=HTTPServer, handler_class=S, port=8080):
         httpd.serve_forever()
     except KeyboardInterrupt:
         pass
+    KeepRunning = False
     httpd.server_close()
     logging.info('Stopping httpd...\n')
 
 ### Start: thread to handle LearnIR device I/O
 def sendLIRSignal():
-    global SendIRSignal
+    global SendIRSignalQueue
     global ser
 
-    tmpBytes = SendIRSignal + bytes(" FF ", "utf-8")
+    tmpBytes = SendIRSignalQueue.get() + bytes(" FF ", "utf-8")
     ser.write(tmpBytes)
     logging.debug(b"sendLIRSignal: Sent: " + tmpBytes)
 
 
-def handle_LearnIR_IO_thread(name):
-    logging.info("handle_LearnIR_IO_thread %s: starting", name)
-    global ReceivedIRSignal
-    global WaitingForIRSignal
-    global SendIRSignal
-    global ser
+class handle_LearnIR_IO_thread (threading.Thread):
+   def __init__(self, threadID, name):
+      threading.Thread.__init__(self)
+      self.threadID = threadID
+      self.name = name
+   def run(self):
+       logging.info("handle_LearnIR_IO_thread %s: starting", self.name)
+       global KeepRunning
+       global ReceivedIRSignal
+       global WaitingForIRSignal
+       global SendIRSignalQueue
+       global WaitingToSend
+       global ser
 
-    while True:  # Alternate between reading/writing LearnIR serial port
-       line = ser.readline().decode('utf-8').rstrip()
-       if line != "": # read/print/process anything coming from Serial port
-           logging.info("from LearnIR: " + line)
-           if line.startswith("LIR: "):
-               if WaitingForIRSignal == 1: # Only keep signal if we were expecting one
-                   logging.info("IR signal from LearnIR: " + line)
-                   ReceivedIRSignal = line[len("LIR: "):] 
-                   WaitingForIRSignal = 0
-           elif line.startswith("I>"):
-               logging.info("LearnIR ready to receive IR signal")
-               sendLIRSignal()
-               SendIRSignal = ""
-       else:
-           #logging.debug("sleeping...")
-           time.sleep(0.5)
+       while KeepRunning:  # Alternate between reading/writing LearnIR serial port
+          line = ser.readline().decode('utf-8').rstrip()
+          if line != "": # read/print/process anything coming from Serial port
+              logging.info("from LearnIR: " + line)
+              if line.startswith("LIR: "):
+                  if WaitingForIRSignal: # Only keep signal if we were expecting one
+                      logging.info("IR signal from LearnIR: " + line)
+                      ReceiveLock.acquire()
+                      ReceivedIRSignal = line[len("LIR: "):] 
+                      WaitingForIRSignal = False 
+                      ReceiveLock.release()
+              elif line.startswith("I>"):
+                  logging.info("LearnIR ready to receive IR signal")
+                  WaitingToSend = False
+                  sendLIRSignal()
+          elif (not SendIRSignalQueue.empty()) and (not WaitingToSend):
+              logging.info("Request permission from LearnIR to send IR signal")
+              WaitingToSend = True
+              sendLIR("I")
+          else:
+              #logging.debug("sleeping...")
+              time.sleep(0.5)
 
 ### End: thread to handle LearnIR device I/O
 
@@ -136,8 +163,9 @@ if __name__ == '__main__':
     logging.basicConfig(format=format, level=logging.INFO,
                         datefmt="%H:%M:%S")
 
-    x = threading.Thread(target=handle_LearnIR_IO_thread, args=(1,), daemon=True)
-    x.start()
+    thread1 = handle_LearnIR_IO_thread(1, "handle_LearnIR_IO_thread")
+    thread1.start()
+
     if len(argv) == 2:
         run(port=int(argv[1]))
     else:
