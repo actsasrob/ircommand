@@ -1,0 +1,1 @@
+https://medium.com/javascript-in-plain-english/drag-and-drop-dashboard-builder-with-angular-and-gridster-a07592e54ce2
