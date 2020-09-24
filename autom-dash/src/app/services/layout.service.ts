@@ -21,7 +21,9 @@ export class LayoutService {
     }
   };  
 public layout: GridsterItem[] = [];  
+//public layout: GridsterItem[] = [{"cols":5,"id":"5d5bd504-45ed-b0cd-ef84-dfe5c148368c","rows":5,"x":0,"y":0},{"cols":5,"id":"229098d2-a233-f0ba-20ed-c91e1cf55aad","rows":5,"x":0,"y":5},{"cols":5,"id":"8646833d-8cc9-4f32-5021-c564cba5ccea","rows":5,"x":5,"y":0},{"cols":5,"id":"e8318ac0-42d6-cdda-e7d9-71c7873a3cfb","rows":5,"x":0,"y":0}];  
 public components: IComponent[] = [];
+//public components: IComponent[] = [{"id":"5d5bd504-45ed-b0cd-ef84-dfe5c148368c","componentRef":"example1"},{"id":"229098d2-a233-f0ba-20ed-c91e1cf55aad","componentRef":"example2"},{"id":"8646833d-8cc9-4f32-5021-c564cba5ccea","componentRef":"example1"}]; 
 dropId: string;
 constructor() { }  
 addItem(): void {
@@ -32,6 +34,8 @@ addItem(): void {
       x: 0,
       y: 0
     });
+  //console.log("LayoutService.addItem: layout" + JSON.stringify(this.layout));
+  //console.log("LayoutService.addItem: components" + JSON.stringify(this.components));
   }  
 deleteItem(id: string): void {
     const item = this.layout.find(d => d.id === id);

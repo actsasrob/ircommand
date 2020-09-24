@@ -7,4 +7,5 @@ export NVM_DIR="$HOME/.nvm"
 nvm use 12.18.4
 
 cd autom-dash 
+npm install
 ng serve --port 4201 --open

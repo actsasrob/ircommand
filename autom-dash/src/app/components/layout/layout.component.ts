@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { GridsterConfig, GridsterItem } from 'angular-gridster2';
 import { LayoutService, IComponent } from '../../services/layout.service';
+import { NGXLogger } from 'ngx-logger';
 
 @Component({
 selector: 'app-layout',
@@ -19,7 +20,10 @@ export class LayoutComponent implements OnInit {
   }
   constructor(
     public layoutService: LayoutService
-  ) { }  
+    //,private logger: NGXLogger
+  ) { 
+  //this.logger.debug("LayoutComponent: constuctor()")
+    }  
 
   ngOnInit() {}
 }
