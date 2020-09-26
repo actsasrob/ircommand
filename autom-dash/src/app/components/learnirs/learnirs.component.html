@@ -1,0 +1,10 @@
+<h2>My LearnIR Devices</h2>
+<ul class="learnirs">
+  <li *ngFor="let learnir of learnirs" (click)="onSelect(learnir)"
+    [class.selected]="learnir === selectedLearnIR"
+    (click)="onSelect(learnir)">
+    <span class="badge">{{learnir.id}}</span> {{learnir.location}} {{learnir.ip_address}}
+  </li>
+</ul>
+
+<app-learnir-detail [learnir]="selectedLearnIR"></app-learnir-detail>

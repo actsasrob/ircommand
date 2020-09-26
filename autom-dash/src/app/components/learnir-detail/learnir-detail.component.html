@@ -1,0 +1,14 @@
+<div *ngIf="learnir">
+      
+  <h2>{{learnir.location}} Details</h2>
+  <div><span>id: </span>{{learnir.id}}</div>
+  <div>
+    <label>Location:
+      <input [(ngModel)]="learnir.location" placeholder="e.g. 'Family Room'"/>
+    </label>
+    <label>IP Address:
+      <input [(ngModel)]="learnir.ip_address" placeholder="e.g. 'localhost'"/>
+    </label>
+  </div>
+
+</div>
