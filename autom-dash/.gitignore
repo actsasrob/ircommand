@@ -41,6 +41,9 @@ yarn-error.log
 testem.log
 /typings
 nohup.out
+*.swp
+*.swo
+*~
 
 # System Files
 .DS_Store
