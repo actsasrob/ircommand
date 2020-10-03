@@ -1,0 +1,33 @@
+
+
+<mat-card *ngFor="let remoteDash of remoteDashes" class="remoteDash-card mat-elevation-z10">
+
+    <mat-card-header>
+
+        <mat-card-title>{{remoteDash.description}}</mat-card-title>
+
+    </mat-card-header>
+
+    <img mat-card-image [src]="remoteDash.iconUrl">
+
+    <mat-card-content>
+        <p>{{remoteDash.longDescription}}</p>
+    </mat-card-content>
+
+    <mat-card-actions class="remoteDash-actions">
+
+        <button mat-raised-button color="primary" [routerLink]="['/remoteDashes', remoteDash.url]">
+            VIEW
+        </button>
+
+      <button mat-mini-fab color="accent">
+        <mat-icon class="add-remoteDash-btn" (click)="editRemoteDash(remoteDash)">edit</mat-icon>
+      </button>
+
+      <button mat-mini-fab color="warn">
+        <mat-icon class="add-remoteDash-btn" (click)="onDeleteRemoteDash(remoteDash)">delete</mat-icon>
+      </button>
+
+    </mat-card-actions>
+
+</mat-card>

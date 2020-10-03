@@ -1,29 +1,49 @@
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * The content below * * * * * * * * * * * -->
-<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * -->
-<!-- * * * * * * * * * * and can be replaced. * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * Delete the template below * * * * * * * * * * -->
-<!-- * * * * * * * to get started with your project! * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+<mat-sidenav-container fullscreen>
 
-<!--
-<app-layout></app-layout>
--->
-<h1>{{title}}</h1>
-<nav>
-  <a routerLink="/learnirs">LearnIRs</a>
-</nav>
-<router-outlet></router-outlet>
+    <mat-sidenav #start>
+        <mat-nav-list (click)="start.close()">
 
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * The content above * * * * * * * * * * * -->
-<!-- * * * * * * * * * * is only a placeholder * * * * * * * * * * -->
-<!-- * * * * * * * * * * and can be replaced. * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
-<!-- * * * * * * * * * * End of Placeholder * * * * * * * * * * * -->
-<!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
+            <a mat-list-item routerLink="/remoteDashes">
+                <mat-icon>library_books</mat-icon>
+                <span>RemoteDashes</span>
+            </a>
 
+            <a mat-list-item routerLink="/IRSignals">
+                <mat-icon>library_books</mat-icon>
+                <span>IR Signals</span>
+            </a>
 
+            <a mat-list-item routerLink="/learnIRs">
+                <mat-icon>library_books</mat-icon>
+                <span>Learn IR Services</span>
+            </a>
 
-<router-outlet></router-outlet>
+            <a mat-list-item routerLink="/login" *ngIf="isLoggedOut$ | async">
+                <mat-icon>account_circle</mat-icon>
+                <span>Login</span>
+            </a>
+
+            <a mat-list-item  (click)="logout()" *ngIf="isLoggedIn$ | async">
+                <mat-icon>exit_to_app</mat-icon>
+                <span>Logout</span>
+            </a>
+
+        </mat-nav-list>
+
+    </mat-sidenav>
+
+    <mat-toolbar color="primary">
+        <button class="menu-button" mat-icon-button (click)="start.open('mouse')">
+            <mat-icon>menu</mat-icon>
+        </button>
+    </mat-toolbar>
+
+  <div class="spinner-container" *ngIf="loading">
+
+    <mat-spinner></mat-spinner>
+
+  </div>
+
+    <router-outlet></router-outlet>
+
+</mat-sidenav-container>

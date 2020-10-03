@@ -1,0 +1,41 @@
+<div class="remoteDashes-panel">
+
+  <div class="header">
+
+    <h2 class="title">All RemoteDashes</h2>
+
+    <button mat-mini-fab>
+      <mat-icon class="add-remoteDash-btn" (click)="onAddRemoteDash()">add</mat-icon>
+    </button>
+
+  </div>
+
+  <div class="counters">
+    <p>In Promo: {{promoTotal$ | async}}</p>
+  </div>
+
+  <mat-tab-group>
+
+    <mat-tab label="Beginners">
+
+      <remote-dashes-card-list (remoteDashChanged)="reload()"
+        [remoteDashes]="beginnerRemoteDashes$ | async">
+
+      </remote-dashes-card-list>
+
+    </mat-tab>
+
+    <mat-tab label="Advanced">
+
+      <remote-dashes-card-list  (remoteDashChanged)="reload()"
+        [remoteDashes]="advancedRemoteDashes$ | async"
+
+      ></remote-dashes-card-list>
+
+    </mat-tab>
+
+  </mat-tab-group>
+
+
+</div>
+
