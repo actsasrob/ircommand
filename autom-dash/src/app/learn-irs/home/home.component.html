@@ -1,0 +1,41 @@
+<div class="learn-irs-panel">
+
+  <div class="header">
+
+    <h2 class="title">All LearnIRs</h2>
+
+    <button mat-mini-fab>
+      <mat-icon class="add-learn-ir-btn" (click)="onAddLearnIR()">add</mat-icon>
+    </button>
+
+  </div>
+
+  <div class="counters">
+    <p>In Promo: {{promoTotal$ | async}}</p>
+  </div>
+
+  <mat-tab-group>
+
+    <mat-tab label="Beginners">
+
+      <learn-irs-card-list (learnIRChanged)="reload()"
+        [learnIRs]="beginnerLearnIRs$ | async">
+
+      </learn-irs-card-list>
+
+    </mat-tab>
+
+    <mat-tab label="Advanced">
+
+      <learn-irs-card-list  (learnIRChanged)="reload()"
+        [learnIRs]="advancedLearnIRs$ | async"
+
+      ></learn-irs-card-list>
+
+    </mat-tab>
+
+  </mat-tab-group>
+
+
+</div>
+

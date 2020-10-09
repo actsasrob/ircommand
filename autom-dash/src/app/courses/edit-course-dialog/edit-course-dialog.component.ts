@@ -38,6 +38,7 @@ export class EditCourseDialogComponent {
             description: ['', Validators.required],
             category: ['', Validators.required],
             longDescription: ['', Validators.required],
+            seqNo: ['', Validators.required],
             promo: ['', []]
         };
 
@@ -63,6 +64,8 @@ export class EditCourseDialogComponent {
             ...this.course,
             ...this.form.value
         };
+
+        console.log("onSave() courxe=" + JSON.stringify(course));
 
         if (this.mode == 'update') {
 

@@ -19,7 +19,11 @@ export class CoursesResolver implements Resolve<boolean> {
             .pipe(
                 tap(loaded => {
                     if (!loaded) {
+                       console.log("CoursesResolver.resolve(): not loaded"); 
                        this.coursesService.getAll();
+                    }
+                    else {
+                       console.log("CoursesResolver.resolve(): loaded"); 
                     }
                 }),
                 filter(loaded => !!loaded),

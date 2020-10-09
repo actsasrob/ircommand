@@ -59,6 +59,22 @@ export class CourseComponent implements OnInit {
 
     }
 
+    add(course: Course) {
+      this.coursesService.add(course);
+    }
+   
+    delete(course: Course) {
+      this.coursesService.delete(course.id);
+    }
+   
+    getCourses() { // HINT: See CoursesResolver
+      this.coursesService.getAll();
+    }
+   
+    update(course: Course) {
+      this.coursesService.update(course);
+    }
+  
     loadLessonsPage(course: Course) {
         this.lessonsService.getWithQuery({
             'courseId': course.id.toString(),

@@ -1,0 +1,33 @@
+
+
+<mat-card *ngFor="let learnIR of learnIRs" class="learn-ir-card mat-elevation-z10">
+
+    <mat-card-header>
+
+        <mat-card-title>{{learnIR.description}}</mat-card-title>
+
+    </mat-card-header>
+
+    <img mat-card-image [src]="learnIR.iconUrl">
+
+    <mat-card-content>
+        <p>{{learnIR.longDescription}}</p>
+    </mat-card-content>
+
+    <mat-card-actions class="learn-ir-actions">
+
+        <button mat-raised-button color="primary" [routerLink]="['/learnIRs', learnIR.url]">
+            VIEW
+        </button>
+
+      <button mat-mini-fab color="accent">
+        <mat-icon class="add-learn-ir-btn" (click)="editLearnIR(learnIR)">edit</mat-icon>
+      </button>
+
+      <button mat-mini-fab color="warn">
+        <mat-icon class="add-learn-ir-btn" (click)="onDeleteLearnIR(learnIR)">delete</mat-icon>
+      </button>
+
+    </mat-card-actions>
+
+</mat-card>

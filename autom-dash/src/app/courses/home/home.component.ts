@@ -4,7 +4,7 @@ import {Observable} from 'rxjs';
 import {defaultDialogConfig} from '../shared/default-dialog-config';
 import {EditCourseDialogComponent} from '../edit-course-dialog/edit-course-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import {map} from 'rxjs/operators';
+import {tap,map} from 'rxjs/operators';
 import {CourseEntityService} from '../services/course-entity.service';
 
 
@@ -12,7 +12,7 @@ import {CourseEntityService} from '../services/course-entity.service';
     selector: 'home',
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.css'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    //changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomeComponent implements OnInit {
 
@@ -33,11 +33,13 @@ export class HomeComponent implements OnInit {
     }
 
   reload() {
-
+    console.log("Courses HomeComponent: reload()");
     this.beginnerCourses$ = this.coursesService.entities$
       .pipe(
+        tap(courses => console.log("Courses.HomeComponent.reload(): " + JSON.stringify(courses))),
         map(courses => courses.filter(course => course.category == 'BEGINNER'))
       );
+    //this.beginnerCourses$.subscribe(val => console.log("Courses.HomeComponent: reload(): " + JSON.stringify(val)));
 
     this.advancedCourses$ = this.coursesService.entities$
       .pipe(

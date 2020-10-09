@@ -16,14 +16,15 @@ export class CoursesHttpService {
     }
 
     findAllCourses(): Observable<Course[]> {
-        return this.http.get('/api/courses')
+        console.log("CoursesHttpService: findAllCourses()");
+        return this.http.get('/api/courses1')
             .pipe(
                 map(res => res['payload'])
             );
     }
 
     findCourseByUrl(courseUrl: string): Observable<Course> {
-      return this.http.get<Course>(`/api/courses/${courseUrl}`);
+      return this.http.get<Course>(`/api/coursesByUrl/${courseUrl}`);
     }
 
     findLessons(

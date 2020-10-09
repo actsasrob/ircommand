@@ -3,7 +3,7 @@ import {DefaultDataService, HttpUrlGenerator} from '@ngrx/data';
 import {Course} from '../model/course';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
+import {tap,map} from 'rxjs/operators';
 
 
 
@@ -19,8 +19,10 @@ export class CoursesDataService extends DefaultDataService<Course> {
     getAll(): Observable<Course[]> {
         return this.http.get('/api/courses')
             .pipe(
+                tap(res => console.log("CoursesDataService: getAll(): " + JSON.stringify(res))),
                 map(res => res["payload"])
             );
     }
 
 }
+

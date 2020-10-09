@@ -42,6 +42,11 @@ import { entityConfig } from './entity-metadata';
 
 const routes: Routes = [
     {
+        path: 'courses',
+        loadChildren: () => import('./courses/courses.module').then(m => m.CoursesModule),
+        canActivate: [AuthGuard]
+    },
+    {
         path: 'remoteDashes',
         loadChildren: () => import('./remote-dashes/remote-dashes.module').then(m => m.RemoteDashesModule),
         canActivate: [AuthGuard]

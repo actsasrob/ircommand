@@ -607,6 +607,20 @@ export const LESSONS = {
 
 };
 
+export const LEARN_IRS: any = {
+
+  1: {
+    id: 1,
+    description: 'NgRx (with NgRx Data) - The Complete Guide',
+    longDescription: 'Learn the modern Ngrx Ecosystem, including NgRx Data, Store, Effects, Router Store, Ngrx Entity, and Dev Tools.',
+    iconUrl: 'https://angular-university.s3-us-west-1.amazonaws.com/course-images/ngrx-v2.png',
+    category: 'BEGINNER',
+    lessonsCount: 10,
+    seqNo: 0,
+    url: 'ngrx-course'
+  }
+};
+
 
 export function findRemoteDashById(remoteDashId: number) {
   return REMOTE_DASHES[remoteDashId];
@@ -616,6 +630,10 @@ export function findLessonsForRemoteDash(remoteDashId: number) {
   return Object.values(LESSONS).filter(lesson => lesson.remoteDashId == remoteDashId);
 }
 
+
+export function findLearnIRById(LearnIRId: number) {
+  return LEARN_IRS[learnIRId];
+}
 
 export function authenticate(email: string, password: string) {
 
