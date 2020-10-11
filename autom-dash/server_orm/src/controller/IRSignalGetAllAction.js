@@ -20,7 +20,7 @@ function IRSignalGetAllAction(request, response) {
         // get item repository to perform operations  
         const itemRepository = typeorm_1.getManager().getRepository(IRSignal_1.IRSignal);
         // load item by a given id
-        const items = yield itemRepository.find();
+        const items = yield itemRepository.find({ relations: ["user"] });
         console.log("IRSignalGetAllAction: " + JSON.stringify(items));
         // return loaded items 
         response.status(200).json({ payload: Object.values(items) });

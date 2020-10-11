@@ -11,7 +11,7 @@ export async function IRSignalGetAllAction(request: Request, response: Response)
     const itemRepository = getManager().getRepository(IRSignal);
 
     // load item by a given id
-    const items = await itemRepository.find();
+    const items = await itemRepository.find({ relations: ["user"] });
 
     console.log("IRSignalGetAllAction: " + JSON.stringify(items));
 
