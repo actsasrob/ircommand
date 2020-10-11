@@ -10,32 +10,10 @@
 
   </div>
 
-  <div class="counters">
-    <p>In Promo: {{promoTotal$ | async}}</p>
-  </div>
-
-  <mat-tab-group>
-
-    <mat-tab label="Beginners">
-
       <learn-irs-card-list (learnIRChanged)="reload()"
-        [learnIRs]="beginnerLearnIRs$ | async">
+        [learnIRs]="learnIRs$ | async">
 
       </learn-irs-card-list>
-
-    </mat-tab>
-
-    <mat-tab label="Advanced">
-
-      <learn-irs-card-list  (learnIRChanged)="reload()"
-        [learnIRs]="advancedLearnIRs$ | async"
-
-      ></learn-irs-card-list>
-
-    </mat-tab>
-
-  </mat-tab-group>
-
 
 </div>
 

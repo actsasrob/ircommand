@@ -3,7 +3,7 @@ import {DefaultDataService, HttpUrlGenerator} from '@ngrx/data';
 import {LearnIR} from '../model/learn-ir';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
+import {tap,map} from 'rxjs/operators';
 
 
 
@@ -17,10 +17,18 @@ export class LearnIRsDataService extends DefaultDataService<LearnIR> {
     }
 
     getAll(): Observable<LearnIR[]> {
-        return this.http.get('/api/learnIRs')
+        /*return this.http.get('/api/learnIRs')
             .pipe(
                 map(res => res["payload"])
             );
+        */
+        return this.http.get('/api/learnIRs')
+          .pipe(
+             map(res => res["payload"]),
+             tap(learnIRs => console.log("LearnIR.LearnIRsDataService: " + JSON.stringify(learnIRs))),
+             map(learnIRs => learnIRs.filter(learnIR => learnIR.user.id == JSON.parse(localStorage.getItem('user')).id)),
+             tap(learnIRs => console.log("LearnIR.LearnIRsDataService1: " + JSON.stringify(learnIRs))),
+      );
     }
 
 }

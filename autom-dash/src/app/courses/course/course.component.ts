@@ -4,7 +4,7 @@ import {Course} from '../model/course';
 import {Observable, of} from 'rxjs';
 import {Lesson} from '../model/lesson';
 import {concatMap, delay, filter, first, map, shareReplay, tap, withLatestFrom} from 'rxjs/operators';
-import {CoursesHttpService} from '../services/courses-http.service';
+//import {CoursesHttpService} from '../services/courses-http.service';
 import {CourseEntityService} from '../services/course-entity.service';
 import {LessonEntityService} from '../services/lesson-entity.service';
 

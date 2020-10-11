@@ -3,7 +3,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {LearnIR} from '../model/learn-ir';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
-import {LearnIRsHttpService} from '../services/learn-irs-http.service';
+//import {LearnIRsHttpService} from '../services/learn-irs-http.service';
 import {LearnIREntityService} from '../services/learn-ir-entity.service';
 
 @Component({
@@ -35,10 +35,9 @@ export class EditLearnIRDialogComponent {
         this.mode = data.mode;
 
         const formControls = {
-            description: ['', Validators.required],
-            category: ['', Validators.required],
-            longDescription: ['', Validators.required],
-            promo: ['', []]
+            location: ['', Validators.required],
+            address: ['', Validators.required],
+            seqNo: ['', Validators.required],
         };
 
         if (this.mode == 'update') {
@@ -47,8 +46,9 @@ export class EditLearnIRDialogComponent {
         } else if (this.mode == 'create') {
             this.form = this.fb.group({
                 ...formControls,
-                url: ['', Validators.required],
-                iconUrl: ['', Validators.required]
+                location: ['', Validators.required],
+                address: ['', Validators.required],
+                seqNo: [2, Validators.required],
             });
         }
     }
@@ -61,7 +61,7 @@ export class EditLearnIRDialogComponent {
 
         const learnIR: LearnIR = {
             ...this.learnIR,
-            ...this.form.value
+            ...this.form.value,
         };
 
         if (this.mode == 'update') {
@@ -70,7 +70,8 @@ export class EditLearnIRDialogComponent {
 
             this.dialogRef.close();
         } else if (this.mode == 'create') {
-
+            learnIR.userId = JSON.parse(localStorage.getItem('user')).id;
+            console.log("learnIR before learnIRsService.add(): " + JSON.stringify(learnIR));
             this.learnIRsService.add(learnIR)
                 .subscribe(
                     newLearnIR => {

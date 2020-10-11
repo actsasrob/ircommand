@@ -19,6 +19,10 @@ import {IRSignalGetAllAction} from "./controller/IRSignalGetAllAction";
 import {IRSignalCreateAction} from "./controller/IRSignalCreateAction";
 import {IRSignalUpdateAction} from "./controller/IRSignalUpdateAction";
 import {IRSignalDeleteAction} from "./controller/IRSignalDeleteAction";
+import {remoteDashGetAllAction} from "./controller/RemoteDashGetAllAction";
+import {remoteDashCreateAction} from "./controller/RemoteDashCreateAction";
+import {remoteDashUpdateAction} from "./controller/RemoteDashUpdateAction";
+import {remoteDashDeleteAction} from "./controller/RemoteDashDeleteAction";
 
 /**
  * All application routes.
@@ -129,4 +133,25 @@ export const AppRoutes = [
         method: "delete",
         action: IRSignalDeleteAction
     },
+    {
+        path: "/api/remoteDash",
+        method: "post",
+        action: remoteDashCreateAction
+    },
+    {
+        path: "/api/remoteDash/:id",
+        method: "put",
+        action: remoteDashUpdateAction
+    },
+    {
+        path: "/api/remoteDashes",
+        method: "get",
+        action: remoteDashGetAllAction
+    },
+    {
+        path: "/api/remoteDash/:id",
+        method: "delete",
+        action: remoteDashDeleteAction
+    },
+
 ];

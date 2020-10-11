@@ -8,7 +8,7 @@ import {authenticate} from "./db-data";
 
 export function loginUser(req: Request, res: Response) {
 
-    console.log("User login attempt ...");
+    console.log("old User login attempt ...");
 
     const {email, password} = req.body;
 

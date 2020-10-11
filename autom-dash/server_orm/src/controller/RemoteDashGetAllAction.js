@@ -9,23 +9,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.courseSaveAction = void 0;
+exports.remoteDashGetAllAction = void 0;
 const typeorm_1 = require("typeorm");
-const Course_1 = require("../entity/Course");
+const RemoteDash_1 = require("../entity/RemoteDash");
 /**
- * Saves given course.
+ * Loads all RemoteDashs from the database.
  */
-function courseSaveAction(request, response) {
+function remoteDashGetAllAction(request, response) {
     return __awaiter(this, void 0, void 0, function* () {
-        // get a course repository to perform operations with course
-        const courseRepository = typeorm_1.getManager().getRepository(Course_1.Course);
-        // create a real course object from course json object sent over http
-        const newCourse = courseRepository.save(request.body);
-        // save received course
-        yield courseRepository.save(newCourse);
-        // return saved course back
-        response.send(newCourse);
+        // get item repository to perform operations  
+        const itemRepository = typeorm_1.getManager().getRepository(RemoteDash_1.RemoteDash);
+        // load item by a given id
+        const items = yield itemRepository.find();
+        console.log("learnIRGetAllAction: " + JSON.stringify(items));
+        // return loaded items 
+        response.status(200).json({ payload: Object.values(items) });
+        //response.send(items);
     });
 }
-exports.courseSaveAction = courseSaveAction;
-//# sourceMappingURL=CourseSaveAction.js.map
+exports.remoteDashGetAllAction = remoteDashGetAllAction;
+//# sourceMappingURL=RemoteDashGetAllAction.js.map

@@ -11,7 +11,7 @@ export async function learnIRGetAllAction(request: Request, response: Response) 
     const itemRepository = getManager().getRepository(LearnIR);
 
     // load item by a given id
-    const items = await itemRepository.find();
+    const items = await itemRepository.find({ relations: ["user"] });
 
     console.log("learnIRGetAllAction: " + JSON.stringify(items));
 

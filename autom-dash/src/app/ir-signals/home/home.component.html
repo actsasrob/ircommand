@@ -1,0 +1,19 @@
+<div class="ir-signals-panel">
+
+  <div class="header">
+
+    <h2 class="title">All IRSignals</h2>
+
+    <button mat-mini-fab>
+      <mat-icon class="add-ir-signal-btn" (click)="onAddIRSignal()">add</mat-icon>
+    </button>
+
+  </div>
+
+      <ir-signals-card-list (IRSignalChanged)="reload()"
+        [IRSignals]="IRSignals$ | async">
+
+      </ir-signals-card-list>
+
+</div>
+

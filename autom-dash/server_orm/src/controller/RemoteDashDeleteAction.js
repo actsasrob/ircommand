@@ -9,27 +9,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.courseGetByUrlAction = void 0;
+exports.remoteDashDeleteAction = void 0;
 const typeorm_1 = require("typeorm");
-const Course_1 = require("../entity/Course");
+const RemoteDash_1 = require("../entity/RemoteDash");
 /**
- * Loads course by a given url.
+ * Delete item by a given id.
  */
-function courseGetByUrlAction(request, response) {
+function remoteDashDeleteAction(request, response) {
     return __awaiter(this, void 0, void 0, function* () {
-        // get a course repository to perform operations with course
-        const courseRepository = typeorm_1.getManager().getRepository(Course_1.Course);
-        // load a course by a given course id
-        const course = yield courseRepository.findOne(request.params.url);
-        // if course was not found return 404 to the client
-        if (!course) {
+        // get an item repository to perform operations
+        const itemRepository = typeorm_1.getManager().getRepository(RemoteDash_1.RemoteDash);
+        const id = request.params.id;
+        // load an object by a given id
+        const item = yield itemRepository.findOne(id);
+        if (!item) {
             response.status(404);
             response.end();
             return;
         }
-        // return loaded course
-        response.send(course);
+        yield itemRepository.remove(item);
+        // return loaded item id
+        response.status(200).json({ id });
     });
 }
-exports.courseGetByUrlAction = courseGetByUrlAction;
-//# sourceMappingURL=CourseGetByUrlAaction.js.map
+exports.remoteDashDeleteAction = remoteDashDeleteAction;
+//# sourceMappingURL=RemoteDashDeleteAction.js.map

@@ -16,6 +16,6 @@ export class LearnIR {
     @Column()
     address: string;
 
-    @ManyToOne(type => User, user => user.remoteDashes)
+    @ManyToOne(type => User, user => user.learnIRs)
     user: User;
 }

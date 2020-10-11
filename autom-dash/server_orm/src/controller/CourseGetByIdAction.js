@@ -20,7 +20,7 @@ function courseGetByIdAction(request, response) {
         // get a course repository to perform operations with course
         const courseRepository = typeorm_1.getManager().getRepository(Course_1.Course);
         // load a course by a given course id
-        const course = yield courseRepository.findOne(request.params.id);
+        const course = yield courseRepository.findOne({ id: parseInt(request.params.id) });
         // if course was not found return 404 to the client
         if (!course) {
             response.status(404);

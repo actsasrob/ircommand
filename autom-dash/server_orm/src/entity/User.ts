@@ -3,7 +3,7 @@ import {RemoteDash} from "./RemoteDash";
 import {LearnIR} from "./LearnIR";
 import {IRSignal} from "./IRSignal";
 
-@Entity()
+@Entity("users")
 export class User {
 
     @PrimaryGeneratedColumn()

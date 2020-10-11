@@ -2,14 +2,9 @@
 export interface LearnIR {
   id: number;
   seqNo:number;
-  url:string;
-  iconUrl: string;
-  learnIRListIcon: string;
-  description: string;
-  longDescription?: string;
-  category: string;
-  lessonsCount: number;
-  promo: boolean;
+  location:string;
+  address: string;
+  userId: number;
 }
 
 

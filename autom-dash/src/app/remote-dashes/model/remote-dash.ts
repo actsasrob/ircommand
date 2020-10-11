@@ -2,14 +2,8 @@
 export interface RemoteDash {
   id: number;
   seqNo:number;
-  url:string;
-  iconUrl: string;
-  remoteDashListIcon: string;
-  description: string;
-  longDescription?: string;
-  category: string;
-  lessonsCount: number;
-  promo: boolean;
+  layout:string;
+  userId: number;
 }
 
 

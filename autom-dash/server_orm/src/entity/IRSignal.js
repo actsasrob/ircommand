@@ -35,7 +35,7 @@ __decorate([
     __metadata("design:type", String)
 ], IRSignal.prototype, "name", void 0);
 __decorate([
-    typeorm_1.ManyToOne(type => User_1.User, user => user.remoteDashes),
+    typeorm_1.ManyToOne(type => User_1.User, user => user.IRSignals),
     __metadata("design:type", User_1.User)
 ], IRSignal.prototype, "user", void 0);
 IRSignal = __decorate([

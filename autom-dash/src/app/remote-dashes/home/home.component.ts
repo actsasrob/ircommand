@@ -16,15 +16,11 @@ import {RemoteDashEntityService} from '../services/remote-dash-entity.service';
 })
 export class HomeComponent implements OnInit {
 
-    promoTotal$: Observable<number>;
-
-    beginnerRemoteDashes$: Observable<RemoteDash[]>;
-
-    advancedRemoteDashes$: Observable<RemoteDash[]>;
+    remoteDashes$: Observable<RemoteDash[]>;
 
     constructor(
       private dialog: MatDialog,
-      private remoteDashesService: RemoteDashEntityService) {
+      private remoteDashService: RemoteDashEntityService) {
 
     }
 
@@ -34,17 +30,17 @@ export class HomeComponent implements OnInit {
 
   reload() {
 
-    this.beginnerRemoteDashes$ = this.remoteDashesService.entities$
+    this.remoteDashes$ = this.remoteDashService.entities$
       .pipe(
         map(remoteDashes => remoteDashes.filter(remoteDash => remoteDash.category == 'BEGINNER'))
       );
 
-    this.advancedRemoteDashes$ = this.remoteDashesService.entities$
+    this.advancedRemoteDashes$ = this.remoteDashService.entities$
       .pipe(
         map(remoteDashes => remoteDashes.filter(remoteDash => remoteDash.category == 'ADVANCED'))
       );
 
-    this.promoTotal$ = this.remoteDashesService.entities$
+    this.promoTotal$ = this.remoteDashService.entities$
         .pipe(
             map(remoteDashes => remoteDashes.filter(remoteDash => remoteDash.promo).length)
         );

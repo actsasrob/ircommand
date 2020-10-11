@@ -45,7 +45,7 @@ __decorate([
     __metadata("design:type", Array)
 ], User.prototype, "IRSignals", void 0);
 User = __decorate([
-    typeorm_1.Entity()
+    typeorm_1.Entity("users")
 ], User);
 exports.User = User;
 //# sourceMappingURL=User.js.map

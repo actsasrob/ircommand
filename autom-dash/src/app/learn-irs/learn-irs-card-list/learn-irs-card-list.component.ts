@@ -58,10 +58,3 @@ export class LearnIRsCardListComponent implements OnInit {
 }
 
 
-
-
-
-
-
-
-

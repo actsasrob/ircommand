@@ -46,12 +46,21 @@ const routes: Routes = [
         loadChildren: () => import('./courses/courses.module').then(m => m.CoursesModule),
         canActivate: [AuthGuard]
     },
-    {
+    /*{
         path: 'remoteDashes',
         loadChildren: () => import('./remote-dashes/remote-dashes.module').then(m => m.RemoteDashesModule),
         canActivate: [AuthGuard]
     },
-    { path: 'learnIRs', component: LearnirsComponent,
+    */
+    { path: 'learnIRs', 
+      loadChildren: () => import('./learn-irs/learn-irs.module').then(m => m.LearnIRsModule),
+      canActivate: [ AuthGuard]
+    },
+    { path: 'IRSignals', 
+      loadChildren: () => import('./ir-signals/ir-signals.module').then(m => m.IRSignalsModule),
+      canActivate: [ AuthGuard]
+    },
+    { path: 'learnIRsold', component: LearnirsComponent,
       canActivate: [ AuthGuard]
     },
     {

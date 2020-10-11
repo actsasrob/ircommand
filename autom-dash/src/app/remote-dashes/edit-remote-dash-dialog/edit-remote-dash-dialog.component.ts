@@ -3,7 +3,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {RemoteDash} from '../model/remote-dash';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
-import {RemoteDashesHttpService} from '../services/remote-dashes-http.service';
+//import {RemoteDashesHttpService} from '../services/remote-dashes-http.service';
 import {RemoteDashEntityService} from '../services/remote-dash-entity.service';
 
 @Component({
@@ -70,6 +70,8 @@ export class EditRemoteDashDialogComponent {
 
             this.dialogRef.close();
         } else if (this.mode == 'create') {
+            remoteDash.userId = JSON.parse(localStorage.getItem('user')).id;
+            console.log("remoteDash before remoteDashesService.add(): " + JSON.stringify(remoteDash));
 
             this.remoteDashesService.add(remoteDash)
                 .subscribe(

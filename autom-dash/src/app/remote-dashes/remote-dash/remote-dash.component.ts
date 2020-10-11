@@ -21,15 +21,12 @@ export class RemoteDashComponent implements OnInit {
 
     loading$: Observable<boolean>;
 
-    lessons$: Observable<Lesson[]>;
-
-    displayedColumns = ['seqNo', 'description', 'duration'];
+    displayedColumns = ['seqNo', 'layout'];
 
     nextPage = 0;
 
     constructor(
         private remoteDashesService: RemoteDashEntityService,
-        private lessonsService: LessonEntityService,
         private route: ActivatedRoute) {
 
     }

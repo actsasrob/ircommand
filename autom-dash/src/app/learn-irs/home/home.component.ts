@@ -4,7 +4,7 @@ import {Observable} from 'rxjs';
 import {defaultDialogConfig} from '../shared/default-dialog-config';
 import {EditLearnIRDialogComponent} from '../edit-learn-ir-dialog/edit-learn-ir-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import {map} from 'rxjs/operators';
+import {tap,map} from 'rxjs/operators';
 import {LearnIREntityService} from '../services/learn-ir-entity.service';
 
 
@@ -16,11 +16,7 @@ import {LearnIREntityService} from '../services/learn-ir-entity.service';
 })
 export class HomeComponent implements OnInit {
 
-    promoTotal$: Observable<number>;
-
-    beginnerLearnIRs$: Observable<LearnIR[]>;
-
-    advancedLearnIRs$: Observable<LearnIR[]>;
+    learnIRs$: Observable<LearnIR[]>;
 
     constructor(
       private dialog: MatDialog,
@@ -34,20 +30,13 @@ export class HomeComponent implements OnInit {
 
   reload() {
 
-    this.beginnerLearnIRs$ = this.learnIRsService.entities$
+    this.learnIRs$ = this.learnIRService.entities$;
+    /*this.learnIRs$ = this.learnIRService.entities$
       .pipe(
-        map(learnIRs => learnIRs.filter(learnIR => learnIR.category == 'BEGINNER'))
+        tap(learnIRs => console.log("LearnIR.HomeComponent.reload(): " + JSON.stringify(learnIRs))),
+        map(learnIRs => learnIRs.filter(learnIR => learnIR.userId == JSON.parse(localStorage.getItem('user')).id))
       );
-
-    this.advancedLearnIRs$ = this.learnIRsService.entities$
-      .pipe(
-        map(learnIRs => learnIRs.filter(learnIR => learnIR.category == 'ADVANCED'))
-      );
-
-    this.promoTotal$ = this.learnIRsService.entities$
-        .pipe(
-            map(learnIRs => learnIRs.filter(learnIR => learnIR.promo).length)
-        );
+     */
 
   }
 
@@ -60,8 +49,10 @@ export class HomeComponent implements OnInit {
       mode: 'create'
     };
 
-    this.dialog.open(EditLearnIRDialogComponent, dialogConfig);
+    //this.dialog.open(EditLearnIRDialogComponent, dialogConfig);
+    const dialogRef = this.dialog.open(EditLearnIRDialogComponent, dialogConfig);
 
+    
   }
 
 

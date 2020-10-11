@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {HomeComponent} from './home/home.component';
 import {LearnIRsCardListComponent} from './learn-irs-card-list/learn-irs-card-list.component';
 import {EditLearnIRDialogComponent} from './edit-learn-ir-dialog/edit-learn-ir-dialog.component';
-import {LearnIRsHttpService} from './services/learn-irs-http.service';
+//import {LearnIRsHttpService} from './services/learn-irs-http.service';
 import {LearnIRComponent} from './learn-ir/learn-ir.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatDialogModule} from '@angular/material/dialog';
@@ -96,7 +96,7 @@ const entityMetadata: EntityMetadataMap = {
     ],
     entryComponents: [EditLearnIRDialogComponent],
     providers: [
-        LearnIRsHttpService,
+        //LearnIRsHttpService,
         LearnIREntityService,
         LessonEntityService,
         LearnIRsResolver,

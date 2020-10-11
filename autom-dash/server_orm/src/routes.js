@@ -22,6 +22,10 @@ const IRSignalGetAllAction_1 = require("./controller/IRSignalGetAllAction");
 const IRSignalCreateAction_1 = require("./controller/IRSignalCreateAction");
 const IRSignalUpdateAction_1 = require("./controller/IRSignalUpdateAction");
 const IRSignalDeleteAction_1 = require("./controller/IRSignalDeleteAction");
+const RemoteDashGetAllAction_1 = require("./controller/RemoteDashGetAllAction");
+const RemoteDashCreateAction_1 = require("./controller/RemoteDashCreateAction");
+const RemoteDashUpdateAction_1 = require("./controller/RemoteDashUpdateAction");
+const RemoteDashDeleteAction_1 = require("./controller/RemoteDashDeleteAction");
 /**
  * All application routes.
  */
@@ -130,6 +134,26 @@ exports.AppRoutes = [
         path: "/api/IRSignal/:id",
         method: "delete",
         action: IRSignalDeleteAction_1.IRSignalDeleteAction
+    },
+    {
+        path: "/api/remoteDash",
+        method: "post",
+        action: RemoteDashCreateAction_1.remoteDashCreateAction
+    },
+    {
+        path: "/api/remoteDash/:id",
+        method: "put",
+        action: RemoteDashUpdateAction_1.remoteDashUpdateAction
+    },
+    {
+        path: "/api/remoteDashes",
+        method: "get",
+        action: RemoteDashGetAllAction_1.remoteDashGetAllAction
+    },
+    {
+        path: "/api/remoteDash/:id",
+        method: "delete",
+        action: RemoteDashDeleteAction_1.remoteDashDeleteAction
     },
 ];
 //# sourceMappingURL=routes.js.map

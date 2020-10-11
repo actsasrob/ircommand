@@ -19,6 +19,6 @@ export class IRSignal {
     @Column()
     name: string;
 
-    @ManyToOne(type => User, user => user.remoteDashes)
+    @ManyToOne(type => User, user => user.IRSignals)
     user: User;
 }

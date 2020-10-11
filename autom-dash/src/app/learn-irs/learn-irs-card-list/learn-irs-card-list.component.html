@@ -4,19 +4,19 @@
 
     <mat-card-header>
 
-        <mat-card-title>{{learnIR.description}}</mat-card-title>
+        <mat-card-title>{{learnIR.location}}</mat-card-title>
 
     </mat-card-header>
 
     <img mat-card-image [src]="learnIR.iconUrl">
 
     <mat-card-content>
-        <p>{{learnIR.longDescription}}</p>
+        <p>{{learnIR.address}}</p>
     </mat-card-content>
 
     <mat-card-actions class="learn-ir-actions">
 
-        <button mat-raised-button color="primary" [routerLink]="['/learnIRs', learnIR.url]">
+        <button mat-raised-button color="primary" [routerLink]="['/learnIRs', learnIR.id]">
             VIEW
         </button>
 

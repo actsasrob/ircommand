@@ -4,7 +4,7 @@ import {LearnIR} from '../model/learn-ir';
 import {Observable, of} from 'rxjs';
 import {Lesson} from '../model/lesson';
 import {concatMap, delay, filter, first, map, shareReplay, tap, withLatestFrom} from 'rxjs/operators';
-import {LearnIRsHttpService} from '../services/learn-irs-http.service';
+//import {LearnIRsHttpService} from '../services/learn-irs-http.service';
 import {LearnIREntityService} from '../services/learn-ir-entity.service';
 import {LessonEntityService} from '../services/lesson-entity.service';
 
@@ -23,7 +23,7 @@ export class LearnIRComponent implements OnInit {
 
     lessons$: Observable<Lesson[]>;
 
-    displayedColumns = ['seqNo', 'description', 'duration'];
+    displayedColumns = ['seqNo', 'location', 'aaddress'];
 
     nextPage = 0;
 
@@ -38,36 +38,14 @@ export class LearnIRComponent implements OnInit {
 
         const learnIRUrl = this.route.snapshot.paramMap.get('learnIRUrl');
 
+        const user = JSON.parse(localStorage.getItem('user')); 
+
         this.learnIR$ = this.learnIRsService.entities$
             .pipe(
-                map(learnIRs => learnRs.find(learnIR => learnIR.url == learnIRUrl))
+                map(learnIRs => learnIRs.find(learnIR => learnIR.userId == user.id))
             );
 
-        this.lessons$ = this.lessonsService.entities$
-            .pipe(
-                withLatestFrom(this.learnIR$),
-                tap(([lessons, learnIR]) => {
-                    if (this.nextPage == 0) {
-                        this.loadLessonsPage(learnIR);
-                    }
-                }),
-                map(([lessons, learnIR]) =>
-                    lessons.filter(lesson => lesson.learnIRId == learnIR.id))
-            );
+}
 
-        this.loading$ = this.lessonsService.loading$.pipe(delay(0));
-
-    }
-
-    loadLessonsPage(learnIR: LearnIR) {
-        this.lessonsService.getWithQuery({
-            'learnIRId': learnIR.id.toString(),
-            'pageNumber': this.nextPage.toString(),
-            'pageSize': '3'
-        });
-
-        this.nextPage += 1;
-
-    }
 
 }

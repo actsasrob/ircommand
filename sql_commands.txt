@@ -1,0 +1,3 @@
+select users.id, learn_ir.id, learn_ir.location from users left join learn_ir on users.id = "learn_ir"."userId";
+insert into "users" (username, email, password) values ('testuser', 'test@autom-dash.com', 'test');
+insert into "users" (username, email, password) values ('baduser', 'baduser@autom-dash.com', 'baduser');

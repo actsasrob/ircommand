@@ -9,24 +9,23 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.courseGetAllWithLessonsAction = void 0;
+exports.remoteDashUpdateAction = void 0;
 const typeorm_1 = require("typeorm");
-const Course_1 = require("../entity/Course");
+const RemoteDash_1 = require("../entity/RemoteDash");
 /**
- * Loads all courses from the database.
+ * Updates given item.
  */
-function courseGetAllWithLessonsAction(request, response) {
+function remoteDashUpdateAction(request, response) {
     return __awaiter(this, void 0, void 0, function* () {
-        const options = {
-            // ... other options
-            entities: [Course_1.Course, Lesson]
-        };
-        let connection = yield typeorm_1.createConnection(options);
-        // load a course by a given course id
-        const courses = yield connection.getRepository(Course_1.Course).find({ relations: ["lessons"] });
-        // return loaded courses
-        response.send(courses);
+        // get an item repository to perform operations
+        const itemRepository = typeorm_1.getManager().getRepository(RemoteDash_1.RemoteDash);
+        // create a real object from json object sent over http
+        const newObject = itemRepository.create(request.body);
+        // save received object 
+        yield itemRepository.save(newObject);
+        // return saved object back
+        response.send(newObject);
     });
 }
-exports.courseGetAllWithLessonsAction = courseGetAllWithLessonsAction;
-//# sourceMappingURL=CourseGetAllWillLessonsAction.js.map
+exports.remoteDashUpdateAction = remoteDashUpdateAction;
+//# sourceMappingURL=RemoteDashUpdateAction.js.map

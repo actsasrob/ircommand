@@ -1,0 +1,33 @@
+
+
+<mat-card *ngFor="let IRSignal of IRSignals" class="ir-signal-card mat-elevation-z10">
+
+    <mat-card-header>
+
+        <mat-card-title>{{IRSignal.location}}</mat-card-title>
+
+    </mat-card-header>
+
+    <img mat-card-image [src]="IRSignal.iconUrl">
+
+    <mat-card-content>
+        <p>{{IRSignal.name}}</p>
+    </mat-card-content>
+
+    <mat-card-actions class="ir-signal-actions">
+
+        <button mat-raised-button color="primary" [routerLink]="['/IRSignals', IRSignal.id]">
+            VIEW
+        </button>
+
+      <button mat-mini-fab color="accent">
+        <mat-icon class="add-ir-signal-btn" (click)="editIRSignal(IRSignal)">edit</mat-icon>
+      </button>
+
+      <button mat-mini-fab color="warn">
+        <mat-icon class="add-ir-signal-btn" (click)="onDeleteIRSignal(IRSignal)">delete</mat-icon>
+      </button>
+
+    </mat-card-actions>
+
+</mat-card>

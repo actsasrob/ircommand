@@ -31,7 +31,7 @@ __decorate([
     __metadata("design:type", String)
 ], LearnIR.prototype, "address", void 0);
 __decorate([
-    typeorm_1.ManyToOne(type => User_1.User, user => user.remoteDashes),
+    typeorm_1.ManyToOne(type => User_1.User, user => user.learnIRs),
     __metadata("design:type", User_1.User)
 ], LearnIR.prototype, "user", void 0);
 LearnIR = __decorate([

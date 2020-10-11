@@ -15,7 +15,7 @@ export interface AuthState {
 }
 
 export const initialAuthState: AuthState = {
-    user: undefined
+    user: undefined,
 };
 
 export const authReducer = createReducer(
@@ -30,11 +30,9 @@ export const authReducer = createReducer(
 
     on(AuthActions.logout, (state, action) => {
         return {
-            user: undefined
+            user: undefined,
+            //state: undefined
         }
     })
-
-
-
 );
 

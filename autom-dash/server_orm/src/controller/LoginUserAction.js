@@ -14,12 +14,14 @@ const typeorm_1 = require("typeorm");
 const User_1 = require("../entity/User");
 function loginUserAction(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log("User login attempt ...");
+        console.log("server_orm: User login attempt ...");
         const { email, password } = req.body;
+        console.log("loginUserAction: email=" + email);
         // get a user repository to perform operations with user 
         const userRepository = typeorm_1.getManager().getRepository(User_1.User);
         // load a user by a given user id
         const user = yield userRepository.findOne({ email: email });
+        console.log("loginUserAction: " + JSON.stringify(user));
         // if user was not found then add the current user (until registraiion is added) 
         if (!user) {
             res.sendStatus(403);
