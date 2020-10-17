@@ -10,10 +10,10 @@ export async function remoteDashGetAllAction(request: Request, response: Respons
     // get item repository to perform operations  
     const itemRepository = getManager().getRepository(RemoteDash);
 
-    // load item by a given id
-    const items = await itemRepository.find({ relations: ["user"] });
+    // load items with associated relations
+    const items = await itemRepository.find({ relations: ["user", "learnIR"] });
 
-    console.log("learnIRGetAllAction: " + JSON.stringify(items));
+    console.log("RemoteDashGetAllAction: " + JSON.stringify(items));
 
     // return loaded items 
     response.status(200).json({payload:Object.values(items)})

@@ -14,45 +14,37 @@
     <ng-container [formGroup]="form">
 
       <mat-form-field>
-
         <input matInput
-               placeholder="RemoteDash Description"
+               placeholder="name"
+               formControlName="name">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput
+               placeholder="icon Url"
+               formControlName="iconUrl">
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput
+               placeholder="layout"
                formControlName="layout">
-
       </mat-form-field>
 
-      <ng-container *ngIf="mode == 'create'">
-
-
-      </ng-container>
+<div *ngIf="learnIRs$ | async as learnIRs">
+<mat-form-field>
+  <mat-select placeholder="Select LearnIR Device" formControlName="learnIRId" >
+    <mat-option *ngFor="let learnIR of learnIRs" [value]="learnIR.id" >{{ learnIR.location }}</mat-option>
+  </mat-select>
+</mat-form-field>
+</div>
 
       <mat-form-field>
-
-        <mat-select placeholder="Select category"
-                    formControlName="category">
-
-          <mat-option value="BEGINNER">
-            Beginner</mat-option>
-          <mat-option value="INTERMEDIATE">
-            Intermediate</mat-option>
-          <mat-option value="ADVANCED">
-            Advanced</mat-option>
-
-        </mat-select>
-
-      </mat-form-field>
-
-      <mat-slide-toggle formControlName="promo">Promotion On</mat-slide-toggle>
-
-
-      <mat-form-field>
-
-        <textarea matInput placeholder="Description"
-                  formControlName="longDescription">
-
-        </textarea>
-
-      </mat-form-field>
+          <input matInput
+                 type="number"
+                 placeholder="Sequence Number"
+                 formControlName="seqNo">
+        </mat-form-field>
 
     </ng-container>
 

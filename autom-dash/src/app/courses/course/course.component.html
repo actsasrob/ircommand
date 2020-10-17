@@ -13,11 +13,8 @@
   <mat-table class="lessons-table mat-elevation-z8" [dataSource]="lessons$ | async">
 
     <ng-container matColumnDef="seqNo">
-
       <mat-header-cell *matHeaderCellDef>#</mat-header-cell>
-
       <mat-cell *matCellDef="let lesson">{{lesson.seqNo}}</mat-cell>
-
     </ng-container>
 
     <ng-container matColumnDef="description">

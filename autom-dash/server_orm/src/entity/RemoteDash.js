@@ -12,7 +12,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.RemoteDash = void 0;
 const typeorm_1 = require("typeorm");
 const User_1 = require("./User");
+const LearnIR_1 = require("./LearnIR");
 let RemoteDash = class RemoteDash {
+    ;
 };
 __decorate([
     typeorm_1.PrimaryGeneratedColumn(),
@@ -34,6 +36,10 @@ __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
 ], RemoteDash.prototype, "name", void 0);
+__decorate([
+    typeorm_1.ManyToOne(type => LearnIR_1.LearnIR, learnIR => learnIR.remoteDashes),
+    __metadata("design:type", LearnIR_1.LearnIR)
+], RemoteDash.prototype, "learnIR", void 0);
 __decorate([
     typeorm_1.ManyToOne(type => User_1.User, user => user.remoteDashes),
     __metadata("design:type", User_1.User)

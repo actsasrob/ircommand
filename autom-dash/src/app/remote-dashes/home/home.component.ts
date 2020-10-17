@@ -4,7 +4,7 @@ import {Observable} from 'rxjs';
 import {defaultDialogConfig} from '../shared/default-dialog-config';
 import {EditRemoteDashDialogComponent} from '../edit-remote-dash-dialog/edit-remote-dash-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import {map} from 'rxjs/operators';
+import {tap,map} from 'rxjs/operators';
 import {RemoteDashEntityService} from '../services/remote-dash-entity.service';
 
 
@@ -16,11 +16,11 @@ import {RemoteDashEntityService} from '../services/remote-dash-entity.service';
 })
 export class HomeComponent implements OnInit {
 
-    remoteDashes$: Observable<RemoteDash[]>;
+    RemoteDashes$: Observable<RemoteDash[]>;
 
     constructor(
       private dialog: MatDialog,
-      private remoteDashService: RemoteDashEntityService) {
+      private RemoteDashService: RemoteDashEntityService) {
 
     }
 
@@ -30,20 +30,13 @@ export class HomeComponent implements OnInit {
 
   reload() {
 
-    this.remoteDashes$ = this.remoteDashService.entities$
+    this.RemoteDashes$ = this.RemoteDashService.entities$;
+    /*this.RemoteDashes$ = this.RemoteDashService.entities$
       .pipe(
-        map(remoteDashes => remoteDashes.filter(remoteDash => remoteDash.category == 'BEGINNER'))
+        tap(RemoteDashes => console.log("RemoteDash.HomeComponent.reload(): " + JSON.stringify(RemoteDashes))),
+        map(RemoteDashes => RemoteDashes.filter(RemoteDash => RemoteDash.userId == JSON.parse(localStorage.getItem('user')).id))
       );
-
-    this.advancedRemoteDashes$ = this.remoteDashService.entities$
-      .pipe(
-        map(remoteDashes => remoteDashes.filter(remoteDash => remoteDash.category == 'ADVANCED'))
-      );
-
-    this.promoTotal$ = this.remoteDashService.entities$
-        .pipe(
-            map(remoteDashes => remoteDashes.filter(remoteDash => remoteDash.promo).length)
-        );
+     */
 
   }
 
@@ -56,8 +49,10 @@ export class HomeComponent implements OnInit {
       mode: 'create'
     };
 
-    this.dialog.open(EditRemoteDashDialogComponent, dialogConfig);
+    //this.dialog.open(EditRemoteDashDialogComponent, dialogConfig);
+    const dialogRef = this.dialog.open(EditRemoteDashDialogComponent, dialogConfig);
 
+    
   }
 
 

@@ -19,9 +19,9 @@ function remoteDashGetAllAction(request, response) {
     return __awaiter(this, void 0, void 0, function* () {
         // get item repository to perform operations  
         const itemRepository = typeorm_1.getManager().getRepository(RemoteDash_1.RemoteDash);
-        // load item by a given id
-        const items = yield itemRepository.find();
-        console.log("learnIRGetAllAction: " + JSON.stringify(items));
+        // load items with associated relations
+        const items = yield itemRepository.find({ relations: ["user", "learnIR"] });
+        console.log("RemoteDashGetAllAction: " + JSON.stringify(items));
         // return loaded items 
         response.status(200).json({ payload: Object.values(items) });
         //response.send(items);

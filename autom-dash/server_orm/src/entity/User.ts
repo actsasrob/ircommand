@@ -18,12 +18,12 @@ export class User {
     @Column()
     email: string;
 
-    @OneToMany(type => RemoteDash, remoteDash => remoteDash.user)
-    remoteDashes: RemoteDash[];
-
     @OneToMany(type => LearnIR, learnIR => learnIR.user)
     learnIRs: LearnIR[];
 
     @OneToMany(type => IRSignal, IRSignal => IRSignal.user)
     IRSignals: IRSignal[];
+
+    @OneToMany(type => RemoteDash, remoteDash => remoteDash.user)
+    remoteDashes: RemoteDash[];
 }

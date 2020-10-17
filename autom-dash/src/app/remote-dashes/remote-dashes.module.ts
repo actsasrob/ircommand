@@ -3,7 +3,7 @@ import {CommonModule} from '@angular/common';
 import {HomeComponent} from './home/home.component';
 import {RemoteDashesCardListComponent} from './remote-dashes-card-list/remote-dashes-card-list.component';
 import {EditRemoteDashDialogComponent} from './edit-remote-dash-dialog/edit-remote-dash-dialog.component';
-import {RemoteDashesHttpService} from './services/remote-dashes-http.service';
+//import {RemoteDashesHttpService} from './services/remote-dashes-http.service';
 import {RemoteDashComponent} from './remote-dash/remote-dash.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatDialogModule} from '@angular/material/dialog';
@@ -24,26 +24,28 @@ import {RouterModule, Routes} from '@angular/router';
 import {EntityDataService, EntityDefinitionService, EntityMetadataMap} from '@ngrx/data';
 import {compareRemoteDashes, RemoteDash} from './model/remote-dash';
 
-import {compareLessons, Lesson} from './model/lesson';
 import {RemoteDashEntityService} from './services/remote-dash-entity.service';
 import {RemoteDashesResolver} from './services/remote-dashes.resolver';
 import {RemoteDashesDataService} from './services/remote-dashes-data.service';
-import {LessonEntityService} from './services/lesson-entity.service';
+import {LearnIREntityService} from '../learn-irs/services/learn-ir-entity.service';
+import {LearnIRsResolver} from '../learn-irs/services/learn-irs.resolver';
+import {compareLearnIRs,LearnIR} from '../learn-irs/model/learn-ir';
 
 
-export const remoteDashesRoutes: Routes = [
+export const RemoteDashesRoutes: Routes = [
     {
         path: '',
         component: HomeComponent,
         resolve: {
-            remoteDashes: RemoteDashesResolver
+            RemoteDashes: RemoteDashesResolver
         }
     },
     {
-        path: ':remoteDashUrl',
+        path: ':RemoteDashUrl',
         component: RemoteDashComponent,
         resolve: {
-            remoteDashes: RemoteDashesResolver
+            RemoteDashes: RemoteDashesResolver,
+            LearnIRs: LearnIRsResolver
         }
     }
 ];
@@ -55,8 +57,8 @@ const entityMetadata: EntityMetadataMap = {
             optimisticUpdate: true
         }
     },
-    Lesson: {
-        sortComparer: compareLessons
+    LearnIR: {
+        sortComparer: compareLearnIRs 
     }
 };
 
@@ -79,7 +81,7 @@ const entityMetadata: EntityMetadataMap = {
         MatDatepickerModule,
         MatMomentDateModule,
         ReactiveFormsModule,
-        RouterModule.forChild(remoteDashesRoutes)
+        RouterModule.forChild(RemoteDashesRoutes)
     ],
     declarations: [
         HomeComponent,
@@ -96,11 +98,11 @@ const entityMetadata: EntityMetadataMap = {
     ],
     entryComponents: [EditRemoteDashDialogComponent],
     providers: [
-        RemoteDashesHttpService,
+        //RemoteDashesHttpService,
         RemoteDashEntityService,
-        LessonEntityService,
         RemoteDashesResolver,
-        RemoteDashesDataService
+        RemoteDashesDataService,
+        LearnIREntityService,
     ]
 })
 export class RemoteDashesModule {
@@ -108,11 +110,11 @@ export class RemoteDashesModule {
     constructor(
         private eds: EntityDefinitionService,
         private entityDataService: EntityDataService,
-        private remoteDashesDataService: RemoteDashesDataService) {
+        private RemoteDashesDataService: RemoteDashesDataService) {
 
         eds.registerMetadataMap(entityMetadata);
 
-        entityDataService.registerService('RemoteDash', remoteDashesDataService);
+        entityDataService.registerService('RemoteDash', RemoteDashesDataService);
 
     }
 

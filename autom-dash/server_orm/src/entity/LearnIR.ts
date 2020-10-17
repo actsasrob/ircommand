@@ -1,5 +1,6 @@
-import {Entity, PrimaryGeneratedColumn, Column, ManyToOne} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne} from "typeorm";
 import {User} from "./User";
+import {RemoteDash} from "./RemoteDash";
 
 @Entity()
 export class LearnIR {
@@ -18,4 +19,7 @@ export class LearnIR {
 
     @ManyToOne(type => User, user => user.learnIRs)
     user: User;
+
+    @OneToMany(type => RemoteDash, remoteDash => remoteDash.learnIR)
+    remoteDashes: RemoteDash[];
 }

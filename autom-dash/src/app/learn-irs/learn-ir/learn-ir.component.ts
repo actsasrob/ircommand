@@ -21,15 +21,12 @@ export class LearnIRComponent implements OnInit {
 
     loading$: Observable<boolean>;
 
-    lessons$: Observable<Lesson[]>;
-
     displayedColumns = ['seqNo', 'location', 'aaddress'];
 
     nextPage = 0;
 
     constructor(
         private learnIRsService: LearnIREntityService,
-        private lessonsService: LessonEntityService,
         private route: ActivatedRoute) {
 
     }
@@ -38,11 +35,10 @@ export class LearnIRComponent implements OnInit {
 
         const learnIRUrl = this.route.snapshot.paramMap.get('learnIRUrl');
 
-        const user = JSON.parse(localStorage.getItem('user')); 
-
         this.learnIR$ = this.learnIRsService.entities$
             .pipe(
-                map(learnIRs => learnIRs.find(learnIR => learnIR.userId == user.id))
+                //tap(() => console.log("Course: ngOnInit: got here")),
+                map(learnIRs => learnIRs.find(learnIR => learnIR.id == parseInt(learnIRUrl)))
             );
 
 }

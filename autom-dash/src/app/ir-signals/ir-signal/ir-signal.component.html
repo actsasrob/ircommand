@@ -2,10 +2,15 @@
 
   <h2>{{IRSignal?.name}}</h2>
 
+  <img class="IRSignal-thumbnail mat-elevation-z8" [src]="IRSignal?.iconUrl">
+
   <div class="spinner-container" *ngIf="(loading$ | async )">
 
     <mat-spinner></mat-spinner>
 
   </div>
 
+    <mat-card-content>
+        <p>{{IRSignal.signal}}</p>
+    </mat-card-content>
 </div>

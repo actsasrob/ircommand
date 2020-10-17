@@ -8,18 +8,18 @@ import {filter, first, map, tap} from 'rxjs/operators';
 @Injectable()
 export class RemoteDashesResolver implements Resolve<boolean> {
 
-    constructor(private remoteDashesService: RemoteDashEntityService) {
+    constructor(private RemoteDashesService: RemoteDashEntityService) {
 
     }
 
     resolve(route: ActivatedRouteSnapshot,
             state: RouterStateSnapshot): Observable<boolean> {
 
-        return this.remoteDashesService.loaded$
+        return this.RemoteDashesService.loaded$
             .pipe(
                 tap(loaded => {
                     if (!loaded) {
-                       this.remoteDashesService.getAll();
+                       this.RemoteDashesService.getAll();
                     }
                 }),
                 filter(loaded => !!loaded),

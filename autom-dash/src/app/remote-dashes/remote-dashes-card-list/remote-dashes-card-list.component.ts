@@ -14,39 +14,39 @@ import {RemoteDashEntityService} from '../services/remote-dash-entity.service';
 export class RemoteDashesCardListComponent implements OnInit {
 
     @Input()
-    remoteDashes: RemoteDash[];
+    RemoteDashes: RemoteDash[];
 
     @Output()
-    remoteDashChanged = new EventEmitter();
+    RemoteDashChanged = new EventEmitter();
 
     constructor(
       private dialog: MatDialog,
-      private remoteDashService: RemoteDashEntityService) {
+      private RemoteDashService: RemoteDashEntityService) {
     }
 
     ngOnInit() {
 
     }
 
-    editRemoteDash(remoteDash:RemoteDash) {
+    editRemoteDash(RemoteDash:RemoteDash) {
 
         const dialogConfig = defaultDialogConfig();
 
         dialogConfig.data = {
           dialogTitle:"Edit RemoteDash",
-          remoteDash,
+          RemoteDash,
           mode: 'update'
         };
 
         this.dialog.open(EditRemoteDashDialogComponent, dialogConfig)
           .afterClosed()
-          .subscribe(() => this.remoteDashChanged.emit());
+          .subscribe(() => this.RemoteDashChanged.emit());
 
     }
 
-  onDeleteRemoteDash(remoteDash:RemoteDash) {
+  onDeleteRemoteDash(RemoteDash:RemoteDash) {
 
-        this.remoteDashService.delete(remoteDash)
+        this.RemoteDashService.delete(RemoteDash)
             .subscribe(
                 () => console.log("Delete completed"),
                 err => console.log("Deleted failed", err)
@@ -56,12 +56,5 @@ export class RemoteDashesCardListComponent implements OnInit {
   }
 
 }
-
-
-
-
-
-
-
 
 

@@ -33,11 +33,9 @@ export class IRSignalComponent implements OnInit {
 
         const IRSignalUrl = this.route.snapshot.paramMap.get('IRSignalUrl');
 
-        const user = JSON.parse(localStorage.getItem('user')); 
-
         this.IRSignal$ = this.IRSignalsService.entities$
             .pipe(
-                map(IRSignals => IRSignals.find(IRSignal => IRSignal.userId == user.id))
+                map(IRSignals => IRSignals.find(IRSignal => IRSignal.id == parseInt(IRSignalUrl)))
             );
 
 }

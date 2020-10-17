@@ -2,6 +2,7 @@ import {Request, Response} from "express";
 import {getManager} from "typeorm";
 import {RemoteDash} from "../entity/RemoteDash";
 import {User} from "../entity/User";
+import {LearnIR} from "../entity/LearnIR";
 
 /**
  * Saves given item.
@@ -10,8 +11,10 @@ export async function remoteDashCreateAction(request: Request, response: Respons
     console.log("RemoteDashCreateAction: request.body=" + JSON.stringify(request.body));
 
     const userId = request.body.userId;
+    const learnIRId = request.body.learnIRId;
 
     console.log("RemoteDashCreateAction: userId=" + userId);
+    console.log("RemoteDashCreateAction: learnIRId=" + learnIRId);
 
     // get a user repository to perform operations with user 
     const userRepository = getManager().getRepository(User);
@@ -21,6 +24,9 @@ export async function remoteDashCreateAction(request: Request, response: Respons
 
     console.log("RemoteDashCreateAction: user= " + JSON.stringify(user));
 
+    const learnIRRepository = getManager().getRepository(LearnIR);
+    const learnIR = await learnIRRepository. findOne(learnIRId);
+
     // get an item repository to perform operations
     const itemRepository = getManager().getRepository(RemoteDash);
 
@@ -29,7 +35,10 @@ export async function remoteDashCreateAction(request: Request, response: Respons
     const newObject = new RemoteDash();
     newObject.layout = request.body.layout;
     newObject.seqNo = request.body.seqNo;;
+    newObject.name = request.body.name;;
+    newObject.iconUrl = request.body.iconUrl;;
     newObject.user = user;
+    newObject.learnIR = learnIR;
 
     console.log("RemoteDashCreateAction: newObject=" + JSON.stringify(newObject));
     // save received object 

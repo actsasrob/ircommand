@@ -1,31 +1,31 @@
 
 
-<mat-card *ngFor="let remoteDash of remoteDashes" class="remoteDash-card mat-elevation-z10">
+<mat-card *ngFor="let RemoteDash of RemoteDashes" class="remote-dash-card mat-elevation-z10">
 
     <mat-card-header>
 
-        <mat-card-title>{{remoteDash.description}}</mat-card-title>
+        <mat-card-title>{{RemoteDash.location}}</mat-card-title>
 
     </mat-card-header>
 
-    <img mat-card-image [src]="remoteDash.iconUrl">
+    <img mat-card-image [src]="RemoteDash.iconUrl">
 
     <mat-card-content>
-        <p>{{remoteDash.longDescription}}</p>
+        <p>{{RemoteDash.name}}</p>
     </mat-card-content>
 
-    <mat-card-actions class="remoteDash-actions">
+    <mat-card-actions class="remote-dash-actions">
 
-        <button mat-raised-button color="primary" [routerLink]="['/remoteDashes', remoteDash.url]">
+        <button mat-raised-button color="primary" [routerLink]="['/RemoteDashes', RemoteDash.id]">
             VIEW
         </button>
 
       <button mat-mini-fab color="accent">
-        <mat-icon class="add-remoteDash-btn" (click)="editRemoteDash(remoteDash)">edit</mat-icon>
+        <mat-icon class="add-remote-dash-btn" (click)="editRemoteDash(RemoteDash)">edit</mat-icon>
       </button>
 
       <button mat-mini-fab color="warn">
-        <mat-icon class="add-remoteDash-btn" (click)="onDeleteRemoteDash(remoteDash)">delete</mat-icon>
+        <mat-icon class="add-remote-dash-btn" (click)="onDeleteRemoteDash(RemoteDash)">delete</mat-icon>
       </button>
 
     </mat-card-actions>

@@ -3,7 +3,7 @@ import {EntityCollectionServiceBase, EntityCollectionServiceElementsFactory} fro
 import {LearnIR} from '../model/learn-ir';
 
 
-@Injectable()
+@Injectable({ providedIn: 'root'})
 export class LearnIREntityService
     extends EntityCollectionServiceBase<LearnIR> {
 

@@ -16,7 +16,7 @@ import {LessonEntityService} from '../services/lesson-entity.service';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CourseComponent implements OnInit {
-
+//
     course$: Observable<Course>;
 
     loading$: Observable<boolean>;

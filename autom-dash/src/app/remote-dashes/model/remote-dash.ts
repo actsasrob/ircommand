@@ -2,8 +2,11 @@
 export interface RemoteDash {
   id: number;
   seqNo:number;
+  name:string;
+  iconUrl:string;
   layout:string;
   userId: number;
+  learnIRId: number;
 }
 
 
