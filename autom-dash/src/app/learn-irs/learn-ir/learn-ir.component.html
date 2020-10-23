@@ -8,7 +8,18 @@
 
   </div>
 
-    <mat-card-content>
-        <p>{{learnIR.address}}</p>
-    </mat-card-content>
+  <mat-card-content>
+      <p>{{learnIR.address}}</p>
+  </mat-card-content>
+
+        <mat-card-content>
+            <p>
+                {{rawIRSignal}}
+            </p>
+        </mat-card-content>
+
+  <button class="bottom-toolbar" mat-raised-button color="accent"
+          (click)="captureIRSignal(learnIR)">Capture IR Signal</button>
+  <button class="bottom-toolbar" mat-raised-button color="accent"
+          (click)="sendIRSignal(learnIR)">Send IR Signal</button>
 </div>

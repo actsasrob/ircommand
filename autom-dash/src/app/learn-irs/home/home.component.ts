@@ -5,7 +5,7 @@ import {defaultDialogConfig} from '../shared/default-dialog-config';
 import {EditLearnIRDialogComponent} from '../edit-learn-ir-dialog/edit-learn-ir-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import {tap,map} from 'rxjs/operators';
-import {LearnIREntityService} from '../services/learn-ir-entity.service';
+import {LearnIREntityService} from '../../shared/services/learn-ir-entity.service';
 
 
 @Component({

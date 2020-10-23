@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {select, Store} from '@ngrx/store';
+import {AppState} from './reducers';
 import {Observable} from 'rxjs';
 import {distinctUntilChanged, map} from 'rxjs/operators';
 import {NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router} from '@angular/router'; 
-import {AppState} from './reducers';
 import {isLoggedIn, isLoggedOut} from './auth/auth.selectors';
 import {login, logout} from './auth/auth.actions';
   

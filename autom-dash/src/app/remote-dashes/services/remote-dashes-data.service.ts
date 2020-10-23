@@ -22,7 +22,12 @@ export class RemoteDashesDataService extends DefaultDataService<RemoteDash> {
              map(res => res["payload"]),
              tap(RemoteDashes => console.log("RemoteDash.RemoteDashesDataService: before filter: " + JSON.stringify(RemoteDashes))),
              map(RemoteDashes => RemoteDashes.filter(RemoteDash => RemoteDash.user.id == JSON.parse(localStorage.getItem('user')).id)),
-             tap(RemoteDashes => console.log("RemoteDash.RemoteDashesDataService: after filter: " + JSON.stringify(RemoteDashes))),
+             map(RemoteDashes => {
+                const rds = <any[]>RemoteDashes;
+                rds.forEach(rd => rd.learnIRId = rd.learnIR.id);
+                return rds;
+             }),
+             tap(RemoteDashes => console.log("RemoteDash.RemoteDashesDataService: after1 filter: " + JSON.stringify(RemoteDashes))),
       );
     }
 

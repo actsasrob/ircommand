@@ -3,8 +3,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {LearnIR} from '../model/learn-ir';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
-//import {LearnIRsHttpService} from '../services/learn-irs-http.service';
-import {LearnIREntityService} from '../services/learn-ir-entity.service';
+import {LearnIREntityService} from '../../shared/services/learn-ir-entity.service';
 
 @Component({
     selector: 'learn-ir-dialog',

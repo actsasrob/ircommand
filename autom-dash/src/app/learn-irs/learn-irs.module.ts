@@ -1,9 +1,8 @@
-import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
 import {HomeComponent} from './home/home.component';
+import {ModuleWithProviders, NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {LearnIRsCardListComponent} from './learn-irs-card-list/learn-irs-card-list.component';
 import {EditLearnIRDialogComponent} from './edit-learn-ir-dialog/edit-learn-ir-dialog.component';
-//import {LearnIRsHttpService} from './services/learn-irs-http.service';
 import {LearnIRComponent} from './learn-ir/learn-ir.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatDialogModule} from '@angular/material/dialog';
@@ -24,11 +23,9 @@ import {RouterModule, Routes} from '@angular/router';
 import {EntityDataService, EntityDefinitionService, EntityMetadataMap} from '@ngrx/data';
 import {compareLearnIRs, LearnIR} from './model/learn-ir';
 
-import {compareLessons, Lesson} from './model/lesson';
-import {LearnIREntityService} from './services/learn-ir-entity.service';
-import {LearnIRsResolver} from './services/learn-irs.resolver';
-import {LearnIRsDataService} from './services/learn-irs-data.service';
-import {LessonEntityService} from './services/lesson-entity.service';
+import {LearnIREntityService} from '../shared/services/learn-ir-entity.service';
+import {LearnIRsResolver} from '../shared/services/learn-irs.resolver';
+import {LearnIRsDataService} from '../shared/services/learn-irs-data.service';
 
 
 export const learnIRsRoutes: Routes = [
@@ -55,9 +52,6 @@ const entityMetadata: EntityMetadataMap = {
             optimisticUpdate: true
         }
     },
-    Lesson: {
-        sortComparer: compareLessons
-    }
 };
 
 
@@ -96,23 +90,21 @@ const entityMetadata: EntityMetadataMap = {
     ],
     entryComponents: [EditLearnIRDialogComponent],
     providers: [
-        //LearnIRsHttpService,
-        LearnIREntityService,
-        LessonEntityService,
+        /*LearnIREntityService,
         LearnIRsResolver,
         LearnIRsDataService
+        */
     ]
 })
 export class LearnIRsModule {
-
     constructor(
         private eds: EntityDefinitionService,
         private entityDataService: EntityDataService,
         private learnIRsDataService: LearnIRsDataService) {
 
-        eds.registerMetadataMap(entityMetadata);
+        //eds.registerMetadataMap(entityMetadata);
 
-        entityDataService.registerService('LearnIR', learnIRsDataService);
+        //entityDataService.registerService('LearnIR', learnIRsDataService);
 
     }
 

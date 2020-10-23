@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {DefaultDataService, HttpUrlGenerator} from '@ngrx/data';
-import {LearnIR} from '../model/learn-ir';
+import {LearnIR} from '../../learn-irs/model/learn-ir';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {tap,map} from 'rxjs/operators';
@@ -17,6 +17,7 @@ export class LearnIRsDataService extends DefaultDataService<LearnIR> {
     }
 
     getAll(): Observable<LearnIR[]> {
+        console.log("LearnIRsDataService.getAll()");
         /*return this.http.get('/api/learnIRs')
             .pipe(
                 map(res => res["payload"])

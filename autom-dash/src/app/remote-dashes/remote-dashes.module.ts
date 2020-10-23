@@ -21,14 +21,15 @@ import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {RouterModule, Routes} from '@angular/router';
+import {SharedModule} from '../shared/shared.module';
 import {EntityDataService, EntityDefinitionService, EntityMetadataMap} from '@ngrx/data';
 import {compareRemoteDashes, RemoteDash} from './model/remote-dash';
 
 import {RemoteDashEntityService} from './services/remote-dash-entity.service';
 import {RemoteDashesResolver} from './services/remote-dashes.resolver';
 import {RemoteDashesDataService} from './services/remote-dashes-data.service';
-import {LearnIREntityService} from '../learn-irs/services/learn-ir-entity.service';
-import {LearnIRsResolver} from '../learn-irs/services/learn-irs.resolver';
+import {LearnIREntityService} from '../shared/services/learn-ir-entity.service';
+import {LearnIRsResolver} from '../shared/services/learn-irs.resolver';
 import {compareLearnIRs,LearnIR} from '../learn-irs/model/learn-ir';
 
 
@@ -53,9 +54,9 @@ export const RemoteDashesRoutes: Routes = [
 const entityMetadata: EntityMetadataMap = {
     RemoteDash: {
         sortComparer: compareRemoteDashes,
-        entityDispatcherOptions: {
-            optimisticUpdate: true
-        }
+        //entityDispatcherOptions: {
+        //    optimisticUpdate: true
+        //}
     },
     LearnIR: {
         sortComparer: compareLearnIRs 
@@ -81,7 +82,8 @@ const entityMetadata: EntityMetadataMap = {
         MatDatepickerModule,
         MatMomentDateModule,
         ReactiveFormsModule,
-        RouterModule.forChild(RemoteDashesRoutes)
+        RouterModule.forChild(RemoteDashesRoutes),
+        SharedModule
     ],
     declarations: [
         HomeComponent,

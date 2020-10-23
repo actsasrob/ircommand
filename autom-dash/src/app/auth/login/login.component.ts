@@ -49,7 +49,7 @@ export class LoginComponent implements OnInit {
 
                   this.store.dispatch(login({user}));
 
-                  this.router.navigateByUrl('/learnIRs');
+                  this.router.navigateByUrl('/remoteDashes');
 
               })
           )

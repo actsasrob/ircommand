@@ -13,6 +13,8 @@ import {HttpClientModule} from '@angular/common/http';
 
 import {RouterModule, Routes} from '@angular/router';
 import {AuthModule} from './auth/auth.module';
+import {SharedModule} from './shared/shared.module';
+//import {LearnIRsModule} from './learn-irs/learn-irs.module';
 import {StoreModule} from '@ngrx/store';
 import {StoreDevtoolsModule} from '@ngrx/store-devtools';
 import {environment} from '../environments/environment';
@@ -91,6 +93,7 @@ const routes: Routes = [
         MatListModule,
         MatToolbarModule,
         AuthModule.forRoot(),
+        SharedModule.forRoot(),
         StoreModule.forRoot(reducers, {
             metaReducers,
             runtimeChecks : {
@@ -111,7 +114,12 @@ const routes: Routes = [
     LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG, serverLogLevel: NgxLoggerLevel.OFF}),
     GridsterModule,
   ],
-  providers:[],
+  providers: [
+        /*LearnIREntityService,
+        LearnIRsResolver,
+        LearnIRsDataService
+        */
+],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

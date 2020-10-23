@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {EntityCollectionServiceBase, EntityCollectionServiceElementsFactory} from '@ngrx/data';
-import {LearnIR} from '../model/learn-ir';
+import {LearnIR} from '../../learn-irs/model/learn-ir';
 
 
 @Injectable({ providedIn: 'root'})

@@ -3,7 +3,7 @@ import {LearnIR} from "../model/learn-ir";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import {EditLearnIRDialogComponent} from "../edit-learn-ir-dialog/edit-learn-ir-dialog.component";
 import {defaultDialogConfig} from '../shared/default-dialog-config';
-import {LearnIREntityService} from '../services/learn-ir-entity.service';
+import {LearnIREntityService} from '../../shared/services/learn-ir-entity.service';
 
 @Component({
     selector: 'learn-irs-card-list',
