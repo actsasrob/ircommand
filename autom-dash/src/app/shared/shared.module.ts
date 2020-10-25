@@ -5,12 +5,22 @@ import {EntityDataService, EntityDefinitionService, EntityMetadataMap} from '@ng
 import {LearnIREntityService} from './services/learn-ir-entity.service';
 import {LearnIRsResolver} from './services/learn-irs.resolver';
 import {LearnIRsDataService} from './services/learn-irs-data.service';
-
 import {compareLearnIRs, LearnIR} from '../learn-irs/model/learn-ir';
+
+import {IRSignalEntityService} from './services/ir-signal-entity.service';
+import {IRSignalsResolver} from './services/ir-signals.resolver';
+import {IRSignalsDataService} from './services/ir-signals-data.service';
+import {compareIRSignals, IRSignal} from '../ir-signals/model/ir-signal';
 
 const entityMetadata: EntityMetadataMap = {
     LearnIR: {
         sortComparer: compareLearnIRs,
+        entityDispatcherOptions: {
+            optimisticUpdate: true
+        }
+    },
+    IRSignal: {
+        sortComparer: compareIRSignals,
         entityDispatcherOptions: {
             optimisticUpdate: true
         }
@@ -36,18 +46,24 @@ export class SharedModule {
             providers: [
                LearnIREntityService,
                LearnIRsResolver,
-               LearnIRsDataService
+               LearnIRsDataService,
+               IRSignalEntityService,
+               IRSignalsResolver,
+               IRSignalsDataService
             ]
         }
     }
     constructor(
         private eds: EntityDefinitionService,
         private entityDataService: EntityDataService,
-        private learnIRsDataService: LearnIRsDataService) {
+        private learnIRsDataService: LearnIRsDataService,
+        private irSignalsDataService: IRSignalsDataService
+        ) {
 
         eds.registerMetadataMap(entityMetadata);
 
         entityDataService.registerService('LearnIR', learnIRsDataService);
+        entityDataService.registerService('IRSignal', irSignalsDataService);
 
     }
 }

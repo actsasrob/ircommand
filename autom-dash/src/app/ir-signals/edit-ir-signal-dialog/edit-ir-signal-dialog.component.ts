@@ -8,8 +8,7 @@ import {concatMap, delay, filter, first, map, shareReplay, tap, withLatestFrom} 
 import {select, Store} from '@ngrx/store';
 import {AppState} from '../../reducers';
 import { EntityCollectionServiceFactory,EntityCollectionService, EntityServices, EntityAction, EntityActionFactory, EntityOp } from '@ngrx/data';
-//import {IRSignalsHttpService} from '../services/ir-signals-http.service';
-import {IRSignalEntityService} from '../services/ir-signal-entity.service';
+import {IRSignalEntityService} from '../../shared/services/ir-signal-entity.service';
 import {LearnIR} from '../../learn-irs/model/learn-ir';
 import {LearnIREntityService} from '../../shared/services/learn-ir-entity.service';
 import { IRService } from '../../shared/services/ir.service';

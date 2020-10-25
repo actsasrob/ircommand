@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {EntityCollectionServiceBase, EntityCollectionServiceElementsFactory} from '@ngrx/data';
-import {IRSignal} from '../model/ir-signal';
+import {IRSignal} from '../../ir-signals/model/ir-signal';
 
 
 @Injectable()

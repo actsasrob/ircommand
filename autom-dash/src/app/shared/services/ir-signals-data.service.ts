@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {DefaultDataService, HttpUrlGenerator} from '@ngrx/data';
-import {IRSignal} from '../model/ir-signal';
+import {IRSignal} from '../../ir-signals/model/ir-signal';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {tap,map} from 'rxjs/operators';

@@ -5,7 +5,7 @@ import {defaultDialogConfig} from '../shared/default-dialog-config';
 import {EditIRSignalDialogComponent} from '../edit-ir-signal-dialog/edit-ir-signal-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import {tap,map} from 'rxjs/operators';
-import {IRSignalEntityService} from '../services/ir-signal-entity.service';
+import {IRSignalEntityService} from '../../shared/services/ir-signal-entity.service';
 
 
 @Component({

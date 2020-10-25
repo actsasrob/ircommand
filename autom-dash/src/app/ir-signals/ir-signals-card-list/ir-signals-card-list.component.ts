@@ -3,7 +3,7 @@ import {IRSignal} from "../model/ir-signal";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import {EditIRSignalDialogComponent} from "../edit-ir-signal-dialog/edit-ir-signal-dialog.component";
 import {defaultDialogConfig} from '../shared/default-dialog-config';
-import {IRSignalEntityService} from '../services/ir-signal-entity.service';
+import {IRSignalEntityService} from '../../shared/services/ir-signal-entity.service';
 
 @Component({
     selector: 'ir-signals-card-list',

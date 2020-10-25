@@ -115,10 +115,6 @@ const routes: Routes = [
     GridsterModule,
   ],
   providers: [
-        /*LearnIREntityService,
-        LearnIRsResolver,
-        LearnIRsDataService
-        */
 ],
   bootstrap: [AppComponent]
 })

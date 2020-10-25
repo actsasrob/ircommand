@@ -24,9 +24,9 @@ import {RouterModule, Routes} from '@angular/router';
 import {EntityDataService, EntityDefinitionService, EntityMetadataMap} from '@ngrx/data';
 import {compareIRSignals, IRSignal} from './model/ir-signal';
 
-import {IRSignalEntityService} from './services/ir-signal-entity.service';
-import {IRSignalsResolver} from './services/ir-signals.resolver';
-import {IRSignalsDataService} from './services/ir-signals-data.service';
+import {IRSignalEntityService} from '../shared/services/ir-signal-entity.service';
+import {IRSignalsResolver} from '../shared/services/ir-signals.resolver';
+import {IRSignalsDataService} from '../shared/services/ir-signals-data.service';
 
 
 export const IRSignalsRoutes: Routes = [
@@ -91,7 +91,6 @@ const entityMetadata: EntityMetadataMap = {
     ],
     entryComponents: [EditIRSignalDialogComponent],
     providers: [
-        //IRSignalsHttpService,
         IRSignalEntityService,
         IRSignalsResolver,
         IRSignalsDataService
@@ -104,9 +103,9 @@ export class IRSignalsModule {
         private entityDataService: EntityDataService,
         private IRSignalsDataService: IRSignalsDataService) {
 
-        eds.registerMetadataMap(entityMetadata);
+        //eds.registerMetadataMap(entityMetadata);
 
-        entityDataService.registerService('IRSignal', IRSignalsDataService);
+        //entityDataService.registerService('IRSignal', IRSignalsDataService);
 
     }
 

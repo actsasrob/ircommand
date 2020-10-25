@@ -3,8 +3,7 @@ import {ActivatedRoute} from '@angular/router';
 import {IRSignal} from '../model/ir-signal';
 import {Observable, of} from 'rxjs';
 import {concatMap, delay, filter, first, map, shareReplay, tap, withLatestFrom} from 'rxjs/operators';
-//import {IRSignalsHttpService} from '../services/ir-signals-http.service';
-import {IRSignalEntityService} from '../services/ir-signal-entity.service';
+import {IRSignalEntityService} from '../../shared/services/ir-signal-entity.service';
 
 
 @Component({
