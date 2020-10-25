@@ -76,39 +76,6 @@ export class EditRemoteDashDialogComponent implements OnInit {
         console.log("EditRemoteDashDialogComponent.ngOnInit()");        
         this.learnIRs$ = this.learnIRsService.entities$
         this.learnIRs$.subscribe(result => { console.log("EditRemoteDashDialogComponent.ngOnInit(): here here here: " + JSON.stringify(result.length)) });
-        /*this.learnIRs$.subscribe(result => { 
-          if(result.length == 0) {
-
-                       this.learnIRsService.getAll();
-          }
-        });
-        */ 
-    /*    this.loading$
-            .pipe(
-                tap(loaded => {
-                    console.log("here1: " + JSON.stringify(loaded));
-                    if (!loaded) {
-                       this.learnIRsService.getAll();
-                    }
-                }),
-                filter(loaded => !!loaded),
-                first()
-            );
-    */
-   /*     this.learnIRsService.loaded$
-            .pipe(
-                tap(loaded => console.log("here1 here1: " + JSON.stringify(loaded))));
-     */
-      /*  this.learnIRs$
-            .pipe(
-                tap(() => console.log("got here")),
-                tap(learnIRs => console.log("EditRemoteDashDialogComponent.OngOnInit(): " + JSON.stringify(learnIRs))),
-                map(learnIRs =>
-                    learnIRs.filter(learnIR => true)),
-                tap(learnIRs => console.log("EditRemoteDashDialogComponent.OngOnInit(): " + JSON.stringify(learnIRs))),
-            );
-          
-        */
         
 const action = this.entityActionFactory.create<LearnIR>(
   'LearnIR',

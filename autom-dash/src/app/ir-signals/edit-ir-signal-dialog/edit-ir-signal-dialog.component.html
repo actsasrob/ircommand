@@ -28,15 +28,34 @@
       <mat-form-field>
         <input matInput
                placeholder="IR signal in LearnIR format"
-               formControlName="signal">
+               formControlName="signal" [(ngModel)]="rawIRSignal" 
+               >
       </mat-form-field>
 
+      <mat-card-content>
+          <p>
+              I/O Message: {{IRSignalIOMessage}}
+          </p>
+      </mat-card-content>
+
+      <div *ngIf="learnIRs$ | async as learnIRs">
+      <mat-form-field>
+        <mat-select placeholder="Select LearnIR Device Location" 
+                    formControlName="learnIRId" 
+                    (selectionChange)="onSelectChangedLearnIR($event)" >
+          <mat-option *ngFor="let learnIR of learnIRs" [value]="learnIR.address" >{{ learnIR.location }}</mat-option>
+        </mat-select>
+        <mat-hint>LearnIR device used to capture IR signal</mat-hint>
+      </mat-form-field>
+      </div>
+
+      <br>
       <mat-form-field>
           <input matInput
                  type="number"
                  placeholder="Sequence Number"
                  formControlName="seqNo">
-        </mat-form-field>
+      </mat-form-field>
 
     </ng-container>
 
@@ -56,6 +75,12 @@
           (click)="onSave()">
     Save
   </button>
+  <button class="bottom-toolbar" mat-raised-button color="accent"
+          [disabled]="!selectedLearnIRAddress"
+          (click)="captureIRSignal()">Capture IR Signal</button>
+  <button class="bottom-toolbar" mat-raised-button color="accent"
+          [disabled]="!rawIRSignal || !selectedLearnIRAddress"
+          (click)="sendIRSignal()">Send IR Signal</button>
 
 </mat-dialog-actions>
 
