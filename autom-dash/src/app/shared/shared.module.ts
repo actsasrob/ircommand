@@ -12,6 +12,8 @@ import {IRSignalsResolver} from './services/ir-signals.resolver';
 import {IRSignalsDataService} from './services/ir-signals-data.service';
 import {compareIRSignals, IRSignal} from '../ir-signals/model/ir-signal';
 
+import {LayoutService} from './services/layout.service';
+
 const entityMetadata: EntityMetadataMap = {
     LearnIR: {
         sortComparer: compareLearnIRs,
@@ -49,7 +51,8 @@ export class SharedModule {
                LearnIRsDataService,
                IRSignalEntityService,
                IRSignalsResolver,
-               IRSignalsDataService
+               IRSignalsDataService,
+               LayoutService
             ]
         }
     }

@@ -31,7 +31,10 @@ import {RemoteDashesDataService} from './services/remote-dashes-data.service';
 import {LearnIREntityService} from '../shared/services/learn-ir-entity.service';
 import {LearnIRsResolver} from '../shared/services/learn-irs.resolver';
 import {compareLearnIRs,LearnIR} from '../learn-irs/model/learn-ir';
+import { GridsterModule } from 'angular-gridster2'; 
 
+
+import { RemoteDashLayoutItemDirective } from '../directives/remote-dash-layout-item.directive';
 
 export const RemoteDashesRoutes: Routes = [
     {
@@ -82,6 +85,7 @@ const entityMetadata: EntityMetadataMap = {
         MatDatepickerModule,
         MatMomentDateModule,
         ReactiveFormsModule,
+        GridsterModule, 
         RouterModule.forChild(RemoteDashesRoutes),
         SharedModule
     ],
@@ -89,7 +93,8 @@ const entityMetadata: EntityMetadataMap = {
         HomeComponent,
         RemoteDashesCardListComponent,
         EditRemoteDashDialogComponent,
-        RemoteDashComponent
+        RemoteDashComponent,
+        RemoteDashLayoutItemDirective
     ],
     exports: [
         HomeComponent,
@@ -100,11 +105,10 @@ const entityMetadata: EntityMetadataMap = {
     ],
     entryComponents: [EditRemoteDashDialogComponent],
     providers: [
-        //RemoteDashesHttpService,
         RemoteDashEntityService,
         RemoteDashesResolver,
         RemoteDashesDataService,
-        LearnIREntityService,
+        //LearnIREntityService,
     ]
 })
 export class RemoteDashesModule {

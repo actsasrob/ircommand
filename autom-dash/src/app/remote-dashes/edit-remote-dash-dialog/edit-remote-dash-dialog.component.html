@@ -31,13 +31,13 @@
                formControlName="layout">
       </mat-form-field>
 
-<div *ngIf="learnIRs$ | async as learnIRs">
-<mat-form-field>
-  <mat-select placeholder="Select LearnIR Device" formControlName="learnIRId" >
-    <mat-option *ngFor="let learnIR of learnIRs" [value]="learnIR.id" >{{ learnIR.location }}</mat-option>
-  </mat-select>
-</mat-form-field>
-</div>
+      <div *ngIf="learnIRs$ | async as learnIRs">
+         <mat-form-field>
+           <mat-select placeholder="Select LearnIR Device" formControlName="learnIRId" >
+             <mat-option *ngFor="let learnIR of learnIRs" [value]="learnIR.id" >{{ learnIR.location }}</mat-option>
+           </mat-select>
+         </mat-form-field>
+      </div>
 
       <mat-form-field>
           <input matInput

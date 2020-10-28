@@ -118,8 +118,7 @@ this.store.dispatch(action);
             this.dialogRef.close();
         } else if (this.mode == 'create') {
             RemoteDash.userId = JSON.parse(localStorage.getItem('user')).id;
-            //RemoteDash.learnIRId = 9;
-            console.log("RemoteDash before remoteDashesService.add(): " + JSON.stringify(RemoteDash));
+            //console.log("RemoteDash before remoteDashesService.add(): " + JSON.stringify(RemoteDash));
             this.remoteDashesService.add(RemoteDash)
                 .subscribe(
                     newRemoteDash => {

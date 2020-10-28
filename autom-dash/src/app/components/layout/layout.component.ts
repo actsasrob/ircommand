@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { GridsterConfig, GridsterItem } from 'angular-gridster2';
-import { LayoutService, IComponent } from '../../services/layout.service';
+
+import { GridsterConfig, GridsterItem } from 'angular-gridster2'; 
+import { LayoutService, IComponent } from '../../shared/services/layout.service';
 import { NGXLogger } from 'ngx-logger';
 
 @Component({

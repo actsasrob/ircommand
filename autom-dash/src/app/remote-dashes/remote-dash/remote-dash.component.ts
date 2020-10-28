@@ -1,16 +1,19 @@
 import {AfterViewInit, ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
 import {ActivatedRoute} from '@angular/router';
 import {RemoteDash} from '../model/remote-dash';
 import {Observable, of} from 'rxjs';
 import {concatMap, delay, filter, first, map, shareReplay, tap, withLatestFrom} from 'rxjs/operators';
-//import {RemoteDashesHttpService} from '../services/remote-dashes-http.service';
 import {RemoteDashEntityService} from '../services/remote-dash-entity.service';
+
+import { GridsterConfig, GridsterItem } from 'angular-gridster2'; 
+import { LayoutService, IComponent } from '../../shared/services/layout.service';
 
 
 @Component({
     selector: 'remote-dash',
     templateUrl: './remote-dash.component.html',
-    styleUrls: ['./remote-dash.component.css'],
+    styleUrls: ['./remote-dash.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RemoteDashComponent implements OnInit {
@@ -19,13 +22,21 @@ export class RemoteDashComponent implements OnInit {
 
     loading$: Observable<boolean>;
 
-    displayedColumns = ['name', 'iconUrl', 'seqNo', 'signal',];
 
-    nextPage = 0;
+    get options(): GridsterConfig {
+       return this.layoutService.options;
+     }  
+     get layout(): GridsterItem[] {
+       return this.layoutService.layout;
+     }  
+     get components(): IComponent[] {
+       return this.layoutService.components;
+     }
 
     constructor(
         private RemoteDashesService: RemoteDashEntityService,
-        private route: ActivatedRoute) {
+        private route: ActivatedRoute,
+        public layoutService: LayoutService) {
 
     }
 
@@ -39,7 +50,6 @@ export class RemoteDashComponent implements OnInit {
                 map(RemoteDashes => RemoteDashes.find(RemoteDash => RemoteDash.id == parseInt(RemoteDashUrl)))
             );
 
-}
-
+    }
 
 }

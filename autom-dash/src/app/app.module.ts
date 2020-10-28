@@ -48,6 +48,11 @@ const routes: Routes = [
         loadChildren: () => import('./courses/courses.module').then(m => m.CoursesModule),
         canActivate: [AuthGuard]
     },
+    { 
+        path: 'layout', 
+        component: LayoutComponent,
+        canActivate: [AuthGuard]
+    },
     {
         path: 'remoteDashes',
         loadChildren: () => import('./remote-dashes/remote-dashes.module').then(m => m.RemoteDashesModule),

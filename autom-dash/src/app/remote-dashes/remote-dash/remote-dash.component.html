@@ -1,14 +1,13 @@
+<!--
 <div class="remote-dash" *ngIf="(RemoteDash$ | async) as RemoteDash">
 
-  <h2>{{RemoteDash?.name}}</h2>
+    <h2>{{RemoteDash?.name}}</h2>
 
-  <img class="IRSignal-thumbnail mat-elevation-z8" [src]="IRSignal?.iconUrl">
-
-  <div class="spinner-container" *ngIf="(loading$ | async )">
-    <mat-spinner></mat-spinner>
-  </div>
-
-
+    <div class="spinner-container" *ngIf="(loading$ | async )">
+      <mat-spinner></mat-spinner>
+    </div>
+--)
+    <!--
     <mat-card-content>
         <p>{{RemoteDash.learnIRId}}</p>
     </mat-card-content>
@@ -16,5 +15,43 @@
     <mat-card-content>
         <p>{{RemoteDash.layout}}</p>
     </mat-card-content>
+    -->
+    <div class="toolbar">
+       <button (click)="layoutService.addItem()">Add Item</button>
+       <div
+         class="draggable"
+         draggable="true"
+         (dragend)="layoutService.dropItem('example1')"
+       >
+         Example 1
+       </div>
+       <div
+         class="draggable"
+         draggable="true"
+         (dragend)="layoutService.dropItem('example2')"
+       >
+         Example 2
+       </div>
+     </div>
 
+     <gridster [options]="options">
+       <gridster-item
+         *ngFor="let item of layout"
+         [item]="item"
+         (dragover)="layoutService.setDropId(item.id)"
+       >
+         <ng-container
+           appLayoutItem
+           [componentRef]="this.layoutService.getComponentRef(item.id)"
+         >
+         </ng-container>
+         <button
+         (click)="layoutService.deleteItem(item)"
+         >
+           Delete Item
+         </button>
+       </gridster-item>
+     </gridster>
+<!--
 </div>
+-->
