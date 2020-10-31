@@ -35,9 +35,10 @@ export async function remoteDashUpdateAction(request: Request, response: Respons
     const newObject = new RemoteDash();
     newObject.id = request.body.id;
     newObject.layout = request.body.layout;
-    newObject.seqNo = request.body.seqNo;;
-    newObject.name = request.body.name;;
-    newObject.iconUrl = request.body.iconUrl;;
+    newObject.components = request.body.components;
+    newObject.seqNo = request.body.seqNo;
+    newObject.name = request.body.name;
+    newObject.iconUrl = request.body.iconUrl;
     //newObject.user = user;
     newObject.learnIR = learnIR;
 

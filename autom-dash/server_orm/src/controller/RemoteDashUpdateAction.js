@@ -38,12 +38,10 @@ function remoteDashUpdateAction(request, response) {
         const newObject = new RemoteDash_1.RemoteDash();
         newObject.id = request.body.id;
         newObject.layout = request.body.layout;
+        newObject.components = request.body.components;
         newObject.seqNo = request.body.seqNo;
-        ;
         newObject.name = request.body.name;
-        ;
         newObject.iconUrl = request.body.iconUrl;
-        ;
         //newObject.user = user;
         newObject.learnIR = learnIR;
         console.log("RemoteDashUpdateAction: newObject=" + JSON.stringify(newObject));

@@ -31,6 +31,10 @@ __decorate([
 __decorate([
     typeorm_1.Column("text"),
     __metadata("design:type", String)
+], RemoteDash.prototype, "components", void 0);
+__decorate([
+    typeorm_1.Column("text"),
+    __metadata("design:type", String)
 ], RemoteDash.prototype, "iconUrl", void 0);
 __decorate([
     typeorm_1.Column(),

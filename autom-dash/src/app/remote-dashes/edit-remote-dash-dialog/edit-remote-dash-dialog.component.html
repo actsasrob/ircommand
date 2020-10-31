@@ -28,7 +28,17 @@
       <mat-form-field>
         <input matInput
                placeholder="layout"
-               formControlName="layout">
+               formControlName="layout"
+               readonly
+        > 
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput
+               placeholder="components"
+               formControlName="components"
+               readonly
+        >
       </mat-form-field>
 
       <div *ngIf="learnIRs$ | async as learnIRs">

@@ -37,6 +37,7 @@ function remoteDashCreateAction(request, response) {
         //const newObject = itemRepository.create(request.body)
         const newObject = new RemoteDash_1.RemoteDash();
         newObject.layout = request.body.layout;
+        newObject.components = request.body.components;
         newObject.seqNo = request.body.seqNo;
         ;
         newObject.name = request.body.name;

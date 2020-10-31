@@ -5,6 +5,7 @@ export interface RemoteDash {
   name:string;
   iconUrl:string;
   layout:string;
+  components:string;
   userId: number;
   learnIRId: number;
 }

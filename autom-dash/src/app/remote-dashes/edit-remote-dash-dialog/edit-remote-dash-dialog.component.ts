@@ -34,17 +34,12 @@ export class EditRemoteDashDialogComponent implements OnInit {
 
     constructor(
         private store: Store<AppState>,
-        //private learnIRsService: LearnIREntityService,
         private fb: FormBuilder,
         private dialogRef: MatDialogRef<EditRemoteDashDialogComponent>,
         @Inject(MAT_DIALOG_DATA) data,
         private remoteDashesService: RemoteDashEntityService,
-        //entityServices: EntityServices,
         EntityCollectionServiceFactory: EntityCollectionServiceFactory) {
         this.entityActionFactory = new EntityActionFactory();
-        //this.learnIRs$ = this.learnIRsService.entities$;
-        //this.loading$ = this.learnIRsService.loading$;
-        //this.learnIRsService = entityServices.getEntityCollectionService('LearnIR');
         this.learnIRsService = EntityCollectionServiceFactory.create<LearnIR>('LearnIR');
         this.dialogTitle = data.dialogTitle;
         this.RemoteDash = data.RemoteDash;
@@ -54,6 +49,7 @@ export class EditRemoteDashDialogComponent implements OnInit {
             iconUrl: ['', Validators.required],
             name: ['', Validators.required],
             layout: ['', Validators.required],
+            components: ['', Validators.required],
             seqNo: ['', Validators.required],
             learnIRId: ['', Validators.required],
         };
@@ -66,7 +62,8 @@ export class EditRemoteDashDialogComponent implements OnInit {
                 ...formControls,
                 iconUrl: ['https://angular-university.s3-us-west-1.amazonaws.com/course-images/ngrx-v2.png', Validators.required],
                 name: ['', Validators.required],
-                layout: ['', Validators.required],
+                layout: ['[]', Validators.required],
+                components: ['[]', Validators.required],
                 seqNo: [2, Validators.required],
                 learnIRId: ['', Validators.required],
             });
@@ -75,25 +72,14 @@ export class EditRemoteDashDialogComponent implements OnInit {
     ngOnInit() {
         console.log("EditRemoteDashDialogComponent.ngOnInit()");        
         this.learnIRs$ = this.learnIRsService.entities$
-        this.learnIRs$.subscribe(result => { console.log("EditRemoteDashDialogComponent.ngOnInit(): here here here: " + JSON.stringify(result.length)) });
+        this.learnIRs$.subscribe(result => { console.log("EditRemoteDashDialogComponent.ngOnInit(): " + JSON.stringify(result.length)) });
         
-const action = this.entityActionFactory.create<LearnIR>(
-  'LearnIR',
-  EntityOp.QUERY_ALL
-);
-
-
-/*const action = {
-  type: '[LearnIR] NgRx Data/query-all',
-  entityName: 'LearnIR',
-  entityOp: EntityOp.QUERY_ALL
-};
-*/
-
-/*const action={"type":"[LearnIR] @ngrx/data/query-all","entityName":"LearnIR","entityOp":"@ngrx/data/query-all"};
-*/
-
-this.store.dispatch(action);
+        const action = this.entityActionFactory.create<LearnIR>(
+          'LearnIR',
+          EntityOp.QUERY_ALL
+        );
+        
+        this.store.dispatch(action);
 
         this.loading$ = this.learnIRsService.loading$.pipe(delay(0));
 

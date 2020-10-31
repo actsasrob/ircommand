@@ -34,6 +34,7 @@ export async function remoteDashCreateAction(request: Request, response: Respons
     //const newObject = itemRepository.create(request.body)
     const newObject = new RemoteDash();
     newObject.layout = request.body.layout;
+    newObject.components = request.body.components;
     newObject.seqNo = request.body.seqNo;;
     newObject.name = request.body.name;;
     newObject.iconUrl = request.body.iconUrl;;

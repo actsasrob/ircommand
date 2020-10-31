@@ -15,6 +15,9 @@ export class RemoteDash {
     layout: string;
 
     @Column("text")
+    components: string;
+
+    @Column("text")
     iconUrl: string;
 
     @Column()
