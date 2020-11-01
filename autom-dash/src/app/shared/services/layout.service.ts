@@ -33,33 +33,38 @@ export class LayoutService {
    constructor() { }  
 
    addItem(): void {
-       console.log("LayoutService.addItem()");
+       //console.log("LayoutService.addItem()");
+       let myUUID = UUID.UUID();
        this.layout.push({
          cols: 5,
-         id: UUID.UUID(),
+         id: myUUID,
          rows: 5,
          x: 0,
          y: 0
        });
+
+     //console.log("LayoutService.addItem(): id=" + myUUID);
      //console.log("LayoutService.addItem: layout" + JSON.stringify(this.layout));
      //console.log("LayoutService.addItem: components" + JSON.stringify(this.components));
      }  
 
    deleteItem(id: string): void {
-       console.log("LayoutService.deleteItem()");
-       const item = this.layout.find(d => d.id === id);
+       let jsonObject = JSON.parse(id);
+       //console.log("LayoutService.deleteItem(): id=" + JSON.stringify(id));
+       const item = this.layout.find(d => d.id === jsonObject.id);
        this.layout.splice(this.layout.indexOf(item), 1);
-       const comp = this.components.find(c => c.id === id);
+       const comp = this.components.find(c => c.id === jsonObject.id);
+       //console.log("LayoutService.deleteItem(): comp=" + JSON.stringify(comp));
        this.components.splice(this.components.indexOf(comp), 1);
    }
    
    setDropId(dropId: string): void {
-     console.log("LayoutService.setDropId()");
+     //console.log("LayoutService.setDropId()");
      this.dropId = dropId;
    }
    
    dropItem(dragId: string): void {  
-     console.log("LayoutService.dropItem()");
+     //console.log("LayoutService.dropItem()");
      const { components } = this;  
      const comp: IComponent = components.find(c => c.id === this.dropId);
      
@@ -72,7 +77,7 @@ export class LayoutService {
    }
    
    getComponentRef(id: string): string {
-     console.log("LayoutService.getComponentRef()");
+     //console.log("LayoutService.getComponentRef()");
      const comp = this.components.find(c => c.id === id);
      return comp ? comp.componentRef : null;
    }

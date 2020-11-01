@@ -20,9 +20,9 @@
        <div
          class="draggable"
          draggable="true"
-         (dragend)="layoutService.dropItem('example1')"
+         (dragend)="layoutService.dropItem('remoteButton')"
        >
-         Example 1
+         Remote Button 
        </div>
        <div
          class="draggable"
@@ -49,6 +49,9 @@
          >
            Delete Item
          </button>
+         <p>layout id: {{item.id}}</p>
+         <p>layout item: {{item}}</p>
+         <p>component id: {{item.componentRef?.id}}</p>
        </gridster-item>
      </gridster>
 <!--

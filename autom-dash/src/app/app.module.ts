@@ -35,6 +35,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { LayoutComponent } from './components/layout/layout.component';
 import { Example1Component } from './components/example1/example1.component';
 import { Example2Component } from './components/example2/example2.component';
+import { RemoteButtonComponent } from './components/remote-button/remote-button.component';
 import { LayoutItemDirective } from './directives/layout-item.directive';
 import { LearnirsComponent } from './components/learnirs/learnirs.component';
 import { LearnirDetailComponent } from './components/learnir-detail/learnir-detail.component';
@@ -81,6 +82,7 @@ const routes: Routes = [
     LayoutComponent,
     Example1Component,
     Example2Component,
+    RemoteButtonComponent,
     LayoutItemDirective,
     LearnirsComponent,
     LearnirDetailComponent,
