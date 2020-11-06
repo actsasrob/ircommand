@@ -2,12 +2,13 @@ import { Component, OnInit } from '@angular/core';
 
 import { GridsterConfig, GridsterItem } from 'angular-gridster2'; 
 import { LayoutService, IComponent } from '../../shared/services/layout.service';
-import { NGXLogger } from 'ngx-logger';
+import { HostListener  } from "@angular/core";
 
 @Component({
 selector: 'app-layout',
 templateUrl: './layout.component.html',
-styleUrls: ['./layout.component.scss']
+styleUrls: ['./layout.component.scss'],
+host: { '(click)': 'onClick()'}
 })
 export class LayoutComponent implements OnInit {  
     get options(): GridsterConfig {
@@ -21,10 +22,16 @@ export class LayoutComponent implements OnInit {
   }
   constructor(
     public layoutService: LayoutService
-    //,private logger: NGXLogger
   ) { 
-  //this.logger.debug("LayoutComponent: constuctor()")
     }  
 
   ngOnInit() {}
+
+  @HostListener("click") onClick(){
+    console.log("layout.component: User Click using Host Listener")
+  }
+
+  //private onClick() {
+  //  console.log('onClick');
+  //}
 }

@@ -5,6 +5,8 @@ import { UUID } from 'angular2-uuid';
 export interface IComponent {
   id: string;
   componentRef: string;
+  label: string;
+  IRSignal: string;
 }
 
 @Injectable({
@@ -49,8 +51,8 @@ export class LayoutService {
      }  
 
    deleteItem(id: string): void {
-       let jsonObject = JSON.parse(id);
-       //console.log("LayoutService.deleteItem(): id=" + JSON.stringify(id));
+       console.log("LayoutService.deleteItem(): id=" + JSON.stringify(id));
+       let jsonObject = JSON.parse(JSON.stringify(id));
        const item = this.layout.find(d => d.id === jsonObject.id);
        this.layout.splice(this.layout.indexOf(item), 1);
        const comp = this.components.find(c => c.id === jsonObject.id);
@@ -71,7 +73,9 @@ export class LayoutService {
      const updateIdx: number = comp ? components.indexOf(comp) : components.length;  
      const componentItem: IComponent = {
        id: this.dropId,
-       componentRef: dragId
+       componentRef: dragId,
+       label: "notset",
+       IRSignal: "notset",
      };  
      this.components = Object.assign([], components, { [updateIdx]: componentItem });
    }

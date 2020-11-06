@@ -30,11 +30,13 @@ export class RemoteDashLayoutItemDirective implements OnChanges {
   ) { }  
 
   ngOnChanges(): void {
+    console.log("RemoteDashLayouItemDirective.ngOnChages()");
     const component = components[this.componentRef];
     
     if (component) {
       const factory = this.resolver.resolveComponentFactory<any>(component);
       this.component = this.container.createComponent(factory);
+      this.component.instance.label = "wow2";
     }
   }
 }
