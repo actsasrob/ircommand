@@ -37,6 +37,12 @@ import { GridsterModule } from 'angular-gridster2';
 
 import { RemoteDashLayoutItemDirective } from '../directives/remote-dash-layout-item.directive';
 
+import { RIBannerComponent } from './components/ri-banner.component';
+import { HeroJobAdComponent } from './components/hero-job-ad.component';
+import { HeroProfileComponent } from './components/hero-profile.component';
+import { RIDirective } from './directives/ri.directive';
+import { RIService } from './components/ri.service';
+
 export const RemoteDashesRoutes: Routes = [
     {
         path: '',
@@ -95,7 +101,11 @@ const entityMetadata: EntityMetadataMap = {
         RemoteDashesCardListComponent,
         EditRemoteDashDialogComponent,
         RemoteDashComponent,
-        RemoteDashLayoutItemDirective
+        RemoteDashLayoutItemDirective,
+        RIBannerComponent,
+        HeroJobAdComponent,
+        HeroProfileComponent,
+        RIDirective
     ],
     exports: [
         HomeComponent,
@@ -109,6 +119,8 @@ const entityMetadata: EntityMetadataMap = {
         RemoteDashEntityService,
         RemoteDashesResolver,
         RemoteDashesDataService,
+        RemoteDashLayoutService,
+        RIService,
         //LearnIREntityService,
     ]
 })

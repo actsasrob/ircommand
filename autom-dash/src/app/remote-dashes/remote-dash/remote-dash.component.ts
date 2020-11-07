@@ -9,6 +9,9 @@ import {RemoteDash} from '../model/remote-dash';
 import { GridsterConfig, GridsterItem } from 'angular-gridster2'; 
 import { RemoteDashLayoutService, IComponent } from '../services/remote-dash-layout.service';
 
+import { RIService } from '../components/ri.service';
+import { RIItem } from '../components/ri-item';
+
 @Component({
     selector: 'remote-dash',
     templateUrl: './remote-dash.component.html',
@@ -16,6 +19,7 @@ import { RemoteDashLayoutService, IComponent } from '../services/remote-dash-lay
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RemoteDashComponent implements OnInit {
+    ris: RIItem[];
 
     RemoteDash$: Observable<RemoteDash>;
 
@@ -23,6 +27,7 @@ export class RemoteDashComponent implements OnInit {
 
     constructor(
         private route: ActivatedRoute,
+        private riService: RIService,
         public layoutService: RemoteDashLayoutService,
         private remoteDashesService: RemoteDashEntityService) {
    } 
@@ -45,7 +50,8 @@ export class RemoteDashComponent implements OnInit {
      }
 
     ngOnInit() {
-
+        this.ris = this.riService.getRIs();
+ 
         const RemoteDashUrl = this.route.snapshot.paramMap.get('RemoteDashUrl');
 
         this.RemoteDash$ = this.remoteDashesService.entities$

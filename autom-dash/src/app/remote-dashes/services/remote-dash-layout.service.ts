@@ -5,8 +5,6 @@ import { UUID } from 'angular2-uuid';
 export interface IComponent {
   id: string;
   componentRef: string;
-  label: string;
-  IRSignal: string;
 }
 
 @Injectable({
@@ -74,8 +72,6 @@ export class RemoteDashLayoutService {
      const componentItem: IComponent = {
        id: this.dropId,
        componentRef: dragId,
-       label: "notset",
-       IRSignal: "notset",
      };  
      this.components = Object.assign([], components, { [updateIdx]: componentItem });
    }
