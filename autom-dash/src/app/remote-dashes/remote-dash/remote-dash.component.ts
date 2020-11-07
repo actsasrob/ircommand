@@ -7,7 +7,7 @@ import {RemoteDashEntityService} from '../services/remote-dash-entity.service';
 import {RemoteDash} from '../model/remote-dash';
 
 import { GridsterConfig, GridsterItem } from 'angular-gridster2'; 
-import { LayoutService, IComponent } from '../../shared/services/layout.service';
+import { RemoteDashLayoutService, IComponent } from '../services/remote-dash-layout.service';
 
 @Component({
     selector: 'remote-dash',
@@ -23,7 +23,7 @@ export class RemoteDashComponent implements OnInit {
 
     constructor(
         private route: ActivatedRoute,
-        public layoutService: LayoutService,
+        public layoutService: RemoteDashLayoutService,
         private remoteDashesService: RemoteDashEntityService) {
    } 
 

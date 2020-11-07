@@ -52,7 +52,7 @@ export class SharedModule {
                IRSignalEntityService,
                IRSignalsResolver,
                IRSignalsDataService,
-               LayoutService
+               LayoutService,
             ]
         }
     }

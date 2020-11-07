@@ -28,6 +28,7 @@ import {compareRemoteDashes, RemoteDash} from './model/remote-dash';
 import {RemoteDashEntityService} from './services/remote-dash-entity.service';
 import {RemoteDashesResolver} from './services/remote-dashes.resolver';
 import {RemoteDashesDataService} from './services/remote-dashes-data.service';
+import {RemoteDashLayoutService} from './services/remote-dash-layout.service';
 import {LearnIREntityService} from '../shared/services/learn-ir-entity.service';
 import {LearnIRsResolver} from '../shared/services/learn-irs.resolver';
 import {compareLearnIRs,LearnIR} from '../learn-irs/model/learn-ir';
