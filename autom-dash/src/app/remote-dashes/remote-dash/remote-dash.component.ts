@@ -7,12 +7,13 @@ import {RemoteDashEntityService} from '../services/remote-dash-entity.service';
 import {RemoteDash} from '../model/remote-dash';
 
 import { GridsterConfig, GridsterItem } from 'angular-gridster2'; 
-import { RemoteDashLayoutService, IComponent } from '../services/remote-dash-layout.service';
+import { RemoteDashLayoutService } from '../services/remote-dash-layout.service';
 
 import { RIComponent } from '../components/ri.component';
 import { RIService } from '../components/ri.service';
 import { RIItem } from '../components/ri-item';
 import { GenericItemComponent } from '../components/generic-item.component';
+import { ButtonItemComponent } from '../components/button-item.component';
 
 @Component({
     selector: 'remote-dash',
@@ -71,9 +72,24 @@ export class RemoteDashComponent implements OnInit {
                 this.layout = JSON.parse(RemoteDash.layout);
                 this.components = JSON.parse(RemoteDash.components);
                 this.componentsObjs = [];
+                var tmpComponent: RIItem;
+                //console.log("RemoteDashComponent.ngOnInit(): here1");  
                 this.components.find(c => {
-                   let tmpComponent: RIItem = new RIItem(GenericItemComponent, c.data);
-                   this.componentsObjs.push(tmpComponent);
+                   const comp: any = c;
+                   //console.log("RemoteDashComponent.ngOnInit(): before switch: " + JSON.stringify(comp));  
+                   switch(comp.component) { 
+                      case "ButtonItemComponent": { 
+                         //console.log("RemoteDashComponent.ngOnInit(): in ButtonItemComponent case");  
+                         tmpComponent = new RIItem(ButtonItemComponent, c.data);
+                         this.componentsObjs.push(tmpComponent);
+                         break; 
+                      } 
+                      case "GenericItemComponent": { 
+                         tmpComponent = new RIItem(GenericItemComponent, c.data);
+                         this.componentsObjs.push(tmpComponent);
+                         break; 
+                      } 
+                   }
                 });
             }    
         );

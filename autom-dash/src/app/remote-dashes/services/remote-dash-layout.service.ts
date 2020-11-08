@@ -4,11 +4,12 @@ import { UUID } from 'angular2-uuid';
 import { RIComponent } from '../components/ri.component';
 import { RIItem } from '../components/ri-item';
 import { GenericItemComponent } from '../components/generic-item.component';
+import { ButtonItemComponent } from '../components/button-item.component';
 
-export interface IComponent {
-  id: string;
-  componentRef: string;
-}
+//export interface IComponent {
+//  id: string;
+//  componentRef: string;
+//}
 
 @Injectable({
   providedIn: 'root'
@@ -46,7 +47,7 @@ export class RemoteDashLayoutService {
          y: 0
        });
     
-      let tmpComponent: RIItem = new RIItem(GenericItemComponent, {id: myUUID, name: 'testName', body: 'Brave as they come'});
+      let tmpComponent: RIItem = new RIItem(GenericItemComponent, {id: myUUID, label: 'testName'});
        console.log("RemoteDashLayoutService.addItem(): tmpComponent=" + tmpComponent.toString());
        //this.components.push(JSON.parse(JSON.stringify(tmpComponent)));
        this.components.push(JSON.parse(tmpComponent.toString()));
@@ -58,33 +59,52 @@ export class RemoteDashLayoutService {
      }  
 
    deleteItem(id: string): void {
-       console.log("LayoutService.deleteItem(): id=" + JSON.stringify(id));
+       console.log("RemoteDashLayoutService.deleteItem(): id=" + JSON.stringify(id));
        let jsonObject = JSON.parse(JSON.stringify(id));
        const item = this.layout.find(d => d.id === jsonObject.id);
        this.layout.splice(this.layout.indexOf(item), 1);
        const comp = this.components.find(c => c.data.id === jsonObject.id);
-       //console.log("LayoutService.deleteItem(): comp=" + JSON.stringify(comp));
        this.components.splice(this.components.indexOf(comp), 1);
        const comp1 = this.componentsObjs.find(c => c.data.id === jsonObject.id);
        this.componentsObjs.splice(this.componentsObjs.indexOf(comp1), 1);
    }
    
    setDropId(dropId: string): void {
-     //console.log("LayoutService.setDropId()");
+     console.log("RemoteDashLayoutService.setDropId(): dropId=" + dropId);
      this.dropId = dropId;
    }
    
    dropItem(dragId: string): void {  
-     //console.log("LayoutService.dropItem()");
-     //const { components } = this;  
-     //const comp: RIComponent = components.find(c => c.data.id === this.dropId);
-     //
-     //const updateIdx: number = comp ? components.indexOf(comp) : components.length;  
-     //const componentItem: RIComponent = {
-     //  id: this.dropId,
-     //  componentRef: dragId,
-     //};  
-     //this.components = Object.assign([], components, { [updateIdx]: componentItem });
+     console.log("RemoteDashLayoutService.dropItem(): dragId=" + dragId);
+     var tmpComponent: RIItem;
+     const comp = this.components.find(c => c.data.id === this.dropId); 
+     const comp1:RIItem = this.componentsObjs.find(c => c.data.id === this.dropId);
+     switch(dragId) { 
+        case "ButtonItemComponent": { 
+             if(!(comp.data.component == "ButtonItemComponent")) {
+                this.components.splice(this.components.indexOf(comp), 1);
+                this.componentsObjs.splice(this.componentsObjs.indexOf(comp1), 1);
+                tmpComponent = new RIItem(ButtonItemComponent, {id: this.dropId, IRSignal: "unset", label: "unset"});
+                this.components.push(JSON.parse(tmpComponent.toString()));
+                this.componentsObjs.push(tmpComponent);
+             }
+           break; 
+        } 
+        case "GenericItemComponent": { 
+             if(!(comp.data.component == "GenericItemComponent")) {
+                this.components.splice(this.components.indexOf(comp), 1);
+                this.componentsObjs.splice(this.componentsObjs.indexOf(comp1), 1);
+                tmpComponent = new RIItem(GenericItemComponent, {id: this.dropId, label: "unset"});
+                this.components.push(JSON.parse(tmpComponent.toString()));
+                this.componentsObjs.push(tmpComponent);
+             }
+           break; 
+        } 
+        default: { 
+           console.log("RemoteDashLayoutService.dropItem(): ALERT: SHOULD NEVER GET HERE");
+           break; 
+        } 
+     } 
    }
    
    getComponentRef(id: string): string {
@@ -94,8 +114,8 @@ export class RemoteDashLayoutService {
    }
 
    getComponent(id: string): RIItem {
-     console.log("RemoteDashLayoutService.getComponent()");
-     this.componentsObjs.find(c => { console.log("RemoteDashLayoutService.getComponent(): " + c.toString())});
+     //console.log("RemoteDashLayoutService.getComponent()");
+     //this.componentsObjs.find(c => { console.log("RemoteDashLayoutService.getComponent(): " + c.toString())});
      const comp = this.componentsObjs.find(c => c.data.id === id);
      return comp ? comp : null;
    }

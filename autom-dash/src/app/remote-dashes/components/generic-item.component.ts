@@ -5,9 +5,9 @@ import { RIComponent } from './ri.component';
 @Component({
   template: `
     <div class="generic-item">
-      <h4>Generic Item{{data.id}}</h4>
+      <h4>Generic Item {{data?.label}}</h4>
 
-      {{data.body}}
+      <p>id: {{data.id}}</p>
     </div>
   `
 })

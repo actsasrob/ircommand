@@ -61,12 +61,12 @@ export class LayoutService {
    }
    
    setDropId(dropId: string): void {
-     //console.log("LayoutService.setDropId()");
+     console.log("LayoutService.setDropId()");
      this.dropId = dropId;
    }
    
    dropItem(dragId: string): void {  
-     //console.log("LayoutService.dropItem()");
+     console.log("LayoutService.dropItem()");
      const { components } = this;  
      const comp: IComponent = components.find(c => c.id === this.dropId);
      

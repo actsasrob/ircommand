@@ -7,12 +7,10 @@ export class RIItem {
 
   // override toString to get the JSON output we need
   public toString = () : string => {
-        console.log("RIItem.toString()");
-        //return JSON.stringify({ component: this.component.toString(), data: this.data });
-        //return JSON.stringify({ component: GenericItemComponent, data: this.data });
+        //console.log("RIItem.toString()");
         switch(this.component) { 
            case ButtonItemComponent: { 
-                return JSON.stringify({ component: 'ButtontemComponent', data: this.data });
+                return JSON.stringify({ component: 'ButtonItemComponent', data: this.data });
               //statements; 
               break; 
            } 

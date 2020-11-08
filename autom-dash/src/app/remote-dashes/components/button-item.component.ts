@@ -5,10 +5,10 @@ import { RIComponent } from './ri.component';
 @Component({
   template: `
     <div class="button-item">
-      <h4>id: {{data.id}}</h4>
+      <h4>ButtonItem {{data?.label}}</h4>
 
-      label: {{data?.label}}
-      IRSignal: {{data?.IRSignal}}
+      <p>IRSignal: {{data?.IRSignal}}</p>
+      <p>id: {{data.id}}</p>
     </div>
   `
 })

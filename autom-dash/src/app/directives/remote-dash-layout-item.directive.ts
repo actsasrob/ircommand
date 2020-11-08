@@ -6,18 +6,16 @@ import {
   ComponentFactoryResolver,
   ComponentRef
 } from '@angular/core';
-import { Example1Component } from '../components/example1/example1.component';
-import { Example2Component } from '../components/example2/example2.component';
-import { RemoteButtonComponent } from '../components/remote-button/remote-button.component';
+import { GenericItemComponent } from '../remote-dashes/components/generic-item.component';
+import { ButtonItemComponent } from '../remote-dashes/components/button-item.component';
 
 const components = {
-  example1: Example1Component,
-  example2: Example2Component,
-  remoteButton: RemoteButtonComponent
+  genericItem: GenericItemComponent,
+  buttonItem: ButtonItemComponent,
 };
 
 @Directive({
-  selector: '[appLayoutItem]'
+  selector: '[appLayoutItem1]'
 })
 
 export class RemoteDashLayoutItemDirective implements OnChanges {

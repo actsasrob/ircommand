@@ -5,31 +5,23 @@
     <div class="spinner-container" *ngIf="(loading$ | async )">
       <mat-spinner></mat-spinner>
     </div>
-    <!--
-    <mat-card-content>
-        <p>{{RemoteDash.learnIRId}}</p>
-    </mat-card-content>
-
-    <mat-card-content>
-        <p>{{RemoteDash.layout}}</p>
-    </mat-card-content>
-    -->
+    
     <div class="toolbar">
        <button (click)="layoutService.addItem()">Add Item</button>
        <button (click)="onSave()">Save</button>
        <div
          class="draggable"
          draggable="true"
-         (dragend)="layoutService.dropItem('remoteButton')"
+         (dragend)="layoutService.dropItem('ButtonItemComponent')"
        >
          Remote Button 
        </div>
        <div
          class="draggable"
          draggable="true"
-         (dragend)="layoutService.dropItem('example2')"
+         (dragend)="layoutService.dropItem('GenericItemComponent')"
        >
-         Example 2
+         Generic Item 
        </div>
      </div>
 
@@ -46,7 +38,11 @@
          </ng-container>
 -->
          <div>
-           <app-ri-banner [ric]="this.layoutService.getComponent(item.id)"></app-ri-banner>
+           <app-ri-banner [ric]="this.layoutService.getComponent(item.id)"
+              appLayoutItem
+              [componentRef]="this.layoutService.getComponentRef(item.id)"
+             >
+            </app-ri-banner>
          </div>
 
          <button
