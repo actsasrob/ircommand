@@ -1,13 +1,14 @@
 import { Component, Input } from '@angular/core';
 
-import { RIComponent } from './RI.component';
+import { RIComponent } from './ri.component';
 
 @Component({
   template: `
     <div class="button-item">
-      <h4>{{data.id}}</h4>
+      <h4>id: {{data.id}}</h4>
 
-      {{data.body}}
+      label: {{data?.label}}
+      IRSignal: {{data?.IRSignal}}
     </div>
   `
 })

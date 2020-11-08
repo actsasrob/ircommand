@@ -9,8 +9,10 @@ import {RemoteDash} from '../model/remote-dash';
 import { GridsterConfig, GridsterItem } from 'angular-gridster2'; 
 import { RemoteDashLayoutService, IComponent } from '../services/remote-dash-layout.service';
 
+import { RIComponent } from '../components/ri.component';
 import { RIService } from '../components/ri.service';
 import { RIItem } from '../components/ri-item';
+import { GenericItemComponent } from '../components/generic-item.component';
 
 @Component({
     selector: 'remote-dash',
@@ -38,15 +40,21 @@ export class RemoteDashComponent implements OnInit {
      get layout(): GridsterItem[] {
        return this.layoutService.layout;
      }  
-     get components(): IComponent[] {
+     get components(): RIComponent[] {
        return this.layoutService.components;
+     }
+     get componentsObjs(): RIItem[] {
+       return this.layoutService.componentsObjs;
      }
 
      set layout(gridsterItems: GridsterItem[]) {
        this.layoutService.layout = gridsterItems;
      }  
-     set components(gridsterComponents: IComponent[]) {
+     set components(gridsterComponents: RIComponent[]) {
        this.layoutService.components = gridsterComponents;
+     }
+     set componentsObjs(gridsterComponentsObjs: RIItem[]) {
+       this.layoutService.componentsObjs = gridsterComponentsObjs;
      }
 
     ngOnInit() {
@@ -62,6 +70,11 @@ export class RemoteDashComponent implements OnInit {
             RemoteDash => {
                 this.layout = JSON.parse(RemoteDash.layout);
                 this.components = JSON.parse(RemoteDash.components);
+                this.componentsObjs = [];
+                this.components.find(c => {
+                   let tmpComponent: RIItem = new RIItem(GenericItemComponent, c.data);
+                   this.componentsObjs.push(tmpComponent);
+                });
             }    
         );
 

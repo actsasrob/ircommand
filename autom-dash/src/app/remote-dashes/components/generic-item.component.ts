@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import { RIComponent } from './RI.component';
+import { RIComponent } from './ri.component';
 
 @Component({
   template: `

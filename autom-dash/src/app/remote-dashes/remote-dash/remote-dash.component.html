@@ -46,7 +46,7 @@
          </ng-container>
 -->
          <div>
-           <app-ri-banner [ris]="ris"></app-ri-banner>
+           <app-ri-banner [ric]="this.layoutService.getComponent(item.id)"></app-ri-banner>
          </div>
 
          <button
