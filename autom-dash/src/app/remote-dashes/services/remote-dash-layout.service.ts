@@ -47,7 +47,7 @@ export class RemoteDashLayoutService {
          y: 0
        });
     
-      let tmpComponent: RIItem = new RIItem(GenericItemComponent, {id: myUUID, label: 'testName'});
+      let tmpComponent: RIItem = new RIItem(ButtonItemComponent, {id: myUUID, label: 'notset', IRSignal: 'notset'});
        console.log("RemoteDashLayoutService.addItem(): tmpComponent=" + tmpComponent.toString());
        //this.components.push(JSON.parse(JSON.stringify(tmpComponent)));
        this.components.push(JSON.parse(tmpComponent.toString()));

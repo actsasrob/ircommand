@@ -1,5 +1,6 @@
 import {AfterViewInit, ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
+import { ChangeDetectorRef } from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {Observable, of} from 'rxjs';
 import {concatMap, delay, filter, first, map, shareReplay, tap, withLatestFrom} from 'rxjs/operators';
@@ -10,7 +11,6 @@ import { GridsterConfig, GridsterItem } from 'angular-gridster2';
 import { RemoteDashLayoutService } from '../services/remote-dash-layout.service';
 
 import { RIComponent } from '../components/ri.component';
-import { RIService } from '../components/ri.service';
 import { RIItem } from '../components/ri-item';
 import { GenericItemComponent } from '../components/generic-item.component';
 import { ButtonItemComponent } from '../components/button-item.component';
@@ -22,7 +22,6 @@ import { ButtonItemComponent } from '../components/button-item.component';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RemoteDashComponent implements OnInit {
-    ris: RIItem[];
 
     RemoteDash$: Observable<RemoteDash>;
 
@@ -30,10 +29,9 @@ export class RemoteDashComponent implements OnInit {
 
     constructor(
         private route: ActivatedRoute,
-        private riService: RIService,
         public layoutService: RemoteDashLayoutService,
         private remoteDashesService: RemoteDashEntityService) {
-   } 
+    } 
 
     get options(): GridsterConfig {
        return this.layoutService.options;
@@ -59,7 +57,6 @@ export class RemoteDashComponent implements OnInit {
      }
 
     ngOnInit() {
-        this.ris = this.riService.getRIs();
  
         const RemoteDashUrl = this.route.snapshot.paramMap.get('RemoteDashUrl');
 
