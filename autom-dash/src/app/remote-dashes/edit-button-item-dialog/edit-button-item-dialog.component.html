@@ -1,0 +1,47 @@
+
+<h2 mat-dialog-title>{{dialogTitle}}</h2>
+
+<mat-dialog-content>
+
+  <ng-container *ngIf="form">
+
+    <div class="spinner-container" *ngIf="loading$ | async">
+
+      <mat-spinner></mat-spinner>
+
+    </div>
+
+    <ng-container [formGroup]="form">
+
+      <div *ngIf="IRSignals$ | async as IRSignals">
+         <mat-form-field>
+           <mat-select placeholder="Select IRSignal" formControlName="IRSignalId" >
+             <mat-option *ngFor="let IRSignal of IRSignals" [value]="IRSignal.id" >{{ IRSignal.name }}</mat-option>
+           </mat-select>
+         </mat-form-field>
+      </div>
+
+    </ng-container>
+
+
+  </ng-container>
+
+</mat-dialog-content>
+
+<mat-dialog-actions>
+
+  <button mat-raised-button (click)="onClose()">
+    Close
+  </button>
+
+  <button mat-raised-button color="primary"
+          [disabled]="!form?.valid || (this.loading$ | async)"
+          (click)="onSave()">
+    Save
+  </button>
+
+</mat-dialog-actions>
+
+
+
+

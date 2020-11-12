@@ -9,7 +9,8 @@ import { RIComponent } from './ri.component';
   template: `
               <div class="ri-banner-example">
                 <h3>Remote Item</h3>
-                <ng-template riHost></ng-template>
+                <ng-template riHost>
+                </ng-template>
               </div>
             `
 })
@@ -35,5 +36,4 @@ export class RIBannerComponent implements OnInit, OnDestroy {
     const componentRef = viewContainerRef.createComponent<RIComponent>(componentFactory);
     componentRef.instance.data = this.ric.data;
   }
-
 }

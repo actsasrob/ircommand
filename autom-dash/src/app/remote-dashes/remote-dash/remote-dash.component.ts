@@ -9,6 +9,7 @@ import {RemoteDash} from '../model/remote-dash';
 
 import { GridsterConfig, GridsterItem } from 'angular-gridster2'; 
 import { RemoteDashLayoutService } from '../services/remote-dash-layout.service';
+import {RemoteDashItemMessageService} from '../services/remote-dash-item-message.service';
 
 import { RIComponent } from '../components/ri.component';
 import { RIItem } from '../components/ri-item';
@@ -19,6 +20,7 @@ import { ButtonItemComponent } from '../components/button-item.component';
     selector: 'remote-dash',
     templateUrl: './remote-dash.component.html',
     styleUrls: ['./remote-dash.component.scss'],
+    providers: [RemoteDashItemMessageService],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RemoteDashComponent implements OnInit {
@@ -30,7 +32,16 @@ export class RemoteDashComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         public layoutService: RemoteDashLayoutService,
-        private remoteDashesService: RemoteDashEntityService) {
+        private remoteDashesService: RemoteDashEntityService,
+        private messageService: RemoteDashItemMessageService) {
+            messageService.fromChildren$.subscribe(
+              message => {
+                console.log(`RemoteDash.messageService.fromChildren$() message=${message}`);
+                if (message) {
+                   const myData: any = JSON.parse(message); 
+                   layoutService.updateComponent(message);
+                }
+              });
     } 
 
     get options(): GridsterConfig {
@@ -49,9 +60,12 @@ export class RemoteDashComponent implements OnInit {
      set layout(gridsterItems: GridsterItem[]) {
        this.layoutService.layout = gridsterItems;
      }  
+
+     // the component data as JSON
      set components(gridsterComponents: RIComponent[]) {
        this.layoutService.components = gridsterComponents;
      }
+     // the components as objects
      set componentsObjs(gridsterComponentsObjs: RIItem[]) {
        this.layoutService.componentsObjs = gridsterComponentsObjs;
      }
@@ -106,5 +120,4 @@ export class RemoteDashComponent implements OnInit {
       this.remoteDashesService.update(myPartial);
 
     }
-
 }

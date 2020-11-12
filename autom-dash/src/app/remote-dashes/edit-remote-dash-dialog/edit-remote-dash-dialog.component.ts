@@ -122,13 +122,12 @@ export class EditRemoteDashDialogComponent implements OnInit {
     }
 
 
-    learnIRChangeAction(selectedLearnIR) {
-      //this.exam_title="";
-     let dropDownData = this.learnIRs$
-       .subscribe(LearnIRs => LearnIRs.forEach(learnIR => learnIR.id == selectedLearnIR.id)); 
-      if (dropDownData) {
-         console.log("EditRemoteDashDialog.learnIRChangeAction(): deopDownData =" + JSON.stringify(dropDownData));
-        //this.RemoteDash.learnIRId = dropDownData.id;
-      }
-    }
+    //learnIRChangeAction(selectedLearnIR) {
+    // let dropDownData = this.learnIRs$
+    //   .subscribe(LearnIRs => LearnIRs.forEach(learnIR => learnIR.id == selectedLearnIR.id)); 
+    //  if (dropDownData) {
+    //     console.log("EditRemoteDashDialog.learnIRChangeAction(): deopDownData =" + JSON.stringify(dropDownData));
+    //    //this.RemoteDash.learnIRId = dropDownData.id;
+    //  }
+    //}
 }

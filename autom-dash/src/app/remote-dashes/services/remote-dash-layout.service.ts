@@ -6,11 +6,6 @@ import { RIItem } from '../components/ri-item';
 import { GenericItemComponent } from '../components/generic-item.component';
 import { ButtonItemComponent } from '../components/button-item.component';
 
-//export interface IComponent {
-//  id: string;
-//  componentRef: string;
-//}
-
 @Injectable({
   providedIn: 'root'
 })
@@ -47,7 +42,7 @@ export class RemoteDashLayoutService {
          y: 0
        });
     
-      let tmpComponent: RIItem = new RIItem(ButtonItemComponent, {id: myUUID, label: 'notset', IRSignal: 'notset'});
+      let tmpComponent: RIItem = new RIItem(ButtonItemComponent, {id: myUUID, IRSignalId: ''});
        console.log("RemoteDashLayoutService.addItem(): tmpComponent=" + tmpComponent.toString());
        //this.components.push(JSON.parse(JSON.stringify(tmpComponent)));
        this.components.push(JSON.parse(tmpComponent.toString()));
@@ -84,7 +79,7 @@ export class RemoteDashLayoutService {
              if(!(comp.data.component == "ButtonItemComponent")) {
                 this.components.splice(this.components.indexOf(comp), 1);
                 this.componentsObjs.splice(this.componentsObjs.indexOf(comp1), 1);
-                tmpComponent = new RIItem(ButtonItemComponent, {id: this.dropId, IRSignal: "unset", label: "unset"});
+                tmpComponent = new RIItem(ButtonItemComponent, {id: this.dropId, IRSignalId: ''});
                 this.components.push(JSON.parse(tmpComponent.toString()));
                 this.componentsObjs.push(tmpComponent);
              }
@@ -94,7 +89,7 @@ export class RemoteDashLayoutService {
              if(!(comp.data.component == "GenericItemComponent")) {
                 this.components.splice(this.components.indexOf(comp), 1);
                 this.componentsObjs.splice(this.componentsObjs.indexOf(comp1), 1);
-                tmpComponent = new RIItem(GenericItemComponent, {id: this.dropId, label: "unset"});
+                tmpComponent = new RIItem(GenericItemComponent, {id: this.dropId, name: ''});
                 this.components.push(JSON.parse(tmpComponent.toString()));
                 this.componentsObjs.push(tmpComponent);
              }
@@ -118,5 +113,18 @@ export class RemoteDashLayoutService {
      //this.componentsObjs.find(c => { console.log("RemoteDashLayoutService.getComponent(): " + c.toString())});
      const comp = this.componentsObjs.find(c => c.data.id === id);
      return comp ? comp : null;
+   }
+
+   updateComponent(data: any): void {
+     console.log("RemoteDashLayoutService.updateComponent(): data=" + JSON.stringify(data));
+     //this.componentsObjs.find(c => { console.log("RemoteDashLayoutService.updateComponent(): " + c.toString())});
+     let myData = JSON.parse(data);
+     const comp = this.componentsObjs.find(c => c.data.id === myData.id);
+     if (comp) {
+        console.log("RemoteDashLayoutService.updateComponent(): found component");
+        comp.data.name = myData.name;
+        comp.data.IRSignalId = myData.IRSignalId;
+        console.log("RemoteDashLayoutService.updateComponent(): found component: comp.data=" + JSON.stringify(comp.data));
+     }
    }
 }

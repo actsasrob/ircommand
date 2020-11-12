@@ -3,8 +3,10 @@ import {CommonModule} from '@angular/common';
 import {HomeComponent} from './home/home.component';
 import {RemoteDashesCardListComponent} from './remote-dashes-card-list/remote-dashes-card-list.component';
 import {EditRemoteDashDialogComponent} from './edit-remote-dash-dialog/edit-remote-dash-dialog.component';
-//import {RemoteDashesHttpService} from './services/remote-dashes-http.service';
+import {EditButtonItemDialogComponent} from './edit-button-item-dialog/edit-button-item-dialog.component';
 import {RemoteDashComponent} from './remote-dash/remote-dash.component';
+import {ButtonItemComponent} from './components/button-item.component';
+import {GenericItemComponent} from './components/generic-item.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatInputModule} from '@angular/material/input';
@@ -32,6 +34,9 @@ import {RemoteDashLayoutService} from './services/remote-dash-layout.service';
 import {LearnIREntityService} from '../shared/services/learn-ir-entity.service';
 import {LearnIRsResolver} from '../shared/services/learn-irs.resolver';
 import {compareLearnIRs,LearnIR} from '../learn-irs/model/learn-ir';
+import {IRSignalEntityService} from '../shared/services/ir-signal-entity.service';
+import {IRSignalsResolver} from '../shared/services/ir-signals.resolver';
+import {compareIRSignals,IRSignal} from '../ir-signals/model/ir-signal';
 import { GridsterModule } from 'angular-gridster2'; 
 
 
@@ -53,7 +58,8 @@ export const RemoteDashesRoutes: Routes = [
         component: RemoteDashComponent,
         resolve: {
             RemoteDashes: RemoteDashesResolver,
-            LearnIRs: LearnIRsResolver
+            LearnIRs: LearnIRsResolver,
+            IRSignals: IRSignalsResolver
         }
     }
 ];
@@ -67,6 +73,9 @@ const entityMetadata: EntityMetadataMap = {
     },
     LearnIR: {
         sortComparer: compareLearnIRs 
+    },
+    IRSignal: {
+        sortComparer: compareIRSignals 
     }
 };
 
@@ -97,10 +106,13 @@ const entityMetadata: EntityMetadataMap = {
         HomeComponent,
         RemoteDashesCardListComponent,
         EditRemoteDashDialogComponent,
+        EditButtonItemDialogComponent,
         RemoteDashComponent,
         RemoteDashLayoutItemDirective,
         RIBannerComponent,
-        RIDirective
+        RIDirective,
+        ButtonItemComponent, 
+        GenericItemComponent 
     ],
     exports: [
         HomeComponent,
