@@ -75,7 +75,7 @@ export class LearnIRComponent implements OnInit, OnDestroy {
     }
 
     sendIRSignal(learnIR: LearnIR) {
-       this.irService.sendPostRequest(learnIR.address)
+       this.irService.sendPostRequest(learnIR.address, this.rawIRSignal)
          .pipe(takeUntil(this.destroy$)).subscribe((res: HttpResponse<any>) => {
            console.log(res);
            this.rawIRSignal = res.body;

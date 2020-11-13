@@ -31,7 +31,7 @@ export class IRService {
     return this.httpClient.get("http://" + url, {  params: new HttpParams({fromString: "_page=1&_limit=20"}), responseType: 'text', observe: "response"}).pipe(retry(0), catchError(this.handleError));
   }
 
-  public sendPostRequest(url){
-    return this.httpClient.post("http://" + url, "28 010A 0318 00F6 074E 00F4 B1F8 00F4 A9B8 01 F0 7F 14 00 20 10 00 F1 4F 04 11 30 1F 07 F1 40 00" ,{  params: new HttpParams({fromString: "_page=1&_limit=20"}), responseType: 'text', observe: "response"}).pipe(retry(0), catchError(this.handleError));
+  public sendPostRequest(url, payload){
+    return this.httpClient.post("http://" + url, payload,{  params: new HttpParams({fromString: "_page=1&_limit=20"}), responseType: 'text', observe: "response"}).pipe(retry(0), catchError(this.handleError));
   }
 }

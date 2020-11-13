@@ -163,7 +163,7 @@ export class EditIRSignalDialogComponent implements OnInit {
     }
 
     sendIRSignal() {
-       this.irService.sendPostRequest(this.selectedLearnIRAddress)
+       this.irService.sendPostRequest(this.selectedLearnIRAddress, this.form.get('signal').value)
          .pipe(takeUntil(this.destroy$)).subscribe((res: HttpResponse<any>) => {
            console.log(res);
            this.IRSignalIOMessage = res.body;

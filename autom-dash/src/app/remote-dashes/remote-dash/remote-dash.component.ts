@@ -16,6 +16,16 @@ import { RIItem } from '../components/ri-item';
 import { GenericItemComponent } from '../components/generic-item.component';
 import { ButtonItemComponent } from '../components/button-item.component';
 
+import {select, Store} from '@ngrx/store';
+import {AppState} from '../../reducers';
+import { EntityCollectionServiceFactory,EntityCollectionService, EntityServices, EntityAction, EntityActionFactory, EntityOp } from '@ngrx/data';
+import {LearnIR} from '../../learn-irs/model/learn-ir';
+import {LearnIREntityService} from '../../shared/services/learn-ir-entity.service';
+import { IRService } from '../../shared/services/ir.service';
+import {  takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { HttpResponse } from '@angular/common/http';
+
 @Component({
     selector: 'remote-dash',
     templateUrl: './remote-dash.component.html',
@@ -29,17 +39,44 @@ export class RemoteDashComponent implements OnInit {
 
     loading$: Observable<boolean>;
 
+    learnIRsService: EntityCollectionService<LearnIR>; 
+    entityActionFactory: EntityActionFactory; 
+    learnIRs$: Observable<LearnIR[]>;
+
+    LearnIR$: Observable<LearnIR>;
+
+    IRSignalIOMessage: string = "";
+   
+    destroy$: Subject<boolean> = new Subject<boolean>();
+
+    selectedLearnIRAddress: string = "";
+
     constructor(
+        private store: Store<AppState>,
         private route: ActivatedRoute,
         public layoutService: RemoteDashLayoutService,
         private remoteDashesService: RemoteDashEntityService,
+        EntityCollectionServiceFactory: EntityCollectionServiceFactory,
+        private irService: IRService,
         private messageService: RemoteDashItemMessageService) {
+            this.entityActionFactory = new EntityActionFactory();
+
+            this.learnIRsService = EntityCollectionServiceFactory.create<LearnIR>('LearnIR');
             messageService.fromChildren$.subscribe(
               message => {
                 console.log(`RemoteDash.messageService.fromChildren$() message=${message}`);
                 if (message) {
-                   const myData: any = JSON.parse(message); 
+                   //const myData: any = JSON.parse(message); 
                    layoutService.updateComponent(message);
+                }
+              });
+
+            messageService.IRSignalFromChildren$.subscribe(
+              message => {
+                console.log(`RemoteDash.messageService.sendIRSignal$() message=${message}`);
+                if (message) {
+                   const myData: any = JSON.parse(message); 
+                   this.sendIRSignal(myData.signal);
                 }
               });
     } 
@@ -78,8 +115,10 @@ export class RemoteDashComponent implements OnInit {
             .pipe(
                 map(RemoteDashes => RemoteDashes.find(RemoteDash => RemoteDash.id == parseInt(RemoteDashUrl)))
             );
+        var learnIRId: number;
         this.RemoteDash$.subscribe(
             RemoteDash => {
+                learnIRId = RemoteDash.learnIRId;
                 this.layout = JSON.parse(RemoteDash.layout);
                 this.components = JSON.parse(RemoteDash.components);
                 this.componentsObjs = [];
@@ -105,6 +144,42 @@ export class RemoteDashComponent implements OnInit {
             }    
         );
 
+        this.learnIRs$ = this.learnIRsService.entities$
+        this.learnIRs$.subscribe(result => { console.log("EditIRSignalDialogComponent.ngOnInit(): here here here: " + JSON.stringify(result.length)) });
+        
+        const action = this.entityActionFactory.create<LearnIR>(
+           'LearnIR',
+           EntityOp.QUERY_ALL
+        );
+
+        this.store.dispatch(action);
+
+        this.loading$ = this.learnIRsService.loading$.pipe(delay(0));
+        this.LearnIR$ = this.learnIRsService.entities$
+            .pipe(
+                map(LearnIRs=> LearnIRs.find(LearnIR => LearnIR.id == learnIRId))
+        );
+        this.LearnIR$.subscribe(
+           LearnIR => {
+              this.selectedLearnIRAddress = LearnIR.address;
+              console.log("RemoteDash.ngOnINit(): this.selectedLearnIRAddress=" + this.selectedLearnIRAddress);
+           }
+        );
+
+    }
+
+   sendIRSignal(signal: string) {
+      console.log(`RemoteDash.sendIRSignal: signal=${signal} address=${this.selectedLearnIRAddress}`);
+      //this.RemoteDash$.subscribe(
+      //   RemoteDash => {
+      //      console.log("RemoteDash.sendIRSignal(): RemoteDash=" + JSON.stringify(RemoteDash));
+      //   }
+      //);
+      this.irService.sendPostRequest(this.selectedLearnIRAddress, signal)
+         .pipe(takeUntil(this.destroy$)).subscribe((res: HttpResponse<any>) => {
+           console.log(res);
+           this.IRSignalIOMessage = res.body;
+       })  
     }
 
     onSave() {
