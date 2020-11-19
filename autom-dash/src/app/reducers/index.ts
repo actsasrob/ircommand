@@ -20,8 +20,8 @@ export const reducers: ActionReducerMap<AppState> = {
 export function logger(reducer:ActionReducer<any>)
     : ActionReducer<any> {
     return (state, action) => {
-        console.log("logger: state before: ", state);
-        console.log("logger: action", action);
+        //console.log("logger: state before: ", state);
+        //console.log("logger: action", action);
 
         return reducer(state, action);
     }
@@ -30,8 +30,8 @@ export function logger(reducer:ActionReducer<any>)
 
 export function clearState(reducer) {
   return function (state, action) {
-    console.log("reducers.clearState: action=" + JSON.stringify(action));
-    console.log("reducers.clearState: action.type=" + action.type);
+    //console.log("reducers.clearState: action=" + JSON.stringify(action));
+    //console.log("reducers.clearState: action.type=" + action.type);
     if (action.type === AuthActions.logout) {
       state = undefined;
     }

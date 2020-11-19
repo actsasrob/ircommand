@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectionStrategy, Component, Inject, OnInit} from '@angular/core';
+import {AfterViewInit, ApplicationRef, ChangeDetectionStrategy, Component, Inject, OnInit, OnDestroy} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import { ChangeDetectorRef } from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
@@ -33,7 +33,7 @@ import { HttpResponse } from '@angular/common/http';
     providers: [RemoteDashItemMessageService],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RemoteDashComponent implements OnInit {
+export class RemoteDashComponent implements OnInit,OnDestroy {
 
     RemoteDash$: Observable<RemoteDash>;
 
@@ -52,6 +52,8 @@ export class RemoteDashComponent implements OnInit {
     selectedLearnIRAddress: string = "";
 
     constructor(
+        private ref: ChangeDetectorRef,
+        private appRef: ApplicationRef, 
         private store: Store<AppState>,
         private route: ActivatedRoute,
         public layoutService: RemoteDashLayoutService,
@@ -62,23 +64,6 @@ export class RemoteDashComponent implements OnInit {
             this.entityActionFactory = new EntityActionFactory();
 
             this.learnIRsService = EntityCollectionServiceFactory.create<LearnIR>('LearnIR');
-            messageService.fromChildren$.subscribe(
-              message => {
-                console.log(`RemoteDash.messageService.fromChildren$() message=${message}`);
-                if (message) {
-                   //const myData: any = JSON.parse(message); 
-                   layoutService.updateComponent(message);
-                }
-              });
-
-            messageService.IRSignalFromChildren$.subscribe(
-              message => {
-                console.log(`RemoteDash.messageService.sendIRSignal$() message=${message}`);
-                if (message) {
-                   const myData: any = JSON.parse(message); 
-                   this.sendIRSignal(myData.signal);
-                }
-              });
     } 
 
     get options(): GridsterConfig {
@@ -166,6 +151,28 @@ export class RemoteDashComponent implements OnInit {
            }
         );
 
+        this.messageService.fromChildren$.subscribe(
+          message => {
+            console.log(`RemoteDash.messageService.fromChildren$() message=${message}`);
+            if (message) {
+               //const myData: any = JSON.parse(message); 
+               this.layoutService.updateComponent(message);
+            }
+          }
+        );
+
+        this.messageService.IRSignalFromChildren$.subscribe(
+          message => {
+            console.log(`RemoteDash.messageService.sendIRSignal$() message=${message}`);
+            if (message) {
+               const myData: any = JSON.parse(message); 
+               this.sendIRSignal(myData.signal);
+            }
+          }
+        );
+    }
+    
+    ngOnDestroy() {
     }
 
    sendIRSignal(signal: string) {
@@ -180,6 +187,21 @@ export class RemoteDashComponent implements OnInit {
            console.log(res);
            this.IRSignalIOMessage = res.body;
        })  
+    }
+
+    // dropId is the UUID of the target layout item for the drop 
+    setDropId(dropId: string): void {
+      console.log("RemoteDashLayoutService.setDropId(): dropId=" + dropId);
+      this.layoutService.dropId = dropId;
+    }
+    
+    // dragId is the type of the component dropped 
+    dropItem(dragId: string): void {  
+       this.layoutService.dropItem(dragId);
+       console.log("RemoteDash.dropItem(): before sendToChildren");  
+       this.messageService.sendToChildren("refresh");
+       this.ref.detectChanges();
+       this.ref.markForCheck();
     }
 
     onSave() {

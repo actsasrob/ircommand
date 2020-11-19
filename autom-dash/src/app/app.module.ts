@@ -70,6 +70,11 @@ const routes: Routes = [
     { path: 'learnIRsold', component: LearnirsComponent,
       canActivate: [ AuthGuard]
     },
+    { 
+        path: 'learnirs', 
+        component: LearnirsComponent,
+        canActivate: [AuthGuard]
+    },
     {
         path: '**',
         redirectTo: '/'
@@ -84,8 +89,8 @@ const routes: Routes = [
     Example2Component,
     RemoteButtonComponent,
     LayoutItemDirective,
-    LearnirsComponent,
-    LearnirDetailComponent,
+    //LearnirsComponent,
+    //LearnirDetailComponent,
     DashboardComponent
   ],
   imports: [

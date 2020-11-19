@@ -30,7 +30,7 @@ export class LearnIRComponent implements OnInit, OnDestroy {
 
     destroy$: Subject<boolean> = new Subject<boolean>();
 
-    displayedColumns = ['seqNo', 'location', 'aaddress'];
+    displayedColumns = ['seqNo', 'location', 'address'];
 
     constructor(
         private learnIRsService: LearnIREntityService,

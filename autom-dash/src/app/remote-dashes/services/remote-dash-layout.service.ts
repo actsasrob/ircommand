@@ -24,7 +24,11 @@ export class RemoteDashLayoutService {
    public layout: GridsterItem[] = [];  
    //public layout: GridsterItem[] = [{"cols":5,"id":"5d5bd504-45ed-b0cd-ef84-dfe5c148368c","rows":5,"x":0,"y":0},{"cols":5,"id":"229098d2-a233-f0ba-20ed-c91e1cf55aad","rows":5,"x":0,"y":5},{"cols":5,"id":"8646833d-8cc9-4f32-5021-c564cba5ccea","rows":5,"x":5,"y":0},{"cols":5,"id":"e8318ac0-42d6-cdda-e7d9-71c7873a3cfb","rows":5,"x":0,"y":0}];  
 
+   // the JSON data for each component which gets persisted as part of a RemoteDash
    public components: RIComponent[] = [];
+
+   // the RIItem object version of the component. Not persisted.
+   // these get created at init time from above components.
    public componentsObjs: RIItem[] = [];
 
    dropId: string;
@@ -60,38 +64,56 @@ export class RemoteDashLayoutService {
        this.layout.splice(this.layout.indexOf(item), 1);
        const comp = this.components.find(c => c.data.id === jsonObject.id);
        this.components.splice(this.components.indexOf(comp), 1);
-       const comp1 = this.componentsObjs.find(c => c.data.id === jsonObject.id);
-       this.componentsObjs.splice(this.componentsObjs.indexOf(comp1), 1);
+       const compObj = this.componentsObjs.find(c => c.data.id === jsonObject.id);
+       this.componentsObjs.splice(this.componentsObjs.indexOf(compObj), 1);
    }
-   
+  
+   // dropId is the UUID of the target layout item for the drop 
    setDropId(dropId: string): void {
      console.log("RemoteDashLayoutService.setDropId(): dropId=" + dropId);
      this.dropId = dropId;
    }
    
+   // dragId is the type of the component dropped 
    dropItem(dragId: string): void {  
      console.log("RemoteDashLayoutService.dropItem(): dragId=" + dragId);
      var tmpComponent: RIItem;
      const comp = this.components.find(c => c.data.id === this.dropId); 
-     const comp1:RIItem = this.componentsObjs.find(c => c.data.id === this.dropId);
+     const compObj:RIItem = this.componentsObjs.find(c => c.data.id === this.dropId);
+     const { components } = this;
      switch(dragId) { 
         case "ButtonItemComponent": { 
              if(!(comp.data.component == "ButtonItemComponent")) {
                 this.components.splice(this.components.indexOf(comp), 1);
-                this.componentsObjs.splice(this.componentsObjs.indexOf(comp1), 1);
+                this.componentsObjs.splice(this.componentsObjs.indexOf(compObj), 1);
                 tmpComponent = new RIItem(ButtonItemComponent, {id: this.dropId, IRSignalId: ''});
                 this.components.push(JSON.parse(tmpComponent.toString()));
+                //const { components } = this;
+                //this.components = Object.assign([], components, { [components.length]: JSON.parse(tmpComponent.toString()) });
                 this.componentsObjs.push(tmpComponent);
+ 
+                //this does not force change detection
+                this.options.draggable.enabled = false;
+                this.options.api.optionsChanged();
+                this.options.draggable.enabled = true;
+                this.options.api.optionsChanged();
              }
            break; 
         } 
         case "GenericItemComponent": { 
              if(!(comp.data.component == "GenericItemComponent")) {
                 this.components.splice(this.components.indexOf(comp), 1);
-                this.componentsObjs.splice(this.componentsObjs.indexOf(comp1), 1);
+                this.componentsObjs.splice(this.componentsObjs.indexOf(compObj), 1);
                 tmpComponent = new RIItem(GenericItemComponent, {id: this.dropId, name: ''});
                 this.components.push(JSON.parse(tmpComponent.toString()));
+                //const { components } = this;
+                //this.components = Object.assign([], components, { [components.length]: JSON.parse(tmpComponent.toString()) });
                 this.componentsObjs.push(tmpComponent);
+                //this does not force change detection
+                this.options.draggable.enabled = false;
+                this.options.api.optionsChanged();
+                this.options.draggable.enabled = true;
+                this.options.api.optionsChanged();
              }
            break; 
         } 

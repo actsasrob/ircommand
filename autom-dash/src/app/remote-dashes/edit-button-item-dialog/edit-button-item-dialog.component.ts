@@ -64,7 +64,7 @@ export class EditButtonItemDialogComponent implements OnInit {
     ngOnInit() {
         console.log("EditButtonItemDialogComponent.ngOnInit()");        
         this.IRSignals$ = this.IRSignalsService.entities$
-        this.IRSignals$.subscribe(result => { console.log("EditButtonItemDialogComponent.ngOnInit(): " + JSON.stringify(result.length)) });
+        //this.IRSignals$.subscribe(result => { console.log("EditButtonItemDialogComponent.ngOnInit(): " + JSON.stringify(result.length)) });
         
         const action = this.entityActionFactory.create<IRSignal>(
           'IRSignal',
@@ -75,15 +75,16 @@ export class EditButtonItemDialogComponent implements OnInit {
 
         this.loading$ = this.IRSignalsService.loading$.pipe(delay(0));
 
-        console.log("EditButtonItemDialogComponent.ngOnInit() at end");        
+        //console.log("EditButtonItemDialogComponent.ngOnInit() at end");        
     }
 
-    onClose() {
+    onClose(event: Event) {
+        event.stopPropagation();
         this.dialogRef.close();
     }
 
-    onSave() {
-
+    onSave(event: Event) {
+        event.stopPropagation();
         const myData: any = {
             ...this.myData,
             ...this.form.value,

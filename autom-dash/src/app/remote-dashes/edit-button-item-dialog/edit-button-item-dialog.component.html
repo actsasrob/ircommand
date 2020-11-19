@@ -23,23 +23,20 @@
 
     </ng-container>
 
-
   </ng-container>
 
 </mat-dialog-content>
 
 <mat-dialog-actions>
-
-  <button mat-raised-button (click)="onClose()">
+  <button mat-raised-button (click)="onClose($event)">
     Close
   </button>
 
   <button mat-raised-button color="primary"
           [disabled]="!form?.valid || (this.loading$ | async)"
-          (click)="onSave()">
+          (click)="onSave($event)">
     Save
   </button>
-
 </mat-dialog-actions>
 
 

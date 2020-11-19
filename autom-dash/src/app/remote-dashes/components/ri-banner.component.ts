@@ -8,7 +8,7 @@ import { RIComponent } from './ri.component';
   selector: 'app-ri-banner',
   template: `
               <div class="ri-banner-example">
-                <h3>Remote Item</h3>
+                <!--<h3>Remote Item</h3>-->
                 <ng-template riHost>
                 </ng-template>
               </div>

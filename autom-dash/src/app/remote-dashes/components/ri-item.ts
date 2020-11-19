@@ -3,7 +3,9 @@ import { GenericItemComponent } from './generic-item.component';
 import { ButtonItemComponent } from './button-item.component';
 
 export class RIItem {
-  constructor(public component: Type<any>, public data: any) {}
+
+  constructor(public component: Type<any>, 
+              public data: any) {}
 
   // override toString to get the JSON output we need
   public toString = () : string => {
