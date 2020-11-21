@@ -42,7 +42,7 @@ import { HostListener  } from "@angular/core";
       </div>
     </div>
   `,
-    changeDetection: ChangeDetectionStrategy.OnPush
+    //changeDetection: ChangeDetectionStrategy.OnPush
 }
     )
 export class ButtonItemComponent implements OnInit, OnChanges, OnDestroy, RIComponent {
@@ -79,7 +79,7 @@ export class ButtonItemComponent implements OnInit, OnChanges, OnDestroy, RIComp
     }
  
     ngOnInit() {
-        //console.log("ButtonItem.ngOnInit(): here1 this.data=" + JSON.stringify(this.data));
+        console.log("ButtonItem.ngOnInit(): here1 this.data=" + JSON.stringify(this.data));
         this.reload();
         //this.IRSignal$ = this.IRSignalsService.entities$
         //    .pipe(
@@ -114,13 +114,14 @@ export class ButtonItemComponent implements OnInit, OnChanges, OnDestroy, RIComp
 
     reload() {
 
+        this.loading$ = this.IRSignalsService.loading$.pipe(delay(0));
         this.IRSignal$ = this.IRSignalsService.entities$
             .pipe(
                 map(IRSignals => IRSignals.find(IRSignal => IRSignal.id == parseInt(this.data.IRSignalId))),
         );
 
         if (this.data.IRSignalId) {
-           //console.log("ButtonItem.ngOnInit(): here1");
+           console.log("ButtonItem.reload(): here1 this.data=" + JSON.stringify(this.data));
            this.IRSignal$.subscribe(
               IRSignal => {
                  console.log("ButtonItem.reload(): IRSignal=" + JSON.stringify(IRSignal));
@@ -166,9 +167,9 @@ export class ButtonItemComponent implements OnInit, OnChanges, OnDestroy, RIComp
           this.dialog.open(EditButtonItemDialogComponent, dialogConfig)
             .afterClosed()
             .subscribe( theData => {
-               this.data.IRSignalId = theData.IRSignalId;
-               console.log("ButtonItem.onClick().afterClosed(): theData=" + JSON.stringify(theData) + "this.data=" + JSON.stringify(this.data));
                if (theData) {
+                  //this.data.IRSignalId = theData.IRSignalId;
+                  //console.log("ButtonItem.onClick().afterClosed(): theData=" + JSON.stringify(theData) + "this.data=" + JSON.stringify(this.data));
                   this.messageService.receiveFromChildren(JSON.stringify(theData));
                }
                this.reload();

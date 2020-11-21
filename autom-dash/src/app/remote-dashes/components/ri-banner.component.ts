@@ -17,23 +17,37 @@ import { RIComponent } from './ri.component';
 export class RIBannerComponent implements OnInit, OnDestroy {
   @Input() ric: RIItem;
   @ViewChild(RIDirective, {static: true}) riHost: RIDirective;
+  interval: any;
 
   constructor(private componentFactoryResolver: ComponentFactoryResolver) { }
 
   ngOnInit() {
     this.loadComponent();
+    //this.getRIs();
+
   }
 
   ngOnDestroy() {
+     clearInterval(this.interval);
   }
 
   loadComponent() {
+    //let myData: any = JSON.parse(this.ric.toString());
+    //console.log("RIBanner: this.ric.component=" + myData.component + " this.ric.data=" + JSON.stringify(myData.data) );
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(this.ric.component);
 
     const viewContainerRef = this.riHost.viewContainerRef;
     viewContainerRef.clear();
 
     const componentRef = viewContainerRef.createComponent<RIComponent>(componentFactory);
+    //let tmpData: any = { ...this.ric.data };
+    //componentRef.instance.data = tmpData;
     componentRef.instance.data = this.ric.data;
+  }
+
+  getRIs() {
+    this.interval = setInterval(() => {
+      this.loadComponent();
+    }, 10000);
   }
 }

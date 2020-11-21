@@ -31,7 +31,7 @@ import { HttpResponse } from '@angular/common/http';
     templateUrl: './remote-dash.component.html',
     styleUrls: ['./remote-dash.component.scss'],
     providers: [RemoteDashItemMessageService],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    //changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RemoteDashComponent implements OnInit,OnDestroy {
 
@@ -151,6 +151,8 @@ export class RemoteDashComponent implements OnInit,OnDestroy {
            }
         );
 
+        // grandchild components communicate data changes back to ancestor
+        // RemoteDash component via this service subscription
         this.messageService.fromChildren$.subscribe(
           message => {
             console.log(`RemoteDash.messageService.fromChildren$() message=${message}`);
@@ -161,6 +163,8 @@ export class RemoteDashComponent implements OnInit,OnDestroy {
           }
         );
 
+        // grandchild components communicate request to send IR signals to
+        // ancestor RemoteDash component via this service subscription
         this.messageService.IRSignalFromChildren$.subscribe(
           message => {
             console.log(`RemoteDash.messageService.sendIRSignal$() message=${message}`);

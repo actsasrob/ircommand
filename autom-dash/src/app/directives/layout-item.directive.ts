@@ -17,7 +17,10 @@ import {
   constructor(
     private container: ViewContainerRef,
     private resolver: ComponentFactoryResolver
-  ) { }  ngOnChanges(): void {
+  ) { }  
+
+  ngOnChanges(): void {
+    console.log("LayoutItemDirective.ngOnChanges()");
     const component = components[this.componentRef];
     
     if (component) {

@@ -40,14 +40,14 @@
       </mat-card-content>
 
       <div *ngIf="learnIRs$ | async as learnIRs">
-      <mat-form-field>
-        <mat-select placeholder="Select LearnIR Device Location" 
-                    formControlName="learnIRId" 
-                    (selectionChange)="onSelectChangedLearnIR($event)" >
-          <mat-option *ngFor="let learnIR of learnIRs" [value]="learnIR.address" >{{ learnIR.location }}</mat-option>
-        </mat-select>
-        <mat-hint>LearnIR device used to capture IR signal</mat-hint>
-      </mat-form-field>
+         <mat-form-field>
+           <mat-select placeholder="Select LearnIR Device Location" 
+                       formControlName="learnIRId" 
+                       (selectionChange)="onSelectChangedLearnIR($event)" >
+             <mat-option *ngFor="let learnIR of learnIRs" [value]="learnIR.address" >{{ learnIR.location }}</mat-option>
+           </mat-select>
+           <mat-hint>LearnIR device used to capture IR signal</mat-hint>
+         </mat-form-field>
       </div>
 
       <br>

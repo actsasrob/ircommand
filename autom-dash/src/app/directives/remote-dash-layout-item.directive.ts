@@ -15,7 +15,7 @@ const components = {
 };
 
 @Directive({
-  selector: '[appLayoutItem1]'
+  selector: '[appLayoutItem]'
 })
 
 export class RemoteDashLayoutItemDirective implements OnChanges {

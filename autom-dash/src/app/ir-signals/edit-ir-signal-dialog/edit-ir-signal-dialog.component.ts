@@ -69,6 +69,7 @@ export class EditIRSignalDialogComponent implements OnInit {
             name: ['', Validators.required],
             signal: ['', Validators.required],
             seqNo: ['', Validators.required],
+            learnIRId: ['', !Validators.required],
         };
 
         if (this.mode == 'update') {

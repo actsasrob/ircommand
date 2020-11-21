@@ -46,7 +46,7 @@ export class RemoteDashLayoutService {
          y: 0
        });
     
-      let tmpComponent: RIItem = new RIItem(ButtonItemComponent, {id: myUUID, IRSignalId: ''});
+      let tmpComponent: RIItem = new RIItem(ButtonItemComponent, {id: myUUID});
        console.log("RemoteDashLayoutService.addItem(): tmpComponent=" + tmpComponent.toString());
        //this.components.push(JSON.parse(JSON.stringify(tmpComponent)));
        this.components.push(JSON.parse(tmpComponent.toString()));
@@ -125,7 +125,7 @@ export class RemoteDashLayoutService {
    }
    
    getComponentRef(id: string): string {
-     //console.log("RemoteDashLayoutService.getComponentRef()");
+     console.log(`RemoteDashLayoutService.getComponentRef(${id})`);
      const comp = this.components.find(c => c.data.id === id);
      return comp ? comp.data.componentRef : null;
    }
@@ -134,6 +134,7 @@ export class RemoteDashLayoutService {
      //console.log("RemoteDashLayoutService.getComponent()");
      //this.componentsObjs.find(c => { console.log("RemoteDashLayoutService.getComponent(): " + c.toString())});
      const comp = this.componentsObjs.find(c => c.data.id === id);
+     //console.log("RemoteDashLayoutService.getComponent(): comp=" + JSON.stringify(comp));
      return comp ? comp : null;
    }
 
@@ -141,10 +142,17 @@ export class RemoteDashLayoutService {
      console.log("RemoteDashLayoutService.updateComponent(): data=" + JSON.stringify(data));
      //this.componentsObjs.find(c => { console.log("RemoteDashLayoutService.updateComponent(): " + c.toString())});
      let myData = JSON.parse(data);
+     let comp1 = this.components.find(c => c.data.id === myData.id);
+     let tmpData: any = { IRSignalId: myData.IRSignalId };
+     if (comp1) {
+        //comp1.data = { ...comp1.data, ...tmpData };
+        comp1.data.IRSignalId = myData.IRSignalId;
+
+        console.log("RemoteDashLayoutService.updateComponent(): found component: comp1.data=" + JSON.stringify(comp1.data));
+     }
      const comp = this.componentsObjs.find(c => c.data.id === myData.id);
      if (comp) {
-        console.log("RemoteDashLayoutService.updateComponent(): found component");
-        comp.data.name = myData.name;
+        //comp.data = { ...comp.data, ...tmpData };
         comp.data.IRSignalId = myData.IRSignalId;
         console.log("RemoteDashLayoutService.updateComponent(): found component: comp.data=" + JSON.stringify(comp.data));
      }
