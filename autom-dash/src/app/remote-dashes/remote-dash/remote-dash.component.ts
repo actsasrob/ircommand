@@ -31,6 +31,7 @@ import { HttpResponse } from '@angular/common/http';
     templateUrl: './remote-dash.component.html',
     styleUrls: ['./remote-dash.component.scss'],
     providers: [RemoteDashItemMessageService],
+    //Gridster item components don't refresh on change with OnPush
     //changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RemoteDashComponent implements OnInit,OnDestroy {

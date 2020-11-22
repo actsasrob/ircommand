@@ -31,12 +31,6 @@
          [item]="item"
          (dragover)="layoutService.setDropId(item.id)"
        >
-<!--         <ng-container
-           appLayoutItem
-           [componentRef]="this.layoutService.getComponentRef(item.id)"
-         >
-         </ng-container>
--->
          <div>
            <app-ri-banner [ric]="this.layoutService.getComponent(item.id)"
              >
@@ -48,7 +42,9 @@
          >
            Delete Item
          </button>
+         <!--
          <p>layout id: {{item.id}}</p>
+         -->
        </gridster-item>
      </gridster>
 <!--

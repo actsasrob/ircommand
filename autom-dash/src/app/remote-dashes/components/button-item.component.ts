@@ -27,9 +27,12 @@ import { HostListener  } from "@angular/core";
          <div class="spinner-container" *ngIf="(loading$ | async )">
            <mat-spinner></mat-spinner>
          </div>
+         <br/>
          <h3>{{IRSignal?.name}}</h3>
+         <!--
          IR Signal
          <p>{{IRSignal?.signal}}</p>
+         -->
       </div>
       <ng-template #elseBlock>
          <p>Please click the Edit button to select an IR Signal</p>
@@ -190,49 +193,49 @@ export class ButtonItemComponent implements OnInit, OnChanges, OnDestroy, RIComp
         }
     }
 
-    editItem(event: Event, data: any) {
-       //console.log("ButtonItem.editItem()");
-          event.stopPropagation();
-          console.log("ButtonItem.editItem(): event=" + event + "event.target=" + event.target + "event.srcElement" + event.srcElement);
-          const dialogConfig = defaultDialogConfig();
+    //editItem(event: Event, data: any) {
+    //   //console.log("ButtonItem.editItem()");
+    //      event.stopPropagation();
+    //      console.log("ButtonItem.editItem(): event=" + event + "event.target=" + event.target + "event.srcElement" + event.srcElement);
+    //      const dialogConfig = defaultDialogConfig();
 
-          dialogConfig.data = {
-            dialogTitle:"Edit Button",
-            data,
-            mode: 'update'
-          };
+    //      dialogConfig.data = {
+    //        dialogTitle:"Edit Button",
+    //        data,
+    //        mode: 'update'
+    //      };
 
-          this.dialog.open(EditButtonItemDialogComponent, dialogConfig)
-            .afterClosed()
-            .subscribe( theData => {
-               console.log("ButtonItem.editItem().afterClosed(): theData=" + JSON.stringify(theData));
-               if (theData) {
-                  this.messageService.receiveFromChildren(JSON.stringify(theData));
-               }
-            });
-    }
+    //      this.dialog.open(EditButtonItemDialogComponent, dialogConfig)
+    //        .afterClosed()
+    //        .subscribe( theData => {
+    //           console.log("ButtonItem.editItem().afterClosed(): theData=" + JSON.stringify(theData));
+    //           if (theData) {
+    //              this.messageService.receiveFromChildren(JSON.stringify(theData));
+    //           }
+    //        });
+    //}
 
-     onMousedown(event: Event) {
-       console.log("ButtonItem.onMousedown(): event=" + event + "event.target=" + event.target);
-        event.stopPropagation();
+     //onMousedown(event: Event) {
+     //  console.log("ButtonItem.onMousedown(): event=" + event + "event.target=" + event.target);
+     //   event.stopPropagation();
+     //}
+
+     onEvent(event: MouseEvent): void {
+         console.log("ButtonItem.onEvent()");
+         this.event = event;
      }
 
-      onEvent(event: MouseEvent): void {
-          console.log("ButtonItem.onEvent()");
-          this.event = event;
-      }
-
-      coordinates(event: MouseEvent): void {
-          this.clientX = event.clientX;
-          this.clientY = event.clientY;
-      }
+     coordinates(event: MouseEvent): void {
+         this.clientX = event.clientX;
+         this.clientY = event.clientY;
+     }
 
     @HostListener('touchstart', ['$event'])
     @HostListener('touchmove', ['$event'])
     @HostListener('touchend', ['$event'])
     @HostListener('touchcancel', ['$event'])
-    handleTouch(event) {
-        console.log("ButtonItem.handleTouch()");
+    handleTouch(event: TouchEvent) {
+        console.log("ButtonItem.handleTouch(): event=" + event + "event=" + event);
         let touch = event.touches[0] || event.changedTouches[0];
 
         // check the events
