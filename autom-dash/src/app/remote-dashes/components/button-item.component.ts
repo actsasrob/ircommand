@@ -27,8 +27,7 @@ import { HostListener  } from "@angular/core";
          <div class="spinner-container" *ngIf="(loading$ | async )">
            <mat-spinner></mat-spinner>
          </div>
-         <br/>
-         <h3>{{IRSignal?.name}}</h3>
+         <h4>{{IRSignal?.name}}</h4>
          <!--
          IR Signal
          <p>{{IRSignal?.signal}}</p>
@@ -42,6 +41,7 @@ import { HostListener  } from "@angular/core";
          >
            Edit Item
          </button>
+        <br><br>
       </div>
     </div>
   `,
