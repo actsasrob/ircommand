@@ -1,5 +1,6 @@
 # TODO List:
 
+- Could not restore PostgreSQL database from backup. Many foriegn key constrainst violations.
 - RemoteDash component does not reload after drag-n-drop of item component. Cause UI to be out-of-date.
   - This works now when not using OnPush change management.
   - UI is not refreshed after drag-n-drop of item.
