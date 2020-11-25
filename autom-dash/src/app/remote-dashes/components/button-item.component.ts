@@ -235,7 +235,7 @@ export class ButtonItemComponent implements OnInit, OnChanges, OnDestroy, RIComp
     @HostListener('touchend', ['$event'])
     @HostListener('touchcancel', ['$event'])
     handleTouch(event: TouchEvent) {
-        console.log("ButtonItem.handleTouch(): event=" + event + "event=" + event);
+        console.log("ButtonItem.handleTouch(): event=" + event + "event=" + JSON.stringify(event));
         let touch = event.touches[0] || event.changedTouches[0];
 
         // check the events

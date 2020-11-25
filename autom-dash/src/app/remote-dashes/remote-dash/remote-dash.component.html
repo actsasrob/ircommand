@@ -1,6 +1,8 @@
 <div class="remote-dash" *ngIf="(RemoteDash$ | async) as RemoteDash">
 
+    <!--
     <h2>{{RemoteDash?.name}}</h2>
+    -->
 
     <div class="spinner-container" *ngIf="(loading$ | async )">
       <mat-spinner></mat-spinner>
@@ -22,6 +24,9 @@
          (dragend)="dropItem('GenericItemComponent')"
        >
          Generic Item 
+       </div>
+       <div class="title"> 
+         {{RemoteDash?.name}}
        </div>
      </div>
 

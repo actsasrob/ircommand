@@ -63,7 +63,7 @@ h2 {
     //background-color: orange;
 
   .toolbar {
-    height: 100px;
+    height: 50px;
     display: flex;
   }  
 
@@ -80,7 +80,8 @@ button {
 }
 .draggable {
   padding: 10px;
-  width: 200px;
+  width: 100px;
+  height: 20px;
   border: solid 2px #000;
   margin-left: 20px;
   text-align: center;
