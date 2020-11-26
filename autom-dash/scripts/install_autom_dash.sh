@@ -48,12 +48,27 @@ for pkg in $(echo ${THEPACKAGE_DEPS}); do
    fi
 done
 
+# dialout group controls which users can connect to USB serial port used by LearnIR device
+echo
+echo "info: checking if 'dialout' group exists..."
+grep dialout /etc/group > /dev/null 2>&1
+if [ "$?" -ne 0 ]; then
+   echo "info: creating 'dialout' group..."
+   groupadd dialout > /dev/null 2>&1
+   grep dialout /etc/group > /dev/null 2>&1
+   if [ "$?" -ne 0 ]; then
+      echo "error: failed to create 'dialout' group. exiting..."
+      exit 1
+   fi
+fi
+echo "info: 'dialout' group exists"
+
 echo
 echo "info: checking if unprivileged user ${THEUSER} exists..."
 grep $THEUSER /etc/passwd > /dev/null 2>&1
 if [ "$?" -ne 0 ]; then
    echo "info: creating unprivileged user ${THEUSER}..."
-   useradd --comment "${THEAPP} user" --home-dir /home/$THEUSER --create-home $THEUSER
+   useradd --comment "${THEAPP} user" -G dialout --home-dir /home/$THEUSER --create-home $THEUSER
 else
    echo "info: unprivileged user ${THEUSER} already exists. skipping create."
 fi
