@@ -27,6 +27,7 @@ import { HostListener  } from "@angular/core";
          <div class="spinner-container" *ngIf="(loading$ | async )">
            <mat-spinner></mat-spinner>
          </div>
+         <br/>
          <h4>{{IRSignal?.name}}</h4>
          <!--
          IR Signal
@@ -235,7 +236,7 @@ export class ButtonItemComponent implements OnInit, OnChanges, OnDestroy, RIComp
     @HostListener('touchend', ['$event'])
     @HostListener('touchcancel', ['$event'])
     handleTouch(event: TouchEvent) {
-        console.log("ButtonItem.handleTouch(): event=" + event + "event=" + JSON.stringify(event));
+        console.log("ButtonItem.handleTouch(): event=" + event + "event=" + event);
         let touch = event.touches[0] || event.changedTouches[0];
 
         // check the events
