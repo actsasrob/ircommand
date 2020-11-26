@@ -20,8 +20,10 @@
 - Add ability to group and chain RemoteDash items. e.g. a "Power On" group which powers on
   AVR, TV, STB.
   Possibly create these groups outside of RemoteDash and they just show up as a special type of item
-- autom-dash install script needs to add aduser user to dialout group to be able to attach
-  on RemoteDash.
+- DONE. NEEDS TO BE TESTED. autom-dash install script needs to add aduser user to dialout group to be able to attach
+- Add logic to autom-dash install script to install on-screen keyboard and add icon to RPI taskbar to
+  toggle on-screen keyboard.
+  https://pimylifeup.com/raspberry-pi-on-screen-keyboard/
 
 ## RestfulLearnIR service:
 - Update RestfulLearnIR.py to allow the tty for the USB serial port to be set from command line.
