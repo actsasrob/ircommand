@@ -13,6 +13,7 @@ import {  takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
 
+import { SidenavService } from '../../shared/services/sidenav.service';
 
 @Component({
     selector: 'learn-ir',
@@ -36,7 +37,8 @@ export class LearnIRComponent implements OnInit, OnDestroy {
         private learnIRsService: LearnIREntityService,
         private route: ActivatedRoute,
         private irService: IRService,
-        private ref: ChangeDetectorRef) {
+        private ref: ChangeDetectorRef,
+        private sidenavService: SidenavService) {
     }
 
     ngOnInit() {
@@ -85,4 +87,7 @@ export class LearnIRComponent implements OnInit, OnDestroy {
        })  
     }
 
+  toggleSidenav() {
+     this.sidenavService.toggle();
+  }
 }

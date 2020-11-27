@@ -1,7 +1,7 @@
 <mat-sidenav-container fullscreen>
 
-    <mat-sidenav #start>
-        <mat-nav-list (click)="start.close()">
+    <mat-sidenav #sidenav>
+        <mat-nav-list (click)="sidenav.close()">
 
             <a mat-list-item routerLink="/remoteDashes">
                 <mat-icon>library_books</mat-icon>
@@ -32,11 +32,13 @@
 
     </mat-sidenav>
 
+    <!--
     <mat-toolbar color="primary">
-        <button class="menu-button" mat-icon-button (click)="start.open('mouse')">
+        <button class="menu-button" mat-icon-button (click)="sidenav.open('mouse')">
             <mat-icon>menu</mat-icon>
         </button>
     </mat-toolbar>
+    -->
 
   <div class="spinner-container" *ngIf="loading">
 

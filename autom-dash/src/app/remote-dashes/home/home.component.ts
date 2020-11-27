@@ -6,6 +6,7 @@ import {EditRemoteDashDialogComponent} from '../edit-remote-dash-dialog/edit-rem
 import { MatDialog } from '@angular/material/dialog';
 import {tap,map} from 'rxjs/operators';
 import {RemoteDashEntityService} from '../services/remote-dash-entity.service';
+import { SidenavService } from '../../shared/services/sidenav.service';
 
 
 @Component({
@@ -20,7 +21,8 @@ export class HomeComponent implements OnInit {
 
     constructor(
       private dialog: MatDialog,
-      private RemoteDashService: RemoteDashEntityService) {
+      private RemoteDashService: RemoteDashEntityService,
+      private sidenavService: SidenavService) {
 
     }
 
@@ -55,5 +57,8 @@ export class HomeComponent implements OnInit {
     
   }
 
+  toggleSidenav() {
+     this.sidenavService.toggle();
+  }
 
 }

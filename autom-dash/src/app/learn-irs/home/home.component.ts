@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import {tap,map} from 'rxjs/operators';
 import {LearnIREntityService} from '../../shared/services/learn-ir-entity.service';
 
+import { SidenavService } from '../../shared/services/sidenav.service';
 
 @Component({
     selector: 'home',
@@ -20,7 +21,8 @@ export class HomeComponent implements OnInit {
 
     constructor(
       private dialog: MatDialog,
-      private learnIRService: LearnIREntityService) {
+      private learnIRService: LearnIREntityService,
+      private sidenavService: SidenavService) {
 
     }
 
@@ -55,5 +57,8 @@ export class HomeComponent implements OnInit {
     
   }
 
+  toggleSidenav() {
+     this.sidenavService.toggle();
+  }
 
 }

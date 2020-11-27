@@ -54,3 +54,14 @@ h2 {
 .spinner-container {
   width:390px;
 }
+
+.menu-button {
+    background: rgba(255, 170, 0, 0.76);
+    color: white;
+    border: none;
+    cursor:pointer;
+    outline:none;
+    position: absolute;
+    left: 0;
+    transform: translateY(-50%);
+}

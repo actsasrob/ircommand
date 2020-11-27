@@ -1,5 +1,9 @@
 <div class="ir-signal" *ngIf="(IRSignal$ | async) as IRSignal">
 
+  <button class="menu-button" mat-icon-button (click)="this.toggleSidenav()">
+      <mat-icon>menu</mat-icon>
+  </button>
+
   <h2>{{IRSignal?.name}}</h2>
 
   <img class="IRSignal-thumbnail mat-elevation-z8" [src]="IRSignal?.iconUrl">

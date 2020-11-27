@@ -26,6 +26,8 @@ import {  takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
 
+import { SidenavService } from '../../shared/services/sidenav.service';
+
 @Component({
     selector: 'remote-dash',
     templateUrl: './remote-dash.component.html',
@@ -53,6 +55,7 @@ export class RemoteDashComponent implements OnInit,OnDestroy {
     selectedLearnIRAddress: string = "";
 
     constructor(
+        private sidenavService: SidenavService,
         private ref: ChangeDetectorRef,
         private appRef: ApplicationRef, 
         private store: Store<AppState>,
@@ -222,4 +225,8 @@ export class RemoteDashComponent implements OnInit,OnDestroy {
       this.remoteDashesService.update(myPartial);
 
     }
+
+  toggleSidenav() {
+     this.sidenavService.toggle();
+  }
 }

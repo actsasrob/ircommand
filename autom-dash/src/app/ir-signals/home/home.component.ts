@@ -7,6 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import {tap,map} from 'rxjs/operators';
 import {IRSignalEntityService} from '../../shared/services/ir-signal-entity.service';
 
+import { SidenavService } from '../../shared/services/sidenav.service';
 
 @Component({
     selector: 'home',
@@ -19,6 +20,7 @@ export class HomeComponent implements OnInit {
     IRSignals$: Observable<IRSignal[]>;
 
     constructor(
+      private sidenavService: SidenavService,
       private dialog: MatDialog,
       private IRSignalService: IRSignalEntityService) {
 
@@ -55,5 +57,7 @@ export class HomeComponent implements OnInit {
     
   }
 
-
+  toggleSidenav() {
+     this.sidenavService.toggle();
+  }
 }

@@ -3,6 +3,7 @@ import {NgModule} from '@angular/core';
 
 import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+
 import {MatMenuModule} from '@angular/material/menu';
 import {MatIconModule} from '@angular/material/icon';
 
@@ -42,6 +43,8 @@ import { LearnirDetailComponent } from './components/learnir-detail/learnir-deta
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 //import { AuthComponent } from './components/dashboard/dashboard.component';
 import { entityConfig } from './entity-metadata';
+
+import { SidenavService } from './shared/services/sidenav.service';
 
 const routes: Routes = [
     {
@@ -89,9 +92,7 @@ const routes: Routes = [
     Example2Component,
     RemoteButtonComponent,
     LayoutItemDirective,
-    //LearnirsComponent,
-    //LearnirDetailComponent,
-    DashboardComponent
+    DashboardComponent,
   ],
   imports: [
         BrowserModule,
@@ -126,8 +127,8 @@ const routes: Routes = [
     LoggerModule.forRoot({level: NgxLoggerLevel.DEBUG, serverLogLevel: NgxLoggerLevel.OFF}),
     GridsterModule,
   ],
-  providers: [
-],
+  providers: [SidenavService,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {select, Store} from '@ngrx/store';
 import {AppState} from './reducers';
 import {Observable} from 'rxjs';
@@ -6,6 +6,8 @@ import {distinctUntilChanged, map} from 'rxjs/operators';
 import {NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router} from '@angular/router'; 
 import {isLoggedIn, isLoggedOut} from './auth/auth.selectors';
 import {login, logout} from './auth/auth.actions';
+import {MatSidenav} from '@angular/material/sidenav';
+import { SidenavService } from './shared/services/sidenav.service';
   
 @Component({
     selector: 'app-root',      
@@ -13,6 +15,7 @@ import {login, logout} from './auth/auth.actions';
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
+    @ViewChild('sidenav') public sidenav: MatSidenav;
 
     loading = true;
 
@@ -21,12 +24,15 @@ export class AppComponent implements OnInit {
     isLoggedOut$: Observable<boolean>;      
 
     constructor(private router: Router,
-                private store: Store<AppState>) {
+                private store: Store<AppState>,
+                private sidenavService: SidenavService
+    ) {
 
     }
 
     ngOnInit() {
 
+        //this.sidenavService.setSidenav(this.sidenav);
         const userProfile = localStorage.getItem("user");
 
         if (userProfile) {
@@ -61,6 +67,11 @@ export class AppComponent implements OnInit {
             .pipe(
                 select(isLoggedOut)
             );
+
+    }
+
+    ngAfterViewInit (): void {
+       this.sidenavService.setSidenav(this.sidenav);
 
     }
 

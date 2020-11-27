@@ -9,6 +9,9 @@
     </div>
     
     <div class="toolbar">
+        <button class="menu-button" mat-icon-button (click)="this.toggleSidenav()">
+            <mat-icon>menu</mat-icon>
+        </button>
        <button (click)="layoutService.addItem()">Add Item</button>
        <button (click)="onSave()">Save</button>
        <div

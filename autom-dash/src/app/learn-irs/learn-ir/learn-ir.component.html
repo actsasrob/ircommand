@@ -1,5 +1,9 @@
 <div class="learn-ir" *ngIf="(learnIR$ | async) as learnIR">
 
+  <button class="menu-button" mat-icon-button (click)="this.toggleSidenav()">
+      <mat-icon>menu</mat-icon>
+  </button>
+
   <h2>{{learnIR?.location}}</h2>
 
   <div class="spinner-container" *ngIf="(loading$ | async )">

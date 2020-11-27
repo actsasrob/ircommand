@@ -4,6 +4,7 @@ import {IRSignal} from '../model/ir-signal';
 import {Observable, of} from 'rxjs';
 import {concatMap, delay, filter, first, map, shareReplay, tap, withLatestFrom} from 'rxjs/operators';
 import {IRSignalEntityService} from '../../shared/services/ir-signal-entity.service';
+import { SidenavService } from '../../shared/services/sidenav.service';
 
 
 @Component({
@@ -24,7 +25,8 @@ export class IRSignalComponent implements OnInit {
 
     constructor(
         private IRSignalsService: IRSignalEntityService,
-        private route: ActivatedRoute) {
+        private route: ActivatedRoute,
+        private sidenavService: SidenavService) {
 
     }
 
@@ -37,7 +39,12 @@ export class IRSignalComponent implements OnInit {
                 map(IRSignals => IRSignals.find(IRSignal => IRSignal.id == parseInt(IRSignalUrl)))
             );
 
-}
+    }
+
+
+    toggleSidenav() {
+       this.sidenavService.toggle();
+    }
 
 
 }
