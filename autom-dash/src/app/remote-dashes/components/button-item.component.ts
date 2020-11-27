@@ -235,13 +235,15 @@ export class ButtonItemComponent implements OnInit, OnChanges, OnDestroy, RIComp
     //@HostListener('touchmove', ['$event'])
     //@HostListener('touchend', ['$event'])
     //@HostListener('touchcancel', ['$event'])
-    handleTouch(event: TouchEvent) {
+    handleTouch(event: TouchEvent, data: any) {
         console.log("ButtonItem.handleTouch(): event=" + event + " event.type=" + event.type + " event.target=" + event.target);
+        console.log("ButtonItem.handleTouch(): data=" + JSON.stringify(data));
         let touch = event.touches[0] || event.changedTouches[0];
 
         // check the events
         if (event.type === 'touchstart') {
             event.preventDefault();
+            event.stopPropagation();
             this.defaultTouch.x = touch.pageX;
             this.defaultTouch.y = touch.pageY;
             this.defaultTouch.time = event.timeStamp;
