@@ -24,6 +24,9 @@
 - Add logic to autom-dash install script to install on-screen keyboard and add icon to RPI taskbar to
   toggle on-screen keyboard.
   https://pimylifeup.com/raspberry-pi-on-screen-keyboard/
+- Consider removing need for ButtonItem Edit button by adding duration component to mouse clicks
+  Treat long duration mouse clicks as an edit request
+  https://stackoverflow.com/questions/25180332/how-can-i-listen-for-a-click-and-hold-in-angularjs
 
 ## RestfulLearnIR service:
 - Update RestfulLearnIR.py to allow the tty for the USB serial port to be set from command line.
