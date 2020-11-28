@@ -38,7 +38,7 @@ import { HostListener  } from "@angular/core";
          <p>Please click the Edit button to select an IR Signal</p>
       </ng-template>
       <div id="2" class="app-button-item-contols"> 
-         <button (click)="onClick($event, data)"
+         <button (click)="onClick($event, data)" 
          >
            Edit Item
          </button>
@@ -233,11 +233,11 @@ export class ButtonItemComponent implements OnInit, OnChanges, OnDestroy, RIComp
 
     @HostListener('touchstart', ['$event'])
     //@HostListener('touchmove', ['$event'])
-    //@HostListener('touchend', ['$event'])
-    //@HostListener('touchcancel', ['$event'])
-    handleTouch(event: TouchEvent, data: any) {
+    @HostListener('touchend', ['$event'])
+    @HostListener('touchcancel', ['$event'])
+    handleTouch(event: TouchEvent) {
         console.log("ButtonItem.handleTouch(): event=" + event + " event.type=" + event.type + " event.target=" + event.target);
-        console.log("ButtonItem.handleTouch(): data=" + JSON.stringify(data));
+        console.log("ButtonItem.handleTouch(): this.data=" + JSON.stringify(this.data));
         let touch = event.touches[0] || event.changedTouches[0];
 
         // check the events
