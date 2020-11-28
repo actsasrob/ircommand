@@ -202,34 +202,37 @@ export class ButtonItemComponent implements OnInit, OnChanges, OnDestroy, RIComp
             let deltaY = touch.pageY - this.defaultTouch.y;
             let deltaTime = event.timeStamp - this.defaultTouch.time;
 
+            console.log("ButtonItem.handleTouch(): event.type=" + event.type + " deltaTime=", deltaTime);
             // simulate a "short touch" with no swipe
-            if ((deltaTime < 100) &&
+            if ((deltaTime < 200) &&
                 (Math.abs(deltaX) <= 60) &&
                 (Math.abs(deltaY) <= 60)) {
                 this.handleSendIR();
-            } else {
+            } else if (deltaTime < 500) {
                // simulte a swipe -> less than 500 ms and more than 60 px
-               if (deltaTime < 500) {
-                   // touch movement lasted less than 500 ms
-                   if (Math.abs(deltaX) > 60) {
-                       // delta x is at least 60 pixels
-                       if (deltaX > 0) {
-                           this.doSwipeRight(event);
-                       } else {
-                           this.doSwipeLeft(event);
-                       }
+               // touch movement lasted less than 500 ms
+               if (Math.abs(deltaX) > 60) {
+                   // delta x is at least 60 pixels
+                   if (deltaX > 0) {
+                       this.doSwipeRight(event);
+                   } else {
+                       this.doSwipeLeft(event);
                    }
+               }
 
-                   if (Math.abs(deltaY) > 60) {
-                       // delta y is at least 60 pixels
-                       if (deltaY > 0) {
-                           this.doSwipeDown(event);
-                       } else {
-                           this.doSwipeUp(event);
-                       }
+               if (Math.abs(deltaY) > 60) {
+                   // delta y is at least 60 pixels
+                   if (deltaY > 0) {
+                       this.doSwipeDown(event);
+                   } else {
+                       this.doSwipeUp(event);
                    }
-               }   
-            } 
+               }
+                  
+            } else {
+               // simulate a "long touch"
+               this.handleEdit();
+            }
         }
     }
 
