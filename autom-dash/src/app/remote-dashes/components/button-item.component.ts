@@ -23,7 +23,7 @@ import { HostListener  } from "@angular/core";
   selector: 'app-button-item',
   template: `
     <div id="4" class="app-button-item" >
-      <div id="1" class="app-button-item-irsignal" (click)="onClick($event, data)" *ngIf="(IRSignal$ | async) as IRSignal; else elseBlock">
+      <div id="1" class="app-button-item-irsignal" (click)="onClick($event)" *ngIf="(IRSignal$ | async) as IRSignal; else elseBlock">
          <div class="spinner-container" *ngIf="(loading$ | async )">
            <mat-spinner></mat-spinner>
          </div>
@@ -38,7 +38,7 @@ import { HostListener  } from "@angular/core";
          <p>Please click the Edit button to select an IR Signal</p>
       </ng-template>
       <div id="2" class="app-button-item-contols"> 
-         <button (click)="onClick($event, data)" 
+         <button (click)="onClick($event)" 
          >
            Edit Item
          </button>
@@ -85,30 +85,6 @@ export class ButtonItemComponent implements OnInit, OnChanges, OnDestroy, RIComp
     ngOnInit() {
         console.log("ButtonItem.ngOnInit(): here1 this.data=" + JSON.stringify(this.data));
         this.reload();
-        //this.IRSignal$ = this.IRSignalsService.entities$
-        //    .pipe(
-        //        map(IRSignals => IRSignals.find(IRSignal => IRSignal.id == parseInt(this.data.IRSignalId))),
-        //);
-
-        //if (this.data.IRSignalId) {
-        //   //console.log("ButtonItem.ngOnInit(): here1");
-        //   this.IRSignal$.subscribe(
-        //      IRSignal => {
-        //         console.log("ButtonItem.ngOnInit(): IRSignal=" + JSON.stringify(IRSignal));
-        //         selectedSignal = IRSignal.signal;
-        //      }
-        //   );
-        //}
-        //this.IRSignal$.subscribe(
-        //   IRSignal => {
-        //      console.log("ButtonItem.ngOnInit(): IRSignal=" + JSON.stringify(IRSignal));
-        //      if (IRSignal.signal) {
-        //         this.selectedSignal = IRSignal.signal;
-        //         console.log("ButtonItem.ngOnInit(): this.selectedSignal=" + this.selectedSignal);
-        //      }
-        //   }
-        //);
-        //console.log("ButtonItem.ngOnInit(): here2");
     }
   
     ngOnChanges(changes: SimpleChanges) {
@@ -125,23 +101,14 @@ export class ButtonItemComponent implements OnInit, OnChanges, OnDestroy, RIComp
         );
 
         if (this.data.IRSignalId) {
-           console.log("ButtonItem.reload(): here1 this.data=" + JSON.stringify(this.data));
+           //console.log("ButtonItem.reload(): here1 this.data=" + JSON.stringify(this.data));
            this.IRSignal$.subscribe(
               IRSignal => {
-                 console.log("ButtonItem.reload(): IRSignal=" + JSON.stringify(IRSignal));
+                 //console.log("ButtonItem.reload(): IRSignal=" + JSON.stringify(IRSignal));
                  this.selectedSignal = IRSignal.signal;
               }
            );
         }
-        //this.IRSignal$.subscribe(
-        //   IRSignal => {
-        //      console.log("ButtonItem.reload(): IRSignal=" + JSON.stringify(IRSignal));
-        //      if (IRSignal.signal) {
-        //         this.selectedSignal = IRSignal.signal;
-        //         console.log("ButtonItem.reload(): this.selectedSignal=" + this.selectedSignal);
-        //      }
-        //   }
-        //);
     }
 
     ngOnDestroy() {
@@ -151,35 +118,45 @@ export class ButtonItemComponent implements OnInit, OnChanges, OnDestroy, RIComp
     }
 
 
+    handleEdit() {
+       const dialogConfig = defaultDialogConfig();
+
+       dialogConfig.data = {
+         dialogTitle:"Edit Button",
+         data: this.data,
+         mode: 'update'
+       };
+       //console.log("ButtonItem.handleEdit(). this.data=" + JSON.stringify(this.data));
+       this.dialog.open(EditButtonItemDialogComponent, dialogConfig)
+         .afterClosed()
+         .subscribe( theData => {
+            if (theData) {
+               //this.data.IRSignalId = theData.IRSignalId;
+               //console.log("ButtonItem.handleEdit().afterClosed(): theData=" + JSON.stringify(theData) + "this.data=" + JSON.stringify(this.data));
+               this.messageService.receiveFromChildren(JSON.stringify(theData));
+            }
+            this.reload();
+       });
+    }
+
+    handleSendIR() {
+       const tmpData: string = `{ "signal": "${this.selectedSignal}" }`;
+       this.messageService.sendIRSignal(tmpData);
+    }
+
     //@HostListener('click', ['$event'])
     //onClick(event: any) {
-      onClick(event: Event, data: any) {
+    onClick(event: Event) {
        event.stopPropagation();
        event.preventDefault();
 
         console.log("ButtonItem.onClick(): event=" + event + "event.target=" + event.target + "event.srcElement" + event.srcElement);
+        //console.log("ButtonItem.onClick(): this.data=" + JSON.stringify(this.data));
         let tmpString: string = event.target.toString();
         if (tmpString.includes("HTMLButtonElement")) {
-          const dialogConfig = defaultDialogConfig();
-
-          dialogConfig.data = {
-            dialogTitle:"Edit Button",
-            data,
-            mode: 'update'
-          };
-          console.log("ButtonItem.onClick(). this.data=" + JSON.stringify(this.data));
-          this.dialog.open(EditButtonItemDialogComponent, dialogConfig)
-            .afterClosed()
-            .subscribe( theData => {
-               if (theData) {
-                  //this.data.IRSignalId = theData.IRSignalId;
-                  //console.log("ButtonItem.onClick().afterClosed(): theData=" + JSON.stringify(theData) + "this.data=" + JSON.stringify(this.data));
-                  this.messageService.receiveFromChildren(JSON.stringify(theData));
-               }
-               this.reload();
-          });
+           this.handleEdit();
         } else if (this.selectedSignal) { // treat as request to send IR Signal
-           console.log("ButtonItem.onClick(): 1event=" + event + "event.target=" + event.target + "this.selectedSignal=" + this.selectedSignal);
+           console.log("ButtonItem.onClick(): event=" + event + "event.target=" + event.target + "this.selectedSignal=" + this.selectedSignal);
            //REMINDER: the line below causes the IRSignal$ observer to fire
            // whenever it changes which causes the message to be sent at
            // the wrong times. 
@@ -189,37 +166,9 @@ export class ButtonItemComponent implements OnInit, OnChanges, OnDestroy, RIComp
            //      this.messageService.sendIRSignal(tmpData);
            //    }
            //);
-           const tmpData: string = `{ "signal": "${this.selectedSignal}" }`;
-           this.messageService.sendIRSignal(tmpData);
+           this.handleSendIR();
         }
     }
-
-    //editItem(event: Event, data: any) {
-    //   //console.log("ButtonItem.editItem()");
-    //      event.stopPropagation();
-    //      console.log("ButtonItem.editItem(): event=" + event + "event.target=" + event.target + "event.srcElement" + event.srcElement);
-    //      const dialogConfig = defaultDialogConfig();
-
-    //      dialogConfig.data = {
-    //        dialogTitle:"Edit Button",
-    //        data,
-    //        mode: 'update'
-    //      };
-
-    //      this.dialog.open(EditButtonItemDialogComponent, dialogConfig)
-    //        .afterClosed()
-    //        .subscribe( theData => {
-    //           console.log("ButtonItem.editItem().afterClosed(): theData=" + JSON.stringify(theData));
-    //           if (theData) {
-    //              this.messageService.receiveFromChildren(JSON.stringify(theData));
-    //           }
-    //        });
-    //}
-
-     //onMousedown(event: Event) {
-     //  console.log("ButtonItem.onMousedown(): event=" + event + "event.target=" + event.target);
-     //   event.stopPropagation();
-     //}
 
      onEvent(event: MouseEvent): void {
          console.log("ButtonItem.onEvent()");
@@ -227,6 +176,7 @@ export class ButtonItemComponent implements OnInit, OnChanges, OnDestroy, RIComp
      }
 
      coordinates(event: MouseEvent): void {
+         console.log("ButtonItem.coordinates()");
          this.clientX = event.clientX;
          this.clientY = event.clientY;
      }
@@ -237,7 +187,7 @@ export class ButtonItemComponent implements OnInit, OnChanges, OnDestroy, RIComp
     @HostListener('touchcancel', ['$event'])
     handleTouch(event: TouchEvent) {
         console.log("ButtonItem.handleTouch(): event=" + event + " event.type=" + event.type + " event.target=" + event.target);
-        console.log("ButtonItem.handleTouch(): this.data=" + JSON.stringify(this.data));
+        //console.log("ButtonItem.handleTouch(): this.data=" + JSON.stringify(this.data));
         let touch = event.touches[0] || event.changedTouches[0];
 
         // check the events
@@ -252,27 +202,34 @@ export class ButtonItemComponent implements OnInit, OnChanges, OnDestroy, RIComp
             let deltaY = touch.pageY - this.defaultTouch.y;
             let deltaTime = event.timeStamp - this.defaultTouch.time;
 
-            // simulte a swipe -> less than 500 ms and more than 60 px
-            if (deltaTime < 500) {
-                // touch movement lasted less than 500 ms
-                if (Math.abs(deltaX) > 60) {
-                    // delta x is at least 60 pixels
-                    if (deltaX > 0) {
-                        this.doSwipeRight(event);
-                    } else {
-                        this.doSwipeLeft(event);
-                    }
-                }
+            // simulate a "short touch" with no swipe
+            if ((deltaTime < 100) &&
+                (Math.abs(deltaX) <= 60) &&
+                (Math.abs(deltaY) <= 60)) {
+                this.handleSendIR();
+            } else {
+               // simulte a swipe -> less than 500 ms and more than 60 px
+               if (deltaTime < 500) {
+                   // touch movement lasted less than 500 ms
+                   if (Math.abs(deltaX) > 60) {
+                       // delta x is at least 60 pixels
+                       if (deltaX > 0) {
+                           this.doSwipeRight(event);
+                       } else {
+                           this.doSwipeLeft(event);
+                       }
+                   }
 
-                if (Math.abs(deltaY) > 60) {
-                    // delta y is at least 60 pixels
-                    if (deltaY > 0) {
-                        this.doSwipeDown(event);
-                    } else {
-                        this.doSwipeUp(event);
-                    }
-                }
-            }
+                   if (Math.abs(deltaY) > 60) {
+                       // delta y is at least 60 pixels
+                       if (deltaY > 0) {
+                           this.doSwipeDown(event);
+                       } else {
+                           this.doSwipeUp(event);
+                       }
+                   }
+               }   
+            } 
         }
     }
 
@@ -290,6 +247,7 @@ export class ButtonItemComponent implements OnInit, OnChanges, OnDestroy, RIComp
 
     doSwipeDown(event) {
         console.log('swipe down', event);
+        this.handleEdit();
     }
 }
 
