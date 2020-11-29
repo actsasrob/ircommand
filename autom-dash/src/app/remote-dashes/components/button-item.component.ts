@@ -284,10 +284,12 @@ export class ButtonItemComponent implements OnInit, OnChanges, OnDestroy, RIComp
 
     doSwipeLeft(event) {
         console.log('swipe left', event);
+        this.handleDelete();
     }
 
     doSwipeRight(event) {
         console.log('swipe right', event);
+        this.handleDelete();
     }
 
     doSwipeUp(event) {
