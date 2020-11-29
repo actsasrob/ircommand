@@ -22,28 +22,17 @@ import { HostListener  } from "@angular/core";
 @Component({
   selector: 'app-button-item',
   template: `
-    <div id="4" class="app-button-item" >
-      <div id="1" class="app-button-item-irsignal" (click)="onClick($event)" *ngIf="(IRSignal$ | async) as IRSignal; else elseBlock">
+    <div class="app-button-item" >
+      <div class="app-button-item-irsignal" (mousedown)="onMouseDown($event)" (mouseup)="onSglClick($event)" (dblclick)="onDblClick($event)" *ngIf="(IRSignal$ | async) as IRSignal; else elseBlock">
          <div class="spinner-container" *ngIf="(loading$ | async )">
            <mat-spinner></mat-spinner>
          </div>
          <br/>
          <h4>{{IRSignal?.name}}</h4>
-         <!--
-         IR Signal
-         <p>{{IRSignal?.signal}}</p>
-         -->
       </div>
       <ng-template #elseBlock>
-         <p>Please click the Edit button to select an IR Signal</p>
+         <p>Quick click/press to send IR signal. Long click/press or swipe down to edit/select an IR Signal</p>
       </ng-template>
-      <div id="2" class="app-button-item-contols"> 
-         <button (click)="onClick($event)" 
-         >
-           Edit Item
-         </button>
-        <br><br>
-      </div>
     </div>
   `,
     //changeDetection: ChangeDetectionStrategy.OnPush
@@ -62,10 +51,17 @@ export class ButtonItemComponent implements OnInit, OnChanges, OnDestroy, RIComp
     selectedSignal: string;
 
     defaultTouch = { x: 0, y: 0, time: 0 };
+    defaultClick = { time: 0 };
+
+    clickTimer: any;
 
     public event: MouseEvent;
     public clientX = 0;
     public clientY = 0;
+
+    shortPressDuration: number = 200;
+    mediumPressDuration: number = 500;
+    // reminder: duration >= mediumPressDuration is considered a long press
 
     constructor(
       private ref: ChangeDetectorRef,
@@ -139,9 +135,54 @@ export class ButtonItemComponent implements OnInit, OnChanges, OnDestroy, RIComp
        });
     }
 
+    handleDelete() {
+       const tmpData: string = `{ "id": "${this.data.id}" }`;
+       this.messageService.deleteReceiveFromChildren(tmpData);
+    }
+
     handleSendIR() {
        const tmpData: string = `{ "signal": "${this.selectedSignal}" }`;
        this.messageService.sendIRSignal(tmpData);
+    }
+
+    onMouseDown(event: Event) {
+       event.stopPropagation();
+       event.preventDefault();
+       console.log("ButtonItem.onMouseDown()");
+       this.defaultClick.time = event.timeStamp;
+    }
+
+    //@HostListener('click', ['$event'])
+    //onClick(event: any) {
+    onClick1(event: Event) {
+       event.stopPropagation();
+       event.preventDefault();
+       
+       let deltaTime = event.timeStamp - this.defaultClick.time;
+       console.log("ButtonItem.onClick(): event=" + event + "event.target=" + event.target + " deltaTime=", deltaTime);
+       //console.log("ButtonItem.onClick(): this.data=" + JSON.stringify(this.data));
+       let tmpString: string = event.target.toString();
+       if (tmpString.includes("HTMLButtonElement")) {
+          this.handleEdit();
+       } else if (this.selectedSignal) { // treat as request to send IR Signal
+          console.log("ButtonItem.onClick(): event=" + event + "event.target=" + event.target + "this.selectedSignal=" + this.selectedSignal);
+          //REMINDER: the line below causes the IRSignal$ observer to fire
+          // whenever it changes which causes the message to be sent at
+          // the wrong times. 
+          //this.IRSignal$.subscribe(
+          //    IRSignal => {
+          //      const tmpData: string = `{ "signal": "${IRSignal.signal}" }`;
+          //      this.messageService.sendIRSignal(tmpData);
+          //    }
+          //);
+          this.handleSendIR();
+       }
+    }
+
+    onSglClick(event: Event): void {
+       console.log("ButtonItem.onSglClick(): event=" + event + "event.target=" + event.target);
+       this.clickTimer = setTimeout( () => {console.log("about to call onClick()"); this.onClick(event);}, 1600); 
+       //this.clickTimer = setTimeout(this.onClick, 1600, event); 
     }
 
     //@HostListener('click', ['$event'])
@@ -150,36 +191,41 @@ export class ButtonItemComponent implements OnInit, OnChanges, OnDestroy, RIComp
        event.stopPropagation();
        event.preventDefault();
 
-        console.log("ButtonItem.onClick(): event=" + event + "event.target=" + event.target + "event.srcElement" + event.srcElement);
-        //console.log("ButtonItem.onClick(): this.data=" + JSON.stringify(this.data));
-        let tmpString: string = event.target.toString();
-        if (tmpString.includes("HTMLButtonElement")) {
-           this.handleEdit();
-        } else if (this.selectedSignal) { // treat as request to send IR Signal
-           console.log("ButtonItem.onClick(): event=" + event + "event.target=" + event.target + "this.selectedSignal=" + this.selectedSignal);
-           //REMINDER: the line below causes the IRSignal$ observer to fire
-           // whenever it changes which causes the message to be sent at
-           // the wrong times. 
-           //this.IRSignal$.subscribe(
-           //    IRSignal => {
-           //      const tmpData: string = `{ "signal": "${IRSignal.signal}" }`;
-           //      this.messageService.sendIRSignal(tmpData);
-           //    }
-           //);
-           this.handleSendIR();
-        }
+       let deltaTime = event.timeStamp - this.defaultClick.time;
+       console.log("ButtonItem.onClick(): event=" + event + "event.target=" + event.target + " deltaTime=", deltaTime);
+       //console.log("ButtonItem.onClick(): this.data=" + JSON.stringify(this.data));
+       if ((deltaTime < this.shortPressDuration) &&
+           (this.selectedSignal)) {
+          this.handleSendIR();
+       } else if (deltaTime < this.mediumPressDuration) { //  treat as what?
+          console.log("ButtonItem.onClick(): medium press");
+       } else { // treat as long press
+          this.handleEdit();
+       }
     }
 
-     onEvent(event: MouseEvent): void {
-         console.log("ButtonItem.onEvent()");
-         this.event = event;
-     }
+    onDblClick(event: Event) {
+       console.log("ButtonItem.onDblClick(): this.clickTimer=" + JSON.stringify(this.clickTimer));
+       clearTimeout(this.clickTimer);
+       this.clickTimer = undefined;
+       console.log("ButtonItem.onDblClick(): this.clickTimer=" + JSON.stringify(this.clickTimer));
+       console.log("ButtonItem.onDblClick(): event=" + event + "event.target=" + event.target);
+       event.stopPropagation();
+       event.preventDefault();
 
-     coordinates(event: MouseEvent): void {
-         console.log("ButtonItem.coordinates()");
-         this.clientX = event.clientX;
-         this.clientY = event.clientY;
-     }
+       this.handleDelete();
+    }
+
+    onEvent(event: MouseEvent): void {
+        console.log("ButtonItem.onEvent()");
+        this.event = event;
+    }
+
+    coordinates(event: MouseEvent): void {
+        console.log("ButtonItem.coordinates()");
+        this.clientX = event.clientX;
+        this.clientY = event.clientY;
+    }
 
     @HostListener('touchstart', ['$event'])
     //@HostListener('touchmove', ['$event'])
@@ -204,11 +250,11 @@ export class ButtonItemComponent implements OnInit, OnChanges, OnDestroy, RIComp
 
             console.log("ButtonItem.handleTouch(): event.type=" + event.type + " deltaTime=", deltaTime);
             // simulate a "short touch" with no swipe
-            if ((deltaTime < 200) &&
+            if ((deltaTime < this.shortPressDuration) &&
                 (Math.abs(deltaX) <= 60) &&
                 (Math.abs(deltaY) <= 60)) {
                 this.handleSendIR();
-            } else if (deltaTime < 500) {
+            } else if (deltaTime < this.mediumPressDuration) {
                // simulte a swipe -> less than 500 ms and more than 60 px
                // touch movement lasted less than 500 ms
                if (Math.abs(deltaX) > 60) {

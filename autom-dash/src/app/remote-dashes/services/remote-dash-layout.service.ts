@@ -58,14 +58,19 @@ export class RemoteDashLayoutService {
      }  
 
    deleteItem(id: string): void {
-       console.log("RemoteDashLayoutService.deleteItem(): id=" + JSON.stringify(id));
-       let jsonObject = JSON.parse(JSON.stringify(id));
-       const item = this.layout.find(d => d.id === jsonObject.id);
-       this.layout.splice(this.layout.indexOf(item), 1);
-       const comp = this.components.find(c => c.data.id === jsonObject.id);
-       this.components.splice(this.components.indexOf(comp), 1);
-       const compObj = this.componentsObjs.find(c => c.data.id === jsonObject.id);
-       this.componentsObjs.splice(this.componentsObjs.indexOf(compObj), 1);
+       //console.log("RemoteDashLayoutService.deleteItem(): id=" + JSON.stringify(id));
+       const item = this.layout.find(d => d.id === id);
+       if (item) {
+          this.layout.splice(this.layout.indexOf(item), 1);
+          const comp = this.components.find(c => c.data.id === id);
+          if (comp) {
+             this.components.splice(this.components.indexOf(comp), 1);
+             const compObj = this.componentsObjs.find(c => c.data.id === id);
+             if (compObj) {
+                this.componentsObjs.splice(this.componentsObjs.indexOf(compObj), 1);
+              }
+          }
+       }
    }
   
    // dropId is the UUID of the target layout item for the drop 

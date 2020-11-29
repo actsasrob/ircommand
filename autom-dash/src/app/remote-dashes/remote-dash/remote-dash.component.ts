@@ -167,6 +167,18 @@ export class RemoteDashComponent implements OnInit,OnDestroy {
           }
         );
 
+        // grandchild components communicate delete item requests back to ancestor
+        // RemoteDash component via this service subscription
+        this.messageService.deleteFromChildren$.subscribe(
+          message => {
+            console.log(`RemoteDash.messageService.deleteFromChildren$() message=${message}`);
+            if (message) {
+               const myData: any = JSON.parse(message);         
+               this.layoutService.deleteItem(myData.id);
+            }
+          }
+        );
+
         // grandchild components communicate request to send IR signals to
         // ancestor RemoteDash component via this service subscription
         this.messageService.IRSignalFromChildren$.subscribe(
