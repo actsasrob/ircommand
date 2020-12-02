@@ -31,7 +31,9 @@ import { HostListener  } from "@angular/core";
          <h4>{{IRSignal?.name}}</h4>
       </div>
       <ng-template #elseBlock>
-         <p>Quick click/press to send IR signal. Long click/press or swipe down to edit/select an IR Signal</p>
+         <div class="app-button-item-empty" (mousedown)="onMouseDown($event)" (mouseup)="onSglClick($event)" (dblclick)="onDblClick($event)" >
+            <p>Quick click/touch to send IR signal. Long click/touch or swipe down to edit. Double click or swipe left/right to delete.</p>
+         </div>
       </ng-template>
     </div>
   `,
@@ -181,8 +183,9 @@ export class ButtonItemComponent implements OnInit, OnChanges, OnDestroy, RIComp
 
     onSglClick(event: Event): void {
        console.log("ButtonItem.onSglClick(): event=" + event + "event.target=" + event.target);
-       this.clickTimer = setTimeout( () => {console.log("about to call onClick()"); this.onClick(event);}, 1600); 
-       //this.clickTimer = setTimeout(this.onClick, 1600, event); 
+       if (! this.clickTimer) {
+          this.clickTimer = setTimeout( () => { this.onClick(event);}, 300); 
+       }
     }
 
     //@HostListener('click', ['$event'])
@@ -190,6 +193,7 @@ export class ButtonItemComponent implements OnInit, OnChanges, OnDestroy, RIComp
     onClick(event: Event) {
        event.stopPropagation();
        event.preventDefault();
+       this.clickTimer = undefined;
 
        let deltaTime = event.timeStamp - this.defaultClick.time;
        console.log("ButtonItem.onClick(): event=" + event + "event.target=" + event.target + " deltaTime=", deltaTime);
@@ -205,10 +209,8 @@ export class ButtonItemComponent implements OnInit, OnChanges, OnDestroy, RIComp
     }
 
     onDblClick(event: Event) {
-       console.log("ButtonItem.onDblClick(): this.clickTimer=" + JSON.stringify(this.clickTimer));
        clearTimeout(this.clickTimer);
        this.clickTimer = undefined;
-       console.log("ButtonItem.onDblClick(): this.clickTimer=" + JSON.stringify(this.clickTimer));
        console.log("ButtonItem.onDblClick(): event=" + event + "event.target=" + event.target);
        event.stopPropagation();
        event.preventDefault();
