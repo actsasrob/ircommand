@@ -35,6 +35,22 @@ __decorate([
     __metadata("design:type", String)
 ], IRSignal.prototype, "name", void 0);
 __decorate([
+    typeorm_1.Column("text", { nullable: true }),
+    __metadata("design:type", String)
+], IRSignal.prototype, "alexaIntent", void 0);
+__decorate([
+    typeorm_1.Column("text", { nullable: true }),
+    __metadata("design:type", String)
+], IRSignal.prototype, "alexaAction", void 0);
+__decorate([
+    typeorm_1.Column("text", { nullable: true }),
+    __metadata("design:type", String)
+], IRSignal.prototype, "alexaComponent", void 0);
+__decorate([
+    typeorm_1.Column({ default: false }),
+    __metadata("design:type", Boolean)
+], IRSignal.prototype, "alexaToggle", void 0);
+__decorate([
     typeorm_1.ManyToOne(type => User_1.User, user => user.IRSignals),
     __metadata("design:type", User_1.User)
 ], IRSignal.prototype, "user", void 0);

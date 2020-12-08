@@ -19,6 +19,18 @@ export class IRSignal {
     @Column()
     name: string;
 
+    @Column("text", { nullable: true })
+    alexaIntent: string;
+
+    @Column("text", { nullable: true })
+    alexaAction: string;
+
+    @Column("text", { nullable: true })
+    alexaComponent: string;
+
+    @Column({ default: false })
+    alexaToggle: boolean;
+
     @ManyToOne(type => User, user => user.IRSignals)
     user: User;
 }

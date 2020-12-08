@@ -8,6 +8,7 @@ import {IRSignalComponent} from './ir-signal/ir-signal.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatInputModule} from '@angular/material/input';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {MatSelectModule} from '@angular/material/select';
@@ -61,6 +62,7 @@ const entityMetadata: EntityMetadataMap = {
         CommonModule,
         MatButtonModule,
         MatIconModule,
+        MatCheckboxModule,
         MatCardModule,
         MatTabsModule,
         MatInputModule,

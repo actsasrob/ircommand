@@ -45,3 +45,21 @@
 All buttons should have a 'class' property:
 classes: power, volume, channel (as in up/down), favorites
 NOTE: Look at Baba Zoo Alexa skill for how I broke out classes. Alexa probably has a better name than class.
+
+For Baba Zoo: 
+- intent -> category of command. e.g. volume_action
+-- action -> type of command. e.g. VOLUME_DECREASE
+--- component -> device with is target of command.
+--- default_component: boolean. whether this device is the default target for the intent/action pair.
+--- numargs: does the command except numeric arguments? This is meant to indicate a command/action pair
+             can be executed multiple times. e.g. execute the VOLUME_DECREASE action 5 times. One sublety here is that with Baba Zoo the target shell script could control the amount of delay between each executed command. Baba Zoo the target shell script could control the amount of delay between each executed command..a
+             for channel_action intents this can be used to specify the channel number to change to
+##intents:
+- generic - e.g. power on system, open dvd tray
+- AVR - e.g. change compononent to DVD player
+- volume - e.g. raise volume, decrease volume by 5
+-- Takes numeric argument: positive integer indicating how much the volume should be raised or lowered
+- channel - e.g. change channel on set top box to 746
+-- Takes numeric argument which is the channel number to change to
+- navigation - e.g. channel up, scroll right 5 times, page down
+-- takes numeric argumment: number of times to repeat command

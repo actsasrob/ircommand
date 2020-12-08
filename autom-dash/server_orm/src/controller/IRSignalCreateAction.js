@@ -33,11 +33,12 @@ function IRSignalCreateAction(request, response) {
         const newObject = new IRSignal_1.IRSignal();
         newObject.signal = request.body.signal;
         newObject.seqNo = request.body.seqNo;
-        ;
         newObject.name = request.body.name;
-        ;
         newObject.iconUrl = request.body.iconUrl;
-        ;
+        newObject.alexaIntent = request.body.alexaIntent;
+        newObject.alexaAction = request.body.alexaAction;
+        newObject.alexaComponent = request.body.alexaComponent;
+        newObject.alexaToggle = request.body.alexaToggle;
         newObject.user = user;
         console.log("IRSignalCreateAction: newObject=" + JSON.stringify(newObject));
         // save received object 

@@ -14,6 +14,7 @@ import {LearnIREntityService} from '../../shared/services/learn-ir-entity.servic
 import { IRService } from '../../shared/services/ir.service';
 import {  takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { AlexaMetadataService } from '../../shared/services/alexa-metadata.service';
 import { HttpResponse } from '@angular/common/http';
 
 @Component({
@@ -40,13 +41,23 @@ export class EditIRSignalDialogComponent implements OnInit {
 
     loading$: Observable<boolean>;
 
+    IRSignalName: string = "";
+
     rawIRSignal: string = "";
 
     IRSignalIOMessage: string = "";
+
+    selectedIntent: any = '';
+    selectedAction: any = '';
+    selectedComponent: any = '';
+    selectedToggle: boolean = false;
    
     destroy$: Subject<boolean> = new Subject<boolean>();
 
     selectedLearnIRAddress: string = "";
+
+    alexaMetadata$: Observable<any>;
+    intents: Array<any> = [];
 
     constructor(
         private store: Store<AppState>,
@@ -56,7 +67,8 @@ export class EditIRSignalDialogComponent implements OnInit {
         private IRSignalsService: IRSignalEntityService,
         EntityCollectionServiceFactory: EntityCollectionServiceFactory,
         private irService: IRService,
-        private ref: ChangeDetectorRef) {
+        private ref: ChangeDetectorRef,
+        private alexaMetadataService: AlexaMetadataService) {
         this.entityActionFactory = new EntityActionFactory();
 
         this.learnIRsService = EntityCollectionServiceFactory.create<LearnIR>('LearnIR');
@@ -70,6 +82,10 @@ export class EditIRSignalDialogComponent implements OnInit {
             signal: ['', Validators.required],
             seqNo: ['', Validators.required],
             learnIRId: ['', !Validators.required],
+            alexaIntent: ['', !Validators.required],
+            alexaAction: ['', !Validators.required],
+            alexaComponent: ['', !Validators.required],
+            alexaToggle: [false, Validators.required],
         };
 
         if (this.mode == 'update') {
@@ -82,14 +98,23 @@ export class EditIRSignalDialogComponent implements OnInit {
                 name: ['', Validators.required],
                 signal: ['', Validators.required],
                 seqNo: [2, Validators.required],
+                alexaIntent: ['', !Validators.required],
+                alexaAction: ['', !Validators.required],
+                alexaComponent: ['', !Validators.required],
+                alexaToggle: [false, Validators.required],
             });
         }
     }
 
     ngOnInit() {
-        console.log("EditIRSignalDialogComponent.ngOnInit()");        
+        console.log("EditIRSignalDialogComponent.ngOnInit() this.IRSignal=" + JSON.stringify(this.IRSignal));        
+        this.IRSignalName = this.IRSignal.name;
+        this.selectedToggle = this.IRSignal.alexaToggle;
+
         this.learnIRs$ = this.learnIRsService.entities$
-        this.learnIRs$.subscribe(result => { console.log("EditIRSignalDialogComponent.ngOnInit(): here here here: " + JSON.stringify(result.length)) });
+        this.learnIRs$.subscribe(result => { 
+           console.log("EditIRSignalDialogComponent.ngOnInit(): here here here: " + JSON.stringify(result.length)) 
+        });
         
         const action = this.entityActionFactory.create<LearnIR>(
            'LearnIR',
@@ -101,6 +126,31 @@ export class EditIRSignalDialogComponent implements OnInit {
         this.loading$ = this.learnIRsService.loading$.pipe(delay(0));
 
         this.rawIRSignal = this.form.get('signal').value;
+
+        this.alexaMetadata$ = this.alexaMetadataService.getMetadata(); 
+        this.alexaMetadata$.subscribe(metadata => {
+           this.intents = metadata.intents;
+           console.log("EditIRSignalDialogComponent.ngOnInit() intents=", this.intents);
+
+           metadata.intents.find(intent => {
+              //console.log("EditIRSignalDialogComponent.ngOnInit() intent=" + JSON.stringify(intent));
+              if (intent.intent.name === this.IRSignal.alexaIntent) {
+                 this.selectedIntent = intent;
+                 //console.log("EditIRSignalDialogComponent.ngOnInit() this.selectedIntent" + JSON.stringify(this.selectedIntent));
+                 intent.actions.find(action => {
+                    if (action.id === this.IRSignal.alexaAction) {
+                       this.selectedAction = action.id;
+                    }
+                 });
+                 intent.components.find(component => {
+
+                    if (component.id === this.IRSignal.alexaComponent) {
+                       this.selectedComponent = component.id;
+                    }
+                 });
+              }
+           })
+        });
 
         console.log("EditIRSignalDialogComponent.ngOnInit() at end");        
     }
@@ -116,6 +166,8 @@ export class EditIRSignalDialogComponent implements OnInit {
             ...this.form.value,
         };
 
+        IRSignal.alexaIntent = this.selectedIntent.intent.name;
+ 
         if (this.mode == 'update') {
 
             this.IRSignalsService.update(IRSignal);
@@ -174,8 +226,41 @@ export class EditIRSignalDialogComponent implements OnInit {
        })  
     }
 
+    computeName() {
+       var action: string = undefined; 
+       var component: string = undefined;
+
+        if (this.selectedIntent && this.selectedAction) {
+           action = this.selectedIntent.actions.find(action => action.id === this.selectedAction).name.value;
+           this.IRSignalName = action;
+           if (this.selectedComponent) {
+              component = this.selectedIntent.components.find(component => component.id === this.selectedComponent).name.value;
+              //this.IRSignalName=`${action} ${component}`; 
+           }
+
+           this.IRSignalName = (this.selectedToggle ? 'toggle ' : '') + action + (component ? ` ${component}` : '');
+        }
+    }
+
+    onSelectChangedAction(selected) {
+        //console.log("EditIRSignalDialog.onSelectChangedAction(): " + " selected.value=" + JSON.stringify(selected.value));
+        //console.log("EditIRSignalDialog.onSelectChangedAction(): this.selectedIntent=", this.selectedIntent);
+        //this.IRSignalName = this.selectedIntent.actions.find(action => action.id === selected.value).name.value;
+       this.computeName();
+    }
+
+    onSelectChangedComponent(selected) {
+       this.computeName();
+    }
+
+    onChangedToggle() {
+        console.log("EditIRSignalDialog.onSelectChangedTogge():");
+       this.selectedToggle = !this.selectedToggle;
+       this.computeName();
+    }
+
     onSelectChangedLearnIR(selected) {
-        console.log("EditIRSignalDialog.onSelectChangedLearnIR(): " + " selected.vale=" + JSON.stringify(selected.value));
+        console.log("EditIRSignalDialog.onSelectChangedLearnIR(): " + " selected.value=" + JSON.stringify(selected.value));
         this.selectedLearnIRAddress=selected.value;
       }
 }

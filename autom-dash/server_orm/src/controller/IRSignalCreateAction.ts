@@ -29,9 +29,13 @@ export async function IRSignalCreateAction(request: Request, response: Response)
     //const newObject = itemRepository.create(request.body)
     const newObject = new IRSignal();
     newObject.signal = request.body.signal;
-    newObject.seqNo = request.body.seqNo;;
-    newObject.name = request.body.name;;
-    newObject.iconUrl = request.body.iconUrl;;
+    newObject.seqNo = request.body.seqNo;
+    newObject.name = request.body.name;
+    newObject.iconUrl = request.body.iconUrl;
+    newObject.alexaIntent = request.body.alexaIntent;
+    newObject.alexaAction = request.body.alexaAction;
+    newObject.alexaComponent = request.body.alexaComponent;
+    newObject.alexaToggle = request.body.alexaToggle;
     newObject.user = user;
 
     console.log("IRSignalCreateAction: newObject=" + JSON.stringify(newObject));

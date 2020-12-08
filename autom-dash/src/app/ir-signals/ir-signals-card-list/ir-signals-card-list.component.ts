@@ -4,6 +4,7 @@ import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import {EditIRSignalDialogComponent} from "../edit-ir-signal-dialog/edit-ir-signal-dialog.component";
 import {defaultDialogConfig} from '../shared/default-dialog-config';
 import {IRSignalEntityService} from '../../shared/services/ir-signal-entity.service';
+import { AlexaMetadataService } from '../../shared/services/alexa-metadata.service';
 
 @Component({
     selector: 'ir-signals-card-list',
@@ -21,11 +22,15 @@ export class IRSignalsCardListComponent implements OnInit {
 
     constructor(
       private dialog: MatDialog,
-      private IRSignalService: IRSignalEntityService) {
+      private IRSignalService: IRSignalEntityService,
+      private alexaMetadataService: AlexaMetadataService) {
     }
 
     ngOnInit() {
-
+        this.alexaMetadataService.getMetadata().subscribe(metadata => {
+           //metadata.intents.find(intent => {
+           //})
+        });
     }
 
     editIRSignal(IRSignal:IRSignal) {

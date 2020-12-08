@@ -5,6 +5,10 @@ export interface IRSignal {
   name:string;
   signal:string;
   iconUrl: string;
+  alexaIntent: string;
+  alexaAction: string;
+  alexaComponent: string;
+  alexaToggle: boolean;
   userId: number;
 }
 

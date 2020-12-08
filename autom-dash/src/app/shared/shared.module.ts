@@ -13,6 +13,7 @@ import {IRSignalsDataService} from './services/ir-signals-data.service';
 import {compareIRSignals, IRSignal} from '../ir-signals/model/ir-signal';
 
 import {LayoutService} from './services/layout.service';
+import {AlexaMetadataService} from './services/alexa-metadata.service';
 
 const entityMetadata: EntityMetadataMap = {
     LearnIR: {
@@ -53,6 +54,7 @@ export class SharedModule {
                IRSignalsResolver,
                IRSignalsDataService,
                LayoutService,
+               AlexaMetadataService,
             ]
         }
     }
