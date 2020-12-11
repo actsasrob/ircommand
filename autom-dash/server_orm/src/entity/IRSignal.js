@@ -47,6 +47,10 @@ __decorate([
     __metadata("design:type", String)
 ], IRSignal.prototype, "alexaComponent", void 0);
 __decorate([
+    typeorm_1.Column({ nullable: true }),
+    __metadata("design:type", String)
+], IRSignal.prototype, "alexaDigit", void 0);
+__decorate([
     typeorm_1.Column({ default: false }),
     __metadata("design:type", Boolean)
 ], IRSignal.prototype, "alexaToggle", void 0);

@@ -25,6 +25,8 @@
 - DONE. NEEDS TO BE TESTED MORE. Consider removing need for ButtonItem Edit button by adding duration component to mouse clicks
   Treat long duration mouse clicks as an edit request
   https://stackoverflow.com/questions/25180332/how-can-i-listen-for-a-click-and-hold-in-angularjs
+- The Edit IR Signal dialog should probably have a custom validator that takes into considerations
+  that the Alexa metadata fields are optional, but if specified should contain valid data
 
 ## RestfulLearnIR service:
 - Update RestfulLearnIR.py to allow the tty for the USB serial port to be set from command line.

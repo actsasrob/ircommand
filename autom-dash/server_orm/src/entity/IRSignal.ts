@@ -28,6 +28,9 @@ export class IRSignal {
     @Column("text", { nullable: true })
     alexaComponent: string;
 
+    @Column({ nullable: true })
+    alexaDigit: string;
+
     @Column({ default: false })
     alexaToggle: boolean;
 

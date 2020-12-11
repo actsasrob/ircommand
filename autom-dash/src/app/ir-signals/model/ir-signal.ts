@@ -9,6 +9,7 @@ export interface IRSignal {
   alexaAction: string;
   alexaComponent: string;
   alexaToggle: boolean;
+  alexaDigit: boolean;
   userId: number;
 }
 

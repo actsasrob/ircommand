@@ -13,11 +13,23 @@ export class AlexaMetadataService {
 
    constructor(private httpClient: HttpClient) { 
       //console.log("AlexaMetadataService.constructor():");
-      let metadata:any = { intents: [] };
+      let metadata:any = { intents: [], digits: [] };
 
       this.httpClient.get("assets/alexa_en-US.json").subscribe(
         (data:any) => {
-           //console.log("AlexaMetadataService.constructor(): data=", data);
+           console.log("AlexaMetadataService.constructor(): data=", data);
+
+           // Retrieve the array of DIGIT_TYPE types from the metadata
+           // to use for things like typing IR Signals that transmit digits
+           data.interactionModel.languageModel.types.forEach(type => {
+              if (type.name === "DIGIT_TYPE") {
+                 metadata.digits = type.values; 
+              }
+           });
+
+           // Retrieve metadata (intents, actions, components) used to type
+           // IR signals and map them to Alexa "autom dash" skill 
+           // intents/actions/components
            data.interactionModel.languageModel.intents.forEach(intent => {
               if (intent.name.includes("_action")) {
                  //console.log("AlexaMetadataService.constructor().intent.name=" + intent.name);  

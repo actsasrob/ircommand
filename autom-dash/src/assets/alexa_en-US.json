@@ -1,7 +1,7 @@
 {
   "interactionModel": {
     "languageModel": {
-      "invocationName": "baba zoo",
+      "invocationName": "autom dash",
       "intents": [
         {
           "name": "AMAZON.CancelIntent",
@@ -622,8 +622,9 @@
             {
               "id": "COMPONENT_STB",
               "name": {
-                "value": "set top box",
+                "value": "stb",
                 "synonyms": [
+                  "set top box",
                   "s. t. b.",
                   "settopbox"
                 ]
@@ -746,6 +747,91 @@
         {
           "values": [
             {
+              "id": "DIGIT_0",
+              "name": {
+                "value": "0",
+                "synonyms": [
+                ]
+              }
+            },
+            {
+              "id": "DIGIT_1",
+              "name": {
+                "value": "1",
+                "synonyms": [
+                ]
+              }
+            },
+            {
+              "id": "DIGIT_2",
+              "name": {
+                "value": "2",
+                "synonyms": [
+                ]
+              }
+            },
+            {
+              "id": "DIGIT_3",
+              "name": {
+                "value": "3",
+                "synonyms": [
+                ]
+              }
+            },
+            {
+              "id": "DIGIT_4",
+              "name": {
+                "value": "4",
+                "synonyms": [
+                ]
+              }
+            },
+            {
+              "id": "DIGIT_5",
+              "name": {
+                "value": "5",
+                "synonyms": [
+                ]
+              }
+            },
+            {
+              "id": "DIGIT_6",
+              "name": {
+                "value": "6",
+                "synonyms": [
+                ]
+              }
+            },
+            {
+              "id": "DIGIT_7",
+              "name": {
+                "value": "7",
+                "synonyms": [
+                ]
+              }
+            },
+            {
+              "id": "DIGIT_8",
+              "name": {
+                "value": "8",
+                "synonyms": [
+                ]
+              }
+            },
+            {
+              "id": "DIGIT_9",
+              "name": {
+                "value": "9",
+                "synonyms": [
+                ]
+              }
+            }
+          ],
+          "name": "DIGIT_TYPE"
+        },
+        {
+          "values": [
+            {
               "id": "COMPONENT_DVD",
               "name": {
                 "value": "dvd player",
@@ -793,8 +879,9 @@
             {
               "id": "COMPONENT_STB",
               "name": {
-                "value": "set top box",
+                "value": "stb",
                 "synonyms": [
+                  "set top box",
                   "s. t. b.",
                   "settopbox"
                 ]
@@ -1121,7 +1208,7 @@
           ]
         },
         {
-          "name": "generic_acion",
+          "name": "generic_action",
           "confirmationRequired": false,
           "prompts": {},
           "slots": [

@@ -36,6 +36,7 @@ export async function IRSignalCreateAction(request: Request, response: Response)
     newObject.alexaAction = request.body.alexaAction;
     newObject.alexaComponent = request.body.alexaComponent;
     newObject.alexaToggle = request.body.alexaToggle;
+    newObject.alexaDigit = request.body.alexaDigit;
     newObject.user = user;
 
     console.log("IRSignalCreateAction: newObject=" + JSON.stringify(newObject));

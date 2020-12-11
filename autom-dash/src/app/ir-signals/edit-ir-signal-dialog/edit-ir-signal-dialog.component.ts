@@ -29,7 +29,7 @@ export class EditIRSignalDialogComponent implements OnInit {
 
     dialogTitle: string;
 
-    IRSignal: IRSignal;
+    IRSignal: IRSignal = undefined;
 
     learnIRsService: EntityCollectionService<LearnIR>; 
     entityActionFactory: EntityActionFactory; 
@@ -51,6 +51,7 @@ export class EditIRSignalDialogComponent implements OnInit {
     selectedAction: any = '';
     selectedComponent: any = '';
     selectedToggle: boolean = false;
+    selectedDigit: any = '';
    
     destroy$: Subject<boolean> = new Subject<boolean>();
 
@@ -58,6 +59,7 @@ export class EditIRSignalDialogComponent implements OnInit {
 
     alexaMetadata$: Observable<any>;
     intents: Array<any> = [];
+    digits: Array<any> = [];
 
     constructor(
         private store: Store<AppState>,
@@ -86,6 +88,7 @@ export class EditIRSignalDialogComponent implements OnInit {
             alexaAction: ['', !Validators.required],
             alexaComponent: ['', !Validators.required],
             alexaToggle: [false, Validators.required],
+            alexaDigit: ['', !Validators.required],
         };
 
         if (this.mode == 'update') {
@@ -102,14 +105,16 @@ export class EditIRSignalDialogComponent implements OnInit {
                 alexaAction: ['', !Validators.required],
                 alexaComponent: ['', !Validators.required],
                 alexaToggle: [false, Validators.required],
+                alexaDigit: ['', !Validators.required],
             });
         }
     }
 
     ngOnInit() {
         console.log("EditIRSignalDialogComponent.ngOnInit() this.IRSignal=" + JSON.stringify(this.IRSignal));        
-        this.IRSignalName = this.IRSignal.name;
-        this.selectedToggle = this.IRSignal.alexaToggle;
+        this.IRSignalName = (this.IRSignal && this.IRSignal.name ? this.IRSignal.name : '');
+        this.selectedToggle = (this.IRSignal && this.IRSignal.alexaToggle ? this.IRSignal.alexaToggle : false);
+        this.selectedDigit = (this.IRSignal && this.IRSignal.alexaDigit ? this.IRSignal.alexaDigit : '');
 
         this.learnIRs$ = this.learnIRsService.entities$
         this.learnIRs$.subscribe(result => { 
@@ -130,11 +135,13 @@ export class EditIRSignalDialogComponent implements OnInit {
         this.alexaMetadata$ = this.alexaMetadataService.getMetadata(); 
         this.alexaMetadata$.subscribe(metadata => {
            this.intents = metadata.intents;
+           this.digits = metadata.digits;
            console.log("EditIRSignalDialogComponent.ngOnInit() intents=", this.intents);
+           console.log("EditIRSignalDialogComponent.ngOnInit() digits=", this.digits);
 
            metadata.intents.find(intent => {
               //console.log("EditIRSignalDialogComponent.ngOnInit() intent=" + JSON.stringify(intent));
-              if (intent.intent.name === this.IRSignal.alexaIntent) {
+              if (this.IRSignal && (intent.intent.name === this.IRSignal.alexaIntent)) {
                  this.selectedIntent = intent;
                  //console.log("EditIRSignalDialogComponent.ngOnInit() this.selectedIntent" + JSON.stringify(this.selectedIntent));
                  intent.actions.find(action => {
@@ -166,7 +173,7 @@ export class EditIRSignalDialogComponent implements OnInit {
             ...this.form.value,
         };
 
-        IRSignal.alexaIntent = this.selectedIntent.intent.name;
+        IRSignal.alexaIntent = (this.selectedIntent ? this.selectedIntent.intent.name : '');
  
         if (this.mode == 'update') {
 
@@ -232,10 +239,13 @@ export class EditIRSignalDialogComponent implements OnInit {
 
         if (this.selectedIntent && this.selectedAction) {
            action = this.selectedIntent.actions.find(action => action.id === this.selectedAction).name.value;
+           if (this.selectedDigit) {
+              action = this.digits.find(digit => digit.id === this.selectedDigit).name.value;
+           }
+
            this.IRSignalName = action;
            if (this.selectedComponent) {
               component = this.selectedIntent.components.find(component => component.id === this.selectedComponent).name.value;
-              //this.IRSignalName=`${action} ${component}`; 
            }
 
            this.IRSignalName = (this.selectedToggle ? 'toggle ' : '') + action + (component ? ` ${component}` : '');
@@ -244,8 +254,6 @@ export class EditIRSignalDialogComponent implements OnInit {
 
     onSelectChangedAction(selected) {
         //console.log("EditIRSignalDialog.onSelectChangedAction(): " + " selected.value=" + JSON.stringify(selected.value));
-        //console.log("EditIRSignalDialog.onSelectChangedAction(): this.selectedIntent=", this.selectedIntent);
-        //this.IRSignalName = this.selectedIntent.actions.find(action => action.id === selected.value).name.value;
        this.computeName();
     }
 
@@ -254,8 +262,11 @@ export class EditIRSignalDialogComponent implements OnInit {
     }
 
     onChangedToggle() {
-        console.log("EditIRSignalDialog.onSelectChangedTogge():");
        this.selectedToggle = !this.selectedToggle;
+       this.computeName();
+    }
+
+    onSelectChangedDigit(selected) {
        this.computeName();
     }
 
