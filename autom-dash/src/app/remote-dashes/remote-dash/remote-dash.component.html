@@ -13,7 +13,7 @@
             <mat-icon>menu</mat-icon>
         </button>
        <button (click)="layoutService.addItem()">Add Item</button>
-       <button (click)="onSave()">Save</button>
+       <button (click)="onSave()" [disabled]="!layoutService.isDirty" >Save</button>
        <div
          class="draggable"
          draggable="true"

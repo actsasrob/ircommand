@@ -235,10 +235,10 @@ export class RemoteDashComponent implements OnInit,OnDestroy {
          }
       );
       this.remoteDashesService.update(myPartial);
-
+      this.layoutService.isDirty = false; 
     }
 
-  toggleSidenav() {
-     this.sidenavService.toggle();
-  }
+    toggleSidenav() {
+       this.sidenavService.toggle();
+    }
 }

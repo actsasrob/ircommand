@@ -1,14 +1,13 @@
 # TODO List:
 
 ## autom-dash Items
-- Could not restore PostgreSQL database from backup. Many foriegn key constrainst violations.
 - RemoteDash component does not reload after drag-n-drop of item component. Cause UI to be out-of-date.
   - This works now when not using OnPush change management.
   - UI is not refreshed after drag-n-drop of item.
+- Need to rethink double clicking RemoteDash item to delete. Single clicking items rapidly (e.g. navigating up/down in a menu) is interpreted as a double click and the item gets deleted
 - Create IRSignal dialog: Save button doesn't activate until you click in Name field after entering content.
 - User information is not cleared from cache after logging out. Need to refresh browser to clear user.
   - Entity cache is not cleared when user logs out
-- Save button on RemoteDashComponent should only be enabled when unsaved changes exists 
 - None of the iconUrl properties are hooked up to anything. Need to provide some static image assets
   to choose from.
 - Use the seqNo property exposed via the dialogs is an awkward way to change display ordering.

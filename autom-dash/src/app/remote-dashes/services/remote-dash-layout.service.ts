@@ -10,17 +10,28 @@ import { ButtonItemComponent } from '../components/button-item.component';
   providedIn: 'root'
 })
 export class RemoteDashLayoutService {  
-  public options: GridsterConfig = {
-    gridType: GridType.Fit,
-    displayGrid: 'onDrag&Resize',
-    draggable: {
-      enabled: true
-    },
-    pushItems: true,
-    resizable: {
-      enabled: true
-    }
-  };  
+   public isDirty: boolean = false;
+
+   public options: GridsterConfig = {
+     gridType: GridType.Fit,
+     displayGrid: 'onDrag&Resize',
+     draggable: {
+       enabled: true,
+       stop: (event, $element, widget) => {
+         //console.log("dragged");
+         this.isDirty = true;
+       }
+     },
+     pushItems: true,
+     resizable: {
+       enabled: true,
+       stop: (event, $element, widget) => {
+         //console.log("resized");
+         this.isDirty = true;
+       }
+     }
+   };  
+
    public layout: GridsterItem[] = [];  
    //public layout: GridsterItem[] = [{"cols":5,"id":"5d5bd504-45ed-b0cd-ef84-dfe5c148368c","rows":5,"x":0,"y":0},{"cols":5,"id":"229098d2-a233-f0ba-20ed-c91e1cf55aad","rows":5,"x":0,"y":5},{"cols":5,"id":"8646833d-8cc9-4f32-5021-c564cba5ccea","rows":5,"x":5,"y":0},{"cols":5,"id":"e8318ac0-42d6-cdda-e7d9-71c7873a3cfb","rows":5,"x":0,"y":0}];  
 
@@ -52,9 +63,7 @@ export class RemoteDashLayoutService {
        this.components.push(JSON.parse(tmpComponent.toString()));
        this.componentsObjs.push(tmpComponent);
 
-     //console.log("LayoutService.addItem(): id=" + myUUID);
-     //console.log("LayoutService.addItem: layout" + JSON.stringify(this.layout));
-     //console.log("LayoutService.addItem: components" + JSON.stringify(this.components));
+       this.isDirty = true;
      }  
 
    deleteItem(id: string): void {
@@ -70,6 +79,8 @@ export class RemoteDashLayoutService {
                 this.componentsObjs.splice(this.componentsObjs.indexOf(compObj), 1);
               }
           }
+
+          this.isDirty = true;
        }
    }
   
@@ -97,6 +108,8 @@ export class RemoteDashLayoutService {
                 //this.components = Object.assign([], components, { [components.length]: JSON.parse(tmpComponent.toString()) });
                 this.componentsObjs.push(tmpComponent);
  
+                this.isDirty = true;
+
                 //this does not force change detection
                 this.options.draggable.enabled = false;
                 this.options.api.optionsChanged();
@@ -114,6 +127,9 @@ export class RemoteDashLayoutService {
                 //const { components } = this;
                 //this.components = Object.assign([], components, { [components.length]: JSON.parse(tmpComponent.toString()) });
                 this.componentsObjs.push(tmpComponent);
+
+                this.isDirty = true;
+
                 //this does not force change detection
                 this.options.draggable.enabled = false;
                 this.options.api.optionsChanged();
@@ -153,13 +169,15 @@ export class RemoteDashLayoutService {
         //comp1.data = { ...comp1.data, ...tmpData };
         comp1.data.IRSignalId = myData.IRSignalId;
 
-        console.log("RemoteDashLayoutService.updateComponent(): found component: comp1.data=" + JSON.stringify(comp1.data));
+        //console.log("RemoteDashLayoutService.updateComponent(): found component: comp1.data=" + JSON.stringify(comp1.data));
+        this.isDirty = true;
      }
      const comp = this.componentsObjs.find(c => c.data.id === myData.id);
      if (comp) {
         //comp.data = { ...comp.data, ...tmpData };
         comp.data.IRSignalId = myData.IRSignalId;
-        console.log("RemoteDashLayoutService.updateComponent(): found component: comp.data=" + JSON.stringify(comp.data));
+        //console.log("RemoteDashLayoutService.updateComponent(): found component: comp.data=" + JSON.stringify(comp.data));
+        this.isDirty = true;
      }
    }
 }
