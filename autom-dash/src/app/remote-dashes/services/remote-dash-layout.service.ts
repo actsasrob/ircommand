@@ -12,7 +12,7 @@ import { ButtonItemComponent } from '../components/button-item.component';
 export class RemoteDashLayoutService {  
   public options: GridsterConfig = {
     gridType: GridType.Fit,
-    displayGrid: 'always',
+    displayGrid: 'onDrag&Resize',
     draggable: {
       enabled: true
     },
