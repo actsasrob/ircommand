@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild, ComponentFactoryResolver, OnDestroy } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, ViewChild, ComponentFactoryResolver, OnDestroy } from '@angular/core';
 
 import { RIDirective } from '../directives/ri.directive';
 import { RIItem } from './ri-item';
@@ -14,7 +14,7 @@ import { RIComponent } from './ri.component';
               </div>
             `
 })
-export class RIBannerComponent implements OnInit, OnDestroy {
+export class RIBannerComponent implements OnInit, OnChanges, OnDestroy {
   @Input() ric: RIItem;
   @ViewChild(RIDirective, {static: true}) riHost: RIDirective;
   interval: any;
@@ -27,6 +27,12 @@ export class RIBannerComponent implements OnInit, OnDestroy {
 
   }
 
+  ngOnChanges() {
+    
+    //console.log("ri-banner: ngOnChanges()");
+    this.loadComponent();
+
+  }
   ngOnDestroy() {
      clearInterval(this.interval);
   }
@@ -47,6 +53,7 @@ export class RIBannerComponent implements OnInit, OnDestroy {
 
   getRIs() {
     this.interval = setInterval(() => {
+      //console.log("ri-banner: getRIs()");
       this.loadComponent();
     }, 10000);
   }

@@ -1,9 +1,6 @@
 # TODO List:
 
 ## autom-dash Items
-- RemoteDash component does not reload after drag-n-drop of item component. Cause UI to be out-of-date.
-  - This works now when not using OnPush change management.
-  - UI is not refreshed after drag-n-drop of item.
 - Need to rethink double clicking RemoteDash item to delete. Single clicking items rapidly (e.g. navigating up/down in a menu) is interpreted as a double click and the item gets deleted
 - Create IRSignal dialog: Save button doesn't activate until you click in Name field after entering content.
 - User information is not cleared from cache after logging out. Need to refresh browser to clear user.

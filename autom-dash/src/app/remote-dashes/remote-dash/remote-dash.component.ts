@@ -217,11 +217,13 @@ export class RemoteDashComponent implements OnInit,OnDestroy {
     
     // dragId is the type of the component dropped 
     dropItem(dragId: string): void {  
+       //this.ref.markForCheck();
        this.layoutService.dropItem(dragId);
        console.log("RemoteDash.dropItem(): before sendToChildren");  
        this.messageService.sendToChildren("refresh");
-       this.ref.detectChanges();
-       this.ref.markForCheck();
+       //this.ref.detectChanges();
+       //this.ref.markForCheck();
+       //this.ref.detectChanges();
     }
 
     onSave() {

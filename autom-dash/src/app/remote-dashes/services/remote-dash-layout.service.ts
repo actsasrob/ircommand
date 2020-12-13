@@ -111,10 +111,10 @@ export class RemoteDashLayoutService {
                 this.isDirty = true;
 
                 //this does not force change detection
-                this.options.draggable.enabled = false;
-                this.options.api.optionsChanged();
-                this.options.draggable.enabled = true;
-                this.options.api.optionsChanged();
+                //this.options.draggable.enabled = false;
+                //this.options.api.optionsChanged();
+                //this.options.draggable.enabled = true;
+                //this.options.api.optionsChanged();
              }
            break; 
         } 
@@ -131,10 +131,10 @@ export class RemoteDashLayoutService {
                 this.isDirty = true;
 
                 //this does not force change detection
-                this.options.draggable.enabled = false;
-                this.options.api.optionsChanged();
-                this.options.draggable.enabled = true;
-                this.options.api.optionsChanged();
+                //this.options.draggable.enabled = false;
+                //this.options.api.optionsChanged();
+                //this.options.draggable.enabled = true;
+                //this.options.api.optionsChanged();
              }
            break; 
         } 

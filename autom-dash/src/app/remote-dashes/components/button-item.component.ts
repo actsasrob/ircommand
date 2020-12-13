@@ -43,7 +43,7 @@ import { HostListener  } from "@angular/core";
 export class ButtonItemComponent implements OnInit, OnChanges, OnDestroy, RIComponent {
     @Input() data: any;
 
-    subscription: Subscription;
+    //subscription: Subscription;
 
     IRSignalsService: EntityCollectionService<IRSignal>; 
     entityActionFactory: EntityActionFactory; 
@@ -71,22 +71,23 @@ export class ButtonItemComponent implements OnInit, OnChanges, OnDestroy, RIComp
       private dialog: MatDialog,
       private messageService: RemoteDashItemMessageService,
       EntityCollectionServiceFactory: EntityCollectionServiceFactory) {
-         this.subscription = messageService.toChildren$.subscribe(
-           message => {
-             console.log("ButtonItem.messageService.toChildren$()");
-             this.ref.markForCheck();
-      });      
+         //this.subscription = messageService.toChildren$.subscribe(
+         //  message => {
+         //    console.log("ButtonItem.messageService.toChildren$()");
+         //    this.ref.markForCheck();
+         //    this.ref.detectChanges();
+         //});      
       this.entityActionFactory = new EntityActionFactory();
       this.IRSignalsService = EntityCollectionServiceFactory.create<IRSignal>('IRSignal');
     }
  
     ngOnInit() {
-        console.log("ButtonItem.ngOnInit(): here1 this.data=" + JSON.stringify(this.data));
+        //console.log("ButtonItem.ngOnInit(): here1 this.data=" + JSON.stringify(this.data));
         this.reload();
     }
   
     ngOnChanges(changes: SimpleChanges) {
-       console.log("ButtonItem.ngOnChanges(): changes=" + JSON.stringify(changes));
+       //console.log("ButtonItem.ngOnChanges(): changes=" + JSON.stringify(changes));
        this.reload();
     }
 
@@ -112,7 +113,7 @@ export class ButtonItemComponent implements OnInit, OnChanges, OnDestroy, RIComp
     ngOnDestroy() {
       // prevent memory leak when component destroyed
       console.log("ButtonItem.ngOnDestroy()");
-      this.subscription.unsubscribe();
+      //this.subscription.unsubscribe();
     }
 
 
