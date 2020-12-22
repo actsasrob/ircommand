@@ -3,6 +3,7 @@
 ## autom-dash Items
 - Need to rethink double clicking RemoteDash item to delete. Single clicking items rapidly (e.g. navigating up/down in a menu) is interpreted as a double click and the item gets deleted
 - Create IRSignal dialog: Save button doesn't activate until you click in Name field after entering content.
+- The Edit IR Signal dialog should probably have a custom validator that takes into considerations
 - User information is not cleared from cache after logging out. Need to refresh browser to clear user.
   - Entity cache is not cleared when user logs out
 - None of the iconUrl properties are hooked up to anything. Need to provide some static image assets
@@ -21,8 +22,6 @@
 - DONE. NEEDS TO BE TESTED MORE. Consider removing need for ButtonItem Edit button by adding duration component to mouse clicks
   Treat long duration mouse clicks as an edit request
   https://stackoverflow.com/questions/25180332/how-can-i-listen-for-a-click-and-hold-in-angularjs
-- The Edit IR Signal dialog should probably have a custom validator that takes into considerations
-  that the Alexa metadata fields are optional, but if specified should contain valid data
 
 ## RestfulLearnIR service:
 - Update RestfulLearnIR.py to allow the tty for the USB serial port to be set from command line.
