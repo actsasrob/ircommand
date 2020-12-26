@@ -5,7 +5,7 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {tap,map} from 'rxjs/operators';
 
-
+import {environment} from '../../../environments/environment';
 
 @Injectable()
 export class IRSignalsDataService extends DefaultDataService<IRSignal> {
@@ -17,6 +17,7 @@ export class IRSignalsDataService extends DefaultDataService<IRSignal> {
     }
 
     getAll(): Observable<IRSignal[]> {
+        //return this.http.get(`${environment.apiUrl}/api/IRSignals`)
         return this.http.get('/api/IRSignals')
           .pipe(
              map(res => res["payload"]),
