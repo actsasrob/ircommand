@@ -8,8 +8,10 @@ import {environment} from '../../../environments/environment';
 @Injectable()
 export class AuthService {
 
+    env=environment;
+
     constructor(private http:HttpClient) {
-       //console.log("AuthService: " + JSON.stringify(environment));
+       console.log("AuthService: env=" + JSON.stringify(this.env));
     }
 
     login(email:string, password:string): Observable<User> {
