@@ -1,0 +1,13 @@
+<pre>[Unit]
+Description=express index.js
+Documentation=https://example.com
+After=network.target
+
+[Service]
+Type=simple
+User=aduser
+ExecStart=/home/aduser/ircommand/cloud/run_express.sh 
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target</pre>

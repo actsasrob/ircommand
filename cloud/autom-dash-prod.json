@@ -49,7 +49,7 @@
   }, 
   {
     "ParameterKey": "DBEncryptedPassword",
-    "ParameterValue": "ThePass"
+    "ParameterValue": "AQICAHjKN3966zMXhlvT41lqVFl1Wof9OgcM5rTMqmPMDPIVAgE5De6pn8CsZAof6UU06vxFAAAAczBxBgkqhkiG9w0BBwagZDBiAgEAMF0GCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMvdUXziufqXpI8gMpAgEQgDBEYtmYHx/4AByLOrOT9y0Nz53UfphLt3enTG0Ek8ssTefk2zr4wdPVX611Z91zDR4="
   }, 
   {
     "ParameterKey": "EncryptionKeyArn",

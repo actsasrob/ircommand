@@ -50,6 +50,9 @@ for pkg in $(echo ${THEPACKAGE_DEPS}); do
    fi
 done
 
+systemctl stop postgresql
+systemctl disable postgresql
+
 echo
 echo "info: checking if unprivileged user ${THEUSER} exists..."
 grep $THEUSER /etc/passwd > /dev/null 2>&1
@@ -77,6 +80,7 @@ echo
 echo "info: checking if node.js version manager (nvm) is installed..."
 if [ ! -d $HEAPPINSTAll_DIR/.nvm ]; then
    echo "info: installing nvm..."
+   NVM_DIR="/home/$THEUSER/.nvm"
    sudo -H -u $THEUSER bash -c "curl --silent -o- https://raw.githubusercontent.com/nvm-sh/nvm/v${THENVM_VERSION}/install.sh | bash"
    cat << EOT >> ${THEAPPINSTALL_DIR}/.bashrc
 export NVM_DIR="${THEAPPINSTALL_DIR}/.nvm"
@@ -113,8 +117,43 @@ echo "info: changing ownership to ${THEUSER} on ${THEAPPINSTALL_DIR}..."
 chown -R $THEUSER: $THEAPPINSTALL_DIR
 
 echo
+echo "info: decrypt DB password..."
+echo "$THEENCRYPTED_DB_PASSWORD" | base64 --decode > secret.encrypted.txt
+#aws kms encrypt --cli-binary-format raw-in-base64-out --key-id $THEENCRYPTION_KEY_ARN --plaintext "THEENCRYPTED_DB_PASSWORD" --output text --query CiphertextBlob | base64 --decode > secret.encrypted.txt
+
+aws kms decrypt --ciphertext-blob fileb://secret.encrypted.txt --output text --query Plaintext | base64 --decode > secret.decrypted.txt
+
+DB_PASSWD=$(cat secret.decrypted.txt)
+
+rm -f secret.decrypted.txt secret.encrypted.txt
+
+sed -i -e "s|^  \"host.*|  \"host\": \"$THEDB_HOST\",|" /home/$THEUSER/ircommand/autom-dash/server_orm/ormconfig.json
+
+sed -i -e "s|^  \"username.*|  \"username\": \"$THEUSER\",|" /home/$THEUSER/ircommand/autom-dash/server_orm/ormconfig.json
+
+sed -i -e "s|^  \"password.*|  \"password\": \"$DB_PASSWD\",|" /home/$THEUSER/ircommand/autom-dash/server_orm/ormconfig.json
+
+sed -i -e "s|^  \"port.*|  \"port\": \"5432\",|" /home/$THEUSER/ircommand/autom-dash/server_orm/ormconfig.json
+
+sudo -i -H -u $THEUSER bash -i -c "cd ${THEAPPINSTALL_DIR}/ircommand/autom-dash/server_orm; npm install"
+sudo -i -H -u $THEUSER bash -i -c "cd ${THEAPPINSTALL_DIR}/ircommand/autom-dash/; npm install"
+sudo -i -H -u $THEUSER bash -i -c "cd ${THEAPPINSTALL_DIR}/ircommand/autom-dash/; npm run build -- --prod"
+
+
+echo
 echo "info: installing nginx"
 apt-get install -y nginx
 
-cd $current_dir
+echo
+echo "info: install nginx.conf..."
+cp -f ${THEAPPINSTALL_DIR}/ircommand/cloud/nginx.conf /etc/nginx/sites-enabled/default
 
+systemctl restart nginx
+
+sudo -i -H -u $THEUSER bash -i -c "cd ${THEAPPINSTALL_DIR}/ircommand/autom-dash/server_orm; tsc"
+
+cp /home/$THEUSER/ircommand/cloud/express.service /lib/systemd/system/ 
+systemctl daemon-reload
+systemctl start express.service
+
+cd $current_dir
