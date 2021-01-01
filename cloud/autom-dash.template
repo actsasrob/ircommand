@@ -50,6 +50,7 @@ Resources:
   WebServerGroup:
     Type: AWS::AutoScaling::AutoScalingGroup
     Properties: 
+      AssociatePublicIpAddress: True
       AutoScalingGroupName: !Join
                               - ''
                               - - 'AutomDash'

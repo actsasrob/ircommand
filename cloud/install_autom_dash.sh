@@ -58,7 +58,7 @@ echo "info: checking if unprivileged user ${THEUSER} exists..."
 grep $THEUSER /etc/passwd > /dev/null 2>&1
 if [ "$?" -ne 0 ]; then
    echo "info: creating unprivileged user ${THEUSER}..."
-   useradd --comment "${THEAPP} user" --home-dir /home/$THEUSER --create-home $THEUSER
+   useradd --comment "${THEAPP} user" --home-dir /home/$THEUSER --create-home $THEUSER --shell /bin/bash
 else
    echo "info: unprivileged user ${THEUSER} already exists. skipping create."
 fi
@@ -139,6 +139,11 @@ sudo -i -H -u $THEUSER bash -i -c "cd ${THEAPPINSTALL_DIR}/ircommand/autom-dash/
 sudo -i -H -u $THEUSER bash -i -c "cd ${THEAPPINSTALL_DIR}/ircommand/autom-dash/; npm install"
 sudo -i -H -u $THEUSER bash -i -c "cd ${THEAPPINSTALL_DIR}/ircommand/autom-dash/; npm run build -- --prod"
 
+echo
+echo "info: install systemd service for express api backend..."
+cp /home/$THEUSER/ircommand/cloud/express.service /lib/systemd/system/ 
+systemctl daemon-reload
+systemctl start express.service
 
 echo
 echo "info: installing nginx"
@@ -149,11 +154,5 @@ echo "info: install nginx.conf..."
 cp -f ${THEAPPINSTALL_DIR}/ircommand/cloud/nginx.conf /etc/nginx/sites-enabled/default
 
 systemctl restart nginx
-
-sudo -i -H -u $THEUSER bash -i -c "cd ${THEAPPINSTALL_DIR}/ircommand/autom-dash/server_orm; tsc"
-
-cp /home/$THEUSER/ircommand/cloud/express.service /lib/systemd/system/ 
-systemctl daemon-reload
-systemctl start express.service
 
 cd $current_dir
