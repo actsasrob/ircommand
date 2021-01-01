@@ -10,6 +10,7 @@ import {environment} from '../../../environments/environment';
 @Injectable()
 export class IRSignalsDataService extends DefaultDataService<IRSignal> {
 
+    env=environment
 
     constructor(http:HttpClient, httpUrlGenerator: HttpUrlGenerator) {
         super('IRSignal', http, httpUrlGenerator);

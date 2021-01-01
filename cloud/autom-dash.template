@@ -1,0 +1,110 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: 'autom-dash CloudFormation template'
+
+Parameters:
+  Environment:
+    Type: String
+  BucketName:
+    Type: String
+  KeyName:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the ECS instances.
+  InstanceType:
+    Description: EC2 instance type
+    Type: String
+    Default: t3.small
+  ImageId:
+    Description: Image AMI Id
+    Type: String
+  TargetGroupARN:
+    Description: Target Group ARN
+    Type: String
+    Default: arn:aws:elasticloadbalancing:us-east-1:524683554318:targetgroup/autom-dash-web-prod-tg/ae4cc5b20129991e
+  SecurityGroups:
+    Type: 'List<AWS::EC2::SecurityGroup::Id>'
+    Description: The list of SecurityGroupIds in your Virtual Private Cloud (VPC)
+  Subnets:
+    #Type: 'List<AWS::EC2::Subnet::Id>'
+    Type: 'List<String>'
+    Description: The list of Subnet Ids in your Virtual Private Cloud (VPC)
+  AZs:
+    Type: 'List<AWS::EC2::AvailabilityZone::Name>'
+    Description: The availability zones where instances will be deployed
+  WebServerInstanceProfile:
+    Type: String
+  DBEndpoint:
+    Type: String
+  DBUser:
+    Type: String
+  DBEncryptedPassword:
+    Type: String
+  EncryptionKeyArn:
+    Type: String
+
+  #LinuxAMIID:
+  #  Description: The Latest Amazon Linux 2 AMI taken from the public Systems Manager Parameter Store
+  #  Type : AWS::SSM::Parameter::Value<String>
+  #  Default: /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2
+
+Resources:
+  WebServerGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties: 
+      AutoScalingGroupName: !Join
+                              - ''
+                              - - 'AutomDash'
+                                - !Ref Environment 
+      AvailabilityZones: !Ref AZs
+      #CapacityRebalance: Boolean
+      #Cooldown: String
+      #DesiredCapacity: 0
+      HealthCheckGracePeriod: 300
+      HealthCheckType: ELB
+      LaunchConfigurationName: !Ref LaunchConfig 
+      #LifecycleHookSpecificationList: 
+      #  - LifecycleHookSpecification
+      #LoadBalancerNames: 
+      #  - String
+      #MaxInstanceLifetime: Integer
+      MaxSize: 100
+      #MetricsCollection: 
+      #  - MetricsCollection
+      MinSize: 0 
+      NewInstancesProtectedFromScaleIn: True 
+      #NotificationConfigurations: 
+      #  - NotificationConfiguration
+      #PlacementGroup: String
+      #ServiceLinkedRoleARN: String
+      Tags: 
+        - 
+          Key: 'Name'
+          Value: !Join
+                   - ''
+                   - - 'Autom Dash Web '
+                     - !Ref Environment 
+          PropagateAtLaunch: True
+        - 
+          Key: 'Environment'
+          Value: !Ref Environment 
+          PropagateAtLaunch: True
+      TargetGroupARNs: 
+        - !Ref TargetGroupARN
+      VPCZoneIdentifier: !Ref Subnets 
+
+  LaunchConfig:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties:
+      KeyName: !Ref 'KeyName'
+      ImageId: !Ref 'ImageId'
+      InstanceType: !Ref 'InstanceType'
+      SecurityGroups: !Ref SecurityGroups
+      IamInstanceProfile: !Ref 'WebServerInstanceProfile'
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash -xe
+          apt-get install -y unzip
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip > /dev/null 2>&1
+          ./aws/install
+          aws s3 cp s3://${BucketName}/install_autom_dash.sh .
+          sh ./install_autom_dash.sh "${DBUser}" "${EncryptionKeyArn}" "${DBEncryptedPassword}" "${DBEndpoint}"
