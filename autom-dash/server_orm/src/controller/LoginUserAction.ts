@@ -15,9 +15,8 @@ export async function loginUserAction(req: Request, res: Response) {
 
     // load a user by a given user id
     const user = await userRepository.findOne({ email: email });
-    console.log("loginUserAction: " + JSON.stringify(user));
+    //console.log("loginUserAction: " + JSON.stringify(user));
 
-    // if user was not found then add the current user (until registraiion is added) 
     if (!user) {
         res.sendStatus(403);
         return;

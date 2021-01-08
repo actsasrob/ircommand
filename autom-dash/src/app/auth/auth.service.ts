@@ -19,4 +19,7 @@ export class AuthService {
         return this.http.post<User>('/api/login', {email,password});
     }
 
+    signup(email:string, username:string, password:string): Observable<User> {
+        return this.http.post<User>('/api/signup', {email,username,password});
+    }
 }

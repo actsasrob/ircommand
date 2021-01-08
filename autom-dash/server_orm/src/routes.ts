@@ -2,6 +2,7 @@ import {postGetAllAction} from "./controller/PostGetAllAction";
 import {postGetByIdAction} from "./controller/PostGetByIdAction";
 import {postSaveAction} from "./controller/PostSaveAction";
 import {loginUserAction} from "./controller/LoginUserAction";
+import {signupUserAction} from "./controller/SignupUserAction";
 import {courseGetAllAction} from "./controller/CourseGetAllAction";
 import {courseGetAllWithLessonsAction} from "./controller/CourseGetAllWithLessonsAction";
 import {courseGetByIdAction} from "./controller/CourseGetByIdAction";
@@ -32,6 +33,11 @@ export const AppRoutes = [
         path: "/api/login",
         method: "post",
         action: loginUserAction 
+    },
+    {
+        path: "/api/signup",
+        method: "post",
+        action: signupUserAction 
     },
     {
         path: "/api/posts",

@@ -41,7 +41,6 @@ import { LayoutItemDirective } from './directives/layout-item.directive';
 import { LearnirsComponent } from './components/learnirs/learnirs.component';
 import { LearnirDetailComponent } from './components/learnir-detail/learnir-detail.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-//import { AuthComponent } from './components/dashboard/dashboard.component';
 import { entityConfig } from './entity-metadata';
 
 import { SidenavService } from './shared/services/sidenav.service';
@@ -78,6 +77,9 @@ const routes: Routes = [
         component: LearnirsComponent,
         canActivate: [AuthGuard]
     },
+    //{ path: 'signup', 
+    //  loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule),
+    //},
     {
         path: '**',
         redirectTo: '/'

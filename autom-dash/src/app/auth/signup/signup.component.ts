@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormControl, FormBuilder, FormGroup, Validators} from "@angular/forms";
 
 import {Store} from "@ngrx/store";
 
@@ -11,14 +11,17 @@ import {AppState} from '../../reducers';
 import {login} from '../auth.actions';
 import {AuthActions} from '../action-types';
 
+import { PasswordValidator } from './password.validator';
+
 @Component({
-  selector: 'login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  selector: 'signup',
+  templateUrl: './signup.component.html',
+  styleUrls: ['./signup.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class SignupComponent implements OnInit {
 
   form: FormGroup;
+  matching_passwords_group: FormGroup;
 
   constructor(
       private fb:FormBuilder,
@@ -27,9 +30,14 @@ export class LoginComponent implements OnInit {
       private store: Store<AppState>) {
 
       this.form = fb.group({
-          email: ['test@autom-dash.com', Validators.required],
-          password: ['test', Validators.required],
-      });
+          email: new FormControl('', Validators.compose([
+  	     Validators.required,
+  	     Validators.email
+	  ])),
+          username: ['', Validators.required],
+          password: ['', Validators.required],
+          verify_password: ['', Validators.required],
+      }, { validators: PasswordValidator});
 
   }
 
@@ -37,11 +45,11 @@ export class LoginComponent implements OnInit {
 
   }
 
-  login() {
-
+  signup() {
       const val = this.form.value;
 
-      this.auth.login(val.email, val.password)
+      //console.log("signup.signup(): val=" + JSON.stringify(val));
+      this.auth.signup(val.email, val.username, val.password)
           .pipe(
               tap(user => {
 

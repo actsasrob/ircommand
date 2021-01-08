@@ -5,6 +5,7 @@ const PostGetAllAction_1 = require("./controller/PostGetAllAction");
 const PostGetByIdAction_1 = require("./controller/PostGetByIdAction");
 const PostSaveAction_1 = require("./controller/PostSaveAction");
 const LoginUserAction_1 = require("./controller/LoginUserAction");
+const SignupUserAction_1 = require("./controller/SignupUserAction");
 const CourseGetAllAction_1 = require("./controller/CourseGetAllAction");
 const CourseGetAllWithLessonsAction_1 = require("./controller/CourseGetAllWithLessonsAction");
 const CourseGetByIdAction_1 = require("./controller/CourseGetByIdAction");
@@ -34,6 +35,11 @@ exports.AppRoutes = [
         path: "/api/login",
         method: "post",
         action: LoginUserAction_1.loginUserAction
+    },
+    {
+        path: "/api/signup",
+        method: "post",
+        action: SignupUserAction_1.signupUserAction
     },
     {
         path: "/api/posts",
