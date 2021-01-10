@@ -4,7 +4,7 @@
 
 import { Environment } from './environment.type';
 
-import { domain, clientId } from '../../auth_config.json';
+import { domain, clientId } from '../auth_config.json';
 
 export const environment: Environment = {
   production: false,
