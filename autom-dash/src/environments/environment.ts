@@ -4,10 +4,17 @@
 
 import { Environment } from './environment.type';
 
+import { domain, clientId } from '../../auth_config.json';
+
 export const environment: Environment = {
   production: false,
   apiUrl: 'http://localhost:3000',
-  localOnly: true
+  localOnly: true,
+  auth: {
+     domain,
+     clientId,
+     redirectUri: window.location.origin,
+  },
 };
 
 /*

@@ -1,6 +1,9 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 
+import { AuthModule as Auth0AuthModule } from '@auth0/auth0-angular';
+import {environment} from '../environments/environment';
+
 import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
@@ -18,13 +21,14 @@ import {SharedModule} from './shared/shared.module';
 //import {LearnIRsModule} from './learn-irs/learn-irs.module';
 import {StoreModule} from '@ngrx/store';
 import {StoreDevtoolsModule} from '@ngrx/store-devtools';
-import {environment} from '../environments/environment';
 import {RouterState, StoreRouterConnectingModule} from '@ngrx/router-store';
 
 import {EffectsModule} from '@ngrx/effects';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import {metaReducers, reducers} from './reducers';
+
 import {AuthGuard} from './auth/auth.guard';
+
 import {EntityDataModule} from '@ngrx/data'
 
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
@@ -44,38 +48,40 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { entityConfig } from './entity-metadata';
 
 import { SidenavService } from './shared/services/sidenav.service';
+import { LoginButtonComponent } from './components/login-button/login-button.component';
+import { SignupButtonComponent } from './components/signup-button/signup-button.component';
+import { LogoutButtonComponent } from './components/logout-button/logout-button.component';
+import { AuthenticationButtonComponent } from './components/authentication-button/authentication-button.component';
+import { AuthNavComponent } from './components/auth-nav/auth-nav.component';
 
 const routes: Routes = [
     {
         path: 'courses',
         loadChildren: () => import('./courses/courses.module').then(m => m.CoursesModule),
-        canActivate: [AuthGuard]
+        canActivate: [environment.localOnly ? AuthGuard : AuthGuard]
     },
     { 
         path: 'layout', 
         component: LayoutComponent,
-        canActivate: [AuthGuard]
+        canActivate: [environment.localOnly ? AuthGuard : AuthGuard]
     },
     {
         path: 'remoteDashes',
         loadChildren: () => import('./remote-dashes/remote-dashes.module').then(m => m.RemoteDashesModule),
-        canActivate: [AuthGuard]
+        canActivate: [environment.localOnly ? AuthGuard : AuthGuard]
     },
-    { path: 'learnIRs', 
-      loadChildren: () => import('./learn-irs/learn-irs.module').then(m => m.LearnIRsModule),
-      canActivate: [ AuthGuard]
+    {   path: 'learnIRs', 
+        loadChildren: () => import('./learn-irs/learn-irs.module').then(m => m.LearnIRsModule),
+        canActivate: [environment.localOnly ? AuthGuard : AuthGuard]
     },
-    { path: 'IRSignals', 
-      loadChildren: () => import('./ir-signals/ir-signals.module').then(m => m.IRSignalsModule),
-      canActivate: [ AuthGuard]
-    },
-    { path: 'learnIRsold', component: LearnirsComponent,
-      canActivate: [ AuthGuard]
+    {   path: 'IRSignals', 
+        loadChildren: () => import('./ir-signals/ir-signals.module').then(m => m.IRSignalsModule),
+        canActivate: [environment.localOnly ? AuthGuard : AuthGuard]
     },
     { 
         path: 'learnirs', 
         component: LearnirsComponent,
-        canActivate: [AuthGuard]
+        canActivate: [environment.localOnly ? AuthGuard : AuthGuard]
     },
     //{ path: 'signup', 
     //  loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule),
@@ -95,6 +101,11 @@ const routes: Routes = [
     RemoteButtonComponent,
     LayoutItemDirective,
     DashboardComponent,
+    LoginButtonComponent,
+    SignupButtonComponent,
+    LogoutButtonComponent,
+    AuthenticationButtonComponent,
+    AuthNavComponent,
   ],
   imports: [
         BrowserModule,
@@ -108,6 +119,9 @@ const routes: Routes = [
         MatListModule,
         MatToolbarModule,
         AuthModule.forRoot(),
+        Auth0AuthModule.forRoot({
+          ...environment.auth,
+        }),
         SharedModule.forRoot(),
         StoreModule.forRoot(reducers, {
             metaReducers,

@@ -8,6 +8,10 @@
     "ParameterValue": "autom-dash"
   }, 
   {
+    "ParameterKey": "GITBranch",
+    "ParameterValue": "auth0"
+  }, 
+  {
     "ParameterKey": "KeyName",
     "ParameterValue": "RobertHughes"
   }, 

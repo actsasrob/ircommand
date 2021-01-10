@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {select, Store} from '@ngrx/store';
 import {AppState} from './reducers';
 import {Observable} from 'rxjs';
@@ -8,7 +8,12 @@ import {isLoggedIn, isLoggedOut} from './auth/auth.selectors';
 import {login, logout} from './auth/auth.actions';
 import {MatSidenav} from '@angular/material/sidenav';
 import { SidenavService } from './shared/services/sidenav.service';
-  
+
+import { AuthService as Auth0AuthService } from '@auth0/auth0-angular';
+import { DOCUMENT } from '@angular/common';
+
+import { environment } from '../environments/environment';  
+
 @Component({
     selector: 'app-root',      
     templateUrl: './app.component.html',
@@ -17,6 +22,8 @@ import { SidenavService } from './shared/services/sidenav.service';
 export class AppComponent implements OnInit {
     @ViewChild('sidenav') public sidenav: MatSidenav;
 
+    env = environment;
+ 
     loading = true;
 
     isLoggedIn$: Observable<boolean>;           
@@ -25,6 +32,8 @@ export class AppComponent implements OnInit {
 
     constructor(private router: Router,
                 private store: Store<AppState>,
+                public auth0: Auth0AuthService,
+                @Inject(DOCUMENT) private doc: Document,
                 private sidenavService: SidenavService
     ) {
 
@@ -75,11 +84,23 @@ export class AppComponent implements OnInit {
 
     }
 
-    logout() {
-
-        this.store.dispatch(logout());
+    login() {
 
     }
+
+    logout() {
+        this.store.dispatch(logout());
+    }
+
+    loginAuth0() {
+      this.auth0.loginWithRedirect();
+    }
+
+    logoutAuth0() {
+       this.auth0.logout({ returnTo: this.doc.location.origin });
+       this.store.dispatch(logout());
+    }
+
 
 }
 

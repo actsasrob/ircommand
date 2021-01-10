@@ -4,12 +4,16 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Store} from "@ngrx/store";
 
 import {AuthService} from "../auth.service";
+import {AuthService as Auth0AuthService} from '@auth0/auth0-angular';
+
 import {tap} from "rxjs/operators";
 import {noop} from "rxjs";
 import {Router} from "@angular/router";
 import {AppState} from '../../reducers';
 import {login} from '../auth.actions';
 import {AuthActions} from '../action-types';
+
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'login',
@@ -20,9 +24,12 @@ export class LoginComponent implements OnInit {
 
   form: FormGroup;
 
+  env = environment;
+
   constructor(
       private fb:FormBuilder,
       private auth: AuthService,
+      public auth0: Auth0AuthService,
       private router:Router,
       private store: Store<AppState>) {
 
@@ -37,8 +44,7 @@ export class LoginComponent implements OnInit {
 
   }
 
-  login() {
-
+  login() { // local login
       const val = this.form.value;
 
       this.auth.login(val.email, val.password)
@@ -59,5 +65,8 @@ export class LoginComponent implements OnInit {
           );
   }
 
+  loginAuth0() { // auth0 login
+     this.auth0.loginWithRedirect();
+  }
 }
 

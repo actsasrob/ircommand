@@ -6,6 +6,9 @@ Parameters:
     Type: String
   BucketName:
     Type: String
+  GITBranch:
+    Type: String
+    Default: master
   KeyName:
     Type: AWS::EC2::KeyPair::KeyName
     Description: Name of an existing EC2 KeyPair to enable SSH access to the ECS instances.
@@ -108,4 +111,4 @@ Resources:
           unzip awscliv2.zip > /dev/null 2>&1
           ./aws/install
           aws s3 cp s3://${BucketName}/install_autom_dash.sh .
-          sh ./install_autom_dash.sh "${DBUser}" "${EncryptionKeyArn}" "${DBEncryptedPassword}" "${DBEndpoint}"
+          sh ./install_autom_dash.sh "${DBUser}" "${EncryptionKeyArn}" "${DBEncryptedPassword}" "${DBEndpoint}" "${GITBranch}"
