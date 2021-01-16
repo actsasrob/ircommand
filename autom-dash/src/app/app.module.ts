@@ -1,7 +1,6 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 
-import { AuthModule as Auth0AuthModule } from '@auth0/auth0-angular';
 import {environment} from '../environments/environment';
 
 import {AppComponent} from './app.component';
@@ -16,7 +15,6 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {HttpClientModule} from '@angular/common/http';
 
 import {RouterModule, Routes} from '@angular/router';
-import {AuthModule} from './auth/auth.module';
 import {SharedModule} from './shared/shared.module';
 //import {LearnIRsModule} from './learn-irs/learn-irs.module';
 import {StoreModule} from '@ngrx/store';
@@ -27,7 +25,12 @@ import {EffectsModule} from '@ngrx/effects';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import {metaReducers, reducers} from './reducers';
 
+import {AuthModule} from './auth/auth.module';
+import { AuthModule as Auth0AuthModule } from '@auth0/auth0-angular';
 import {AuthGuard} from './auth/auth.guard';
+import { AuthGuard as Auth0AuthGuard } from '@auth0/auth0-angular';
+
+import { ProfileComponent } from './components/profile/profile.component';
 
 import {EntityDataModule} from '@ngrx/data'
 
@@ -58,31 +61,37 @@ const routes: Routes = [
     {
         path: 'courses',
         loadChildren: () => import('./courses/courses.module').then(m => m.CoursesModule),
-        canActivate: [environment.localOnly ? AuthGuard : AuthGuard]
+        canActivate: [environment.localOnly ? AuthGuard : Auth0AuthGuard]
     },
     { 
         path: 'layout', 
         component: LayoutComponent,
-        canActivate: [environment.localOnly ? AuthGuard : AuthGuard]
+        canActivate: [environment.localOnly ? AuthGuard : Auth0AuthGuard]
     },
     {
         path: 'remoteDashes',
         loadChildren: () => import('./remote-dashes/remote-dashes.module').then(m => m.RemoteDashesModule),
-        canActivate: [environment.localOnly ? AuthGuard : AuthGuard]
+        canActivate: [environment.localOnly ? AuthGuard : Auth0AuthGuard]
     },
     {   path: 'learnIRs', 
         loadChildren: () => import('./learn-irs/learn-irs.module').then(m => m.LearnIRsModule),
-        canActivate: [environment.localOnly ? AuthGuard : AuthGuard]
+        canActivate: [environment.localOnly ? AuthGuard : Auth0AuthGuard]
     },
     {   path: 'IRSignals', 
         loadChildren: () => import('./ir-signals/ir-signals.module').then(m => m.IRSignalsModule),
-        canActivate: [environment.localOnly ? AuthGuard : AuthGuard]
+        canActivate: [environment.localOnly ? AuthGuard : Auth0AuthGuard]
     },
     { 
         path: 'learnirs', 
         component: LearnirsComponent,
-        canActivate: [environment.localOnly ? AuthGuard : AuthGuard]
+        canActivate: [environment.localOnly ? AuthGuard : Auth0AuthGuard]
     },
+    {
+      path: 'profile',
+      component: ProfileComponent,
+      canActivate: [Auth0AuthGuard],
+    },
+
     //{ path: 'signup', 
     //  loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule),
     //},

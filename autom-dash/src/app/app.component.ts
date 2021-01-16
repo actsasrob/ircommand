@@ -10,6 +10,7 @@ import {MatSidenav} from '@angular/material/sidenav';
 import { SidenavService } from './shared/services/sidenav.service';
 
 import { AuthService as Auth0AuthService } from '@auth0/auth0-angular';
+import { ProfileComponent } from './components/profile/profile.component';
 import { DOCUMENT } from '@angular/common';
 
 import { environment } from '../environments/environment';  
