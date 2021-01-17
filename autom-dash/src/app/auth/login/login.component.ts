@@ -13,6 +13,8 @@ import {AppState} from '../../reducers';
 import {login} from '../auth.actions';
 import {AuthActions} from '../action-types';
 
+import { SidenavService } from '../../shared/services/sidenav.service';
+
 import {environment} from '../../../environments/environment';
 
 @Component({
@@ -27,6 +29,7 @@ export class LoginComponent implements OnInit {
   env = environment;
 
   constructor(
+      private sidenavService: SidenavService,
       private fb:FormBuilder,
       private auth: AuthService,
       public auth0: Auth0AuthService,
@@ -73,6 +76,10 @@ export class LoginComponent implements OnInit {
      console.log("login: logoutAuth0");
      //this.auth0.logout({ returnTo: this.doc.location.origin });
      //this.store.dispatch(logout());
+  }
+
+  toggleSidenav() {
+     this.sidenavService.toggle();
   }
 }
 

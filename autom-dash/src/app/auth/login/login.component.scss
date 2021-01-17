@@ -9,3 +9,14 @@
   display: flex;
   flex-direction: column;
 }
+
+.menu-button {
+    background: rgba(255, 170, 0, 0.76);
+    color: white;
+    border: none;
+    cursor:pointer;
+    outline:none;
+    position: absolute;
+    left: 0;
+    transform: translateY(-50%);
+}

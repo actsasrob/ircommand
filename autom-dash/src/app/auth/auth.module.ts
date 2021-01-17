@@ -8,6 +8,8 @@ import {RouterModule} from "@angular/router";
 import {ReactiveFormsModule} from "@angular/forms";
 import {MatButtonModule} from "@angular/material/button";
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatIconModule} from '@angular/material/icon';
+
 import { StoreModule } from '@ngrx/store';
 import {AuthService} from "./auth.service";
 import * as fromAuth from './reducers';
@@ -24,6 +26,7 @@ import {AuthEffects} from './auth.effects';
         MatInputModule,
         MatCheckboxModule,
         MatButtonModule,
+        MatIconModule,
         RouterModule.forChild([{path: '', component: LoginComponent},
                                {path: 'signup', component: SignupComponent}]),
         StoreModule.forFeature('auth', authReducer),
