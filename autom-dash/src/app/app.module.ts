@@ -1,6 +1,6 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
-
+import { CommonModule } from '@angular/common';
 import {environment} from '../environments/environment';
 
 import {AppComponent} from './app.component';
@@ -119,6 +119,7 @@ const routes: Routes = [
   imports: [
         BrowserModule,
         BrowserAnimationsModule,
+        CommonModule,
         RouterModule.forRoot(routes),
         HttpClientModule,
         MatMenuModule,
