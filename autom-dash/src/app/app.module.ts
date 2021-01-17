@@ -1,6 +1,5 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
-import { CommonModule } from '@angular/common';
 import {environment} from '../environments/environment';
 
 import {AppComponent} from './app.component';
@@ -30,7 +29,7 @@ import { AuthModule as Auth0AuthModule } from '@auth0/auth0-angular';
 import {AuthGuard} from './auth/auth.guard';
 import { AuthGuard as Auth0AuthGuard } from '@auth0/auth0-angular';
 
-import { ProfileComponent } from './components/profile/profile.component';
+import { ProfileComponent } from './auth/profile/profile.component';
 
 import {EntityDataModule} from '@ngrx/data'
 
@@ -119,7 +118,6 @@ const routes: Routes = [
   imports: [
         BrowserModule,
         BrowserAnimationsModule,
-        CommonModule,
         RouterModule.forRoot(routes),
         HttpClientModule,
         MatMenuModule,
