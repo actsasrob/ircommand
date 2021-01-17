@@ -39,6 +39,13 @@
                </a>
             </div>
 
+            <div *ngIf="!env.localOnly">
+               <a mat-list-item routerLink="/profile" *ngIf="auth0.isAuthenticated$ | async">
+                  <mat-icon>library_books</mat-icon>
+                  <span>Profile</span>
+               </a>
+            </div>
+
             <div *ngIf="env.localOnly">
                <a mat-list-item  (click)="logout()" *ngIf="isLoggedIn$ | async">
                    <mat-icon>exit_to_app</mat-icon>

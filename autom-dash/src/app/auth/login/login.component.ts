@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Inject, OnInit, ViewEncapsulation } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 
 import {Store} from "@ngrx/store";
@@ -10,8 +10,10 @@ import {tap} from "rxjs/operators";
 import {noop} from "rxjs";
 import {Router} from "@angular/router";
 import {AppState} from '../../reducers';
-import {login} from '../auth.actions';
+import {login, logout} from '../auth.actions';
 import {AuthActions} from '../action-types';
+
+import { DOCUMENT } from '@angular/common';
 
 import { SidenavService } from '../../shared/services/sidenav.service';
 
@@ -30,6 +32,7 @@ export class LoginComponent implements OnInit {
 
   constructor(
       private sidenavService: SidenavService,
+      @Inject(DOCUMENT) private doc: Document,
       private fb:FormBuilder,
       private auth: AuthService,
       public auth0: Auth0AuthService,
@@ -74,8 +77,8 @@ export class LoginComponent implements OnInit {
 
   logoutAuth0() {
      console.log("login: logoutAuth0");
-     //this.auth0.logout({ returnTo: this.doc.location.origin });
-     //this.store.dispatch(logout());
+     this.auth0.logout({ returnTo: this.doc.location.origin });
+     this.store.dispatch(logout());
   }
 
   toggleSidenav() {
