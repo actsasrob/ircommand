@@ -68,5 +68,11 @@ export class LoginComponent implements OnInit {
   loginAuth0() { // auth0 login
      this.auth0.loginWithRedirect();
   }
+
+  logoutAuth0() {
+     console.log("login: logoutAuth0");
+     //this.auth0.logout({ returnTo: this.doc.location.origin });
+     //this.store.dispatch(logout());
+  }
 }
 

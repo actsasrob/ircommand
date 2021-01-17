@@ -35,7 +35,11 @@
        <mat-dialog-actions>
        
           <button mat-raised-button (click)="loginAuth0()">
-          Login 
+          Login Auth0
+          </button>
+          <button mat-raised-button (click)="logoutAuth0()" *ngIf="auth0.isAuthenticated$ | async">
+
+          Logout Auth0 
           </button>
        </mat-dialog-actions>
     </ng-template>

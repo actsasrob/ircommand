@@ -71,7 +71,8 @@ const routes: Routes = [
     {
         path: 'remoteDashes',
         loadChildren: () => import('./remote-dashes/remote-dashes.module').then(m => m.RemoteDashesModule),
-        canActivate: [environment.localOnly ? AuthGuard : Auth0AuthGuard]
+        //canActivate: [environment.localOnly ? AuthGuard : Auth0AuthGuard]
+        canActivate: [Auth0AuthGuard]
     },
     {   path: 'learnIRs', 
         loadChildren: () => import('./learn-irs/learn-irs.module').then(m => m.LearnIRsModule),
