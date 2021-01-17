@@ -21,7 +21,7 @@ THEDB_PORT=5432
 THEPGPASS_FILE="${THEAPPINSTALL_DIR}/.pgpass"
 
 
-if [ "$EUID" -ne 0 ]; then
+if [ "$(id -u)" -ne 0 ]; then
     echo "error: this script must be run as root. exiting..."
     exit 1
 fi
