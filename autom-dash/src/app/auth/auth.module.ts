@@ -2,6 +2,7 @@ import {ModuleWithProviders, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {LoginComponent} from './login/login.component';
 import {SignupComponent} from './signup/signup.component';
+import {ProfileComponent} from './profile/profile.component';
 import {MatCardModule} from "@angular/material/card";
 import { MatInputModule } from "@angular/material/input";
 import {RouterModule} from "@angular/router";
@@ -33,10 +34,12 @@ import {AuthEffects} from './auth.effects';
         EffectsModule.forFeature([AuthEffects])
     ],
     declarations: [LoginComponent,
-                   SignupComponent
+                   SignupComponent,
+                   ProfileComponent,
                   ],
     exports: [LoginComponent,
-              SignupComponent
+              SignupComponent,
+              ProfileComponent
              ]
 })
 export class AuthModule {
