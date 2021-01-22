@@ -14,12 +14,11 @@ export class AuthService {
        console.log("AuthService: env=" + JSON.stringify(this.env));
     }
 
-    login(email:string, password:string): Observable<User> {
-        //return this.http.post<User>(`${environment.apiUrl}/api/login`, {email,password});
-        return this.http.post<User>('/api/login', {email,password});
+    login(email:string, passwordDigest:string): Observable<User> {
+        return this.http.post<User>('/api/login', {email,passwordDigest});
     }
 
-    signup(email:string, username:string, password:string): Observable<User> {
-        return this.http.post<User>('/api/signup', {email,username,password});
+    signup(email:string, username:string, passwordDigest:string): Observable<User> {
+        return this.http.post<User>('/api/signup', {email,passwordDigest});
     }
 }

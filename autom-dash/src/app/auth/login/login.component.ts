@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
 
       this.form = fb.group({
           email: ['test@autom-dash.com', Validators.required],
-          password: ['test', Validators.required],
+          passwordDigest: ['test', Validators.required],
       });
 
   }
@@ -41,7 +41,7 @@ export class LoginComponent implements OnInit {
 
       const val = this.form.value;
 
-      this.auth.login(val.email, val.password)
+      this.auth.login(val.email, val.passwordDigest)
           .pipe(
               tap(user => {
 

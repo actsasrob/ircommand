@@ -7,7 +7,7 @@ export async function signupUserAction(req: Request, res: Response) {
 
     console.log("server_orm: User signup attempt ...");
 
-    const {email, username, password} = req.body;
+    const {email, passwordDigest} = req.body;
 
     console.log("signupUserAction: email=" + email);
     // get a user repository to perform operations with user 
@@ -27,14 +27,13 @@ export async function signupUserAction(req: Request, res: Response) {
     //const newObject = itemRepository.create(request.body)
     const newObject = new User();
     newObject.email = email;
-    newObject.username = username;
-    newObject.password = password;
+    newObject.passwordDigest = passwordDigest;
  
     //console.log("signupUserAction: newObject=" + JSON.stringify(newObject));
     // save received object 
     const responseObject = await userRepository.save(newObject);
 
-    res.status(200).json({id: responseObject.id, email: responseObject.email, username: responseObject.username});
+    res.status(200).json({id: responseObject.id, email: responseObject.email});
 }
 
 

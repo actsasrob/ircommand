@@ -23,11 +23,7 @@ __decorate([
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)
-], User.prototype, "username", void 0);
-__decorate([
-    typeorm_1.Column(),
-    __metadata("design:type", String)
-], User.prototype, "password", void 0);
+], User.prototype, "passwordDigest", void 0);
 __decorate([
     typeorm_1.Column(),
     __metadata("design:type", String)

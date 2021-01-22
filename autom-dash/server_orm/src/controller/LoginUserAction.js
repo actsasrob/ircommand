@@ -15,7 +15,7 @@ const User_1 = require("../entity/User");
 function loginUserAction(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log("server_orm: User login attempt ...");
-        const { email, password } = req.body;
+        const { email, passwordDigest } = req.body;
         console.log("loginUserAction: email=" + email);
         // get a user repository to perform operations with user 
         const userRepository = typeorm_1.getManager().getRepository(User_1.User);
@@ -26,8 +26,8 @@ function loginUserAction(req, res) {
             res.sendStatus(403);
             return;
         }
-        if ((user.email == email && user.password == password)) {
-            res.status(200).json({ id: user.id, email: user.email, username: user.username });
+        if ((user.email == email && user.passwordDigest == passwordDigest)) {
+            res.status(200).json({ id: user.id, email: user.email });
         }
         else {
             res.sendStatus(403);

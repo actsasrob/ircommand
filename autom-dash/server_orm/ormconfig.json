@@ -2,7 +2,7 @@
   "type": "postgres",
   "host": "localhost",
   "port": 15432,
-  "username": "dbuser",
+  "username": "aduser",
   "password": "dbpass",
   "database": "automdash",
   "synchronize": true,

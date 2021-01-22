@@ -15,7 +15,7 @@ const User_1 = require("../entity/User");
 function signupUserAction(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log("server_orm: User signup attempt ...");
-        const { email, username, password } = req.body;
+        const { email, passwordDigest } = req.body;
         console.log("signupUserAction: email=" + email);
         // get a user repository to perform operations with user 
         const userRepository = typeorm_1.getManager().getRepository(User_1.User);
@@ -31,12 +31,11 @@ function signupUserAction(req, res) {
         //const newObject = itemRepository.create(request.body)
         const newObject = new User_1.User();
         newObject.email = email;
-        newObject.username = username;
-        newObject.password = password;
+        newObject.passwordDigest = passwordDigest;
         //console.log("signupUserAction: newObject=" + JSON.stringify(newObject));
         // save received object 
         const responseObject = yield userRepository.save(newObject);
-        res.status(200).json({ id: responseObject.id, email: responseObject.email, username: responseObject.username });
+        res.status(200).json({ id: responseObject.id, email: responseObject.email });
     });
 }
 exports.signupUserAction = signupUserAction;

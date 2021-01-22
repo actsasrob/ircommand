@@ -7,7 +7,7 @@ export async function loginUserAction(req: Request, res: Response) {
 
     console.log("server_orm: User login attempt ...");
 
-    const {email, password} = req.body;
+    const {email, passwordDigest} = req.body;
 
     console.log("loginUserAction: email=" + email);
     // get a user repository to perform operations with user 
@@ -22,8 +22,8 @@ export async function loginUserAction(req: Request, res: Response) {
         return;
     }
 
-    if ((user.email == email && user.password == password)) {
-        res.status(200).json({id: user.id, email: user.email, username: user.username});
+    if ((user.email == email && user.passwordDigest == passwordDigest)) {
+        res.status(200).json({id: user.id, email: user.email});
     }
     else {
         res.sendStatus(403);

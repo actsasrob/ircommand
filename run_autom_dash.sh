@@ -14,8 +14,8 @@ cd autom-dash
 cd server_orm
 npm install
 
-#nohup npm run server&
-nohup npm start &
+nohup npm run server &
+#nohup npm start &
 
 cd ..
 
