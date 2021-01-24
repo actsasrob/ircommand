@@ -69,7 +69,7 @@ export class EditLearnIRDialogComponent {
 
             this.dialogRef.close();
         } else if (this.mode == 'create') {
-            learnIR.userId = JSON.parse(localStorage.getItem('user')).id;
+            //learnIR.userId = JSON.parse(localStorage.getItem('user')).id;
             console.log("learnIR before learnIRsService.add(): " + JSON.stringify(learnIR));
             this.learnIRsService.add(learnIR)
                 .subscribe(

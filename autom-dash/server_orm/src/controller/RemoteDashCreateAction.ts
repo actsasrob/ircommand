@@ -8,19 +8,22 @@ import {LearnIR} from "../entity/LearnIR";
  * Saves given item.
  */
 export async function remoteDashCreateAction(request: Request, response: Response) {
+
+    const user1 = request["user"];
+
     console.log("RemoteDashCreateAction: request.body=" + JSON.stringify(request.body));
 
-    const userId = request.body.userId;
+    //const userId = request.body.userId;
     const learnIRId = request.body.learnIRId;
 
-    console.log("RemoteDashCreateAction: userId=" + userId);
+    console.log("RemoteDashCreateAction: userId=" + user1.sub);
     console.log("RemoteDashCreateAction: learnIRId=" + learnIRId);
 
     // get a user repository to perform operations with user 
     const userRepository = getManager().getRepository(User);
 
     // load a user by a given user id
-    const user = await userRepository. findOne(userId);
+    const user = await userRepository. findOne(user1.sub);
 
     console.log("RemoteDashCreateAction: user= " + JSON.stringify(user));
 

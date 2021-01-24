@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --host 0.0.0.0  --port 4201 --proxy-config ./proxy.json",
+    "start": "ng serve --host 0.0.0.0  --port 4201 --proxy-config ./proxy.json --ssl --ssl-key ./server_orm/automdash.com.key --ssl-cert ./server_orm/automdash.com.crt",
     "server": "ts-node -P ./server/server.tsconfig.json ./server/server.ts",
     "build": "ng build",
     "test": "ng test",

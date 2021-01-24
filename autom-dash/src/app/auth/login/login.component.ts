@@ -1,15 +1,10 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 
-import {Store} from "@ngrx/store";
-
-import {AuthService} from "../auth.service";
+import {AuthService} from "../services/auth.service";
 import {tap} from "rxjs/operators";
 import {noop} from "rxjs";
 import {Router} from "@angular/router";
-import {AppState} from '../../reducers';
-import {login} from '../auth.actions';
-import {AuthActions} from '../action-types';
 
 @Component({
   selector: 'login',
@@ -18,46 +13,46 @@ import {AuthActions} from '../action-types';
 })
 export class LoginComponent implements OnInit {
 
-  form: FormGroup;
+   form: FormGroup;
 
-  constructor(
-      private fb:FormBuilder,
-      private auth: AuthService,
-      private router:Router,
-      private store: Store<AppState>) {
+   messagePerErrorCode = {
+      loginfailed: "Invalid credentials"
+   };
 
-      this.form = fb.group({
-          email: ['test@autom-dash.com', Validators.required],
-          passwordDigest: ['test', Validators.required],
-      });
+   errors = [];
 
-  }
+   constructor(
+       private fb:FormBuilder,
+       private authService: AuthService,
+       private router:Router) {
+ 
+       this.form = fb.group({
+           email: ['test2@automdash.com', Validators.required],
+           password: ['', Validators.required],
+       });
+ 
+   }
+ 
+   ngOnInit() {
+ 
+   }
 
-  ngOnInit() {
+   login() {
 
-  }
+        const val = this.form.value;
 
-  login() {
+        if (val.email && val.password) {
 
-      const val = this.form.value;
+            this.authService.login(val.email, val.password)
+                .subscribe(
+                    () => {
+                        console.log("User is logged in");
+                        this.router.navigateByUrl('/remoteDashes');
+                    },
+                    response => this.errors = response.error.errors
+                );
 
-      this.auth.login(val.email, val.passwordDigest)
-          .pipe(
-              tap(user => {
-
-                  console.log(user);
-
-                  this.store.dispatch(login({user}));
-
-                  this.router.navigateByUrl('/remoteDashes');
-
-              })
-          )
-          .subscribe(
-              noop,
-              () => alert('Login Failed')
-          );
-  }
-
+        }
+   }
 }
 

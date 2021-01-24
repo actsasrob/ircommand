@@ -3,7 +3,7 @@ import {FormControl, FormBuilder, FormGroup, Validators, ValidatorFn, Validation
 
 export const PasswordValidator: ValidatorFn = (control: FormGroup): ValidationErrors | null => {
   const password = control.get('password');
-  const verify_password = control.get('verify_password');
+  const confirm = control.get('confirm');
 
-  return password && verify_password && password.value === verify_password.value ? null : { passwordMismatch: true };
+  return password && confirm && password.value === confirm.value ? null : { passwordMismatch: true };
 };

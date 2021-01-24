@@ -13,7 +13,6 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {HttpClientModule} from '@angular/common/http';
 
 import {RouterModule, Routes} from '@angular/router';
-import {AuthModule} from './auth/auth.module';
 import {SharedModule} from './shared/shared.module';
 //import {LearnIRsModule} from './learn-irs/learn-irs.module';
 import {StoreModule} from '@ngrx/store';
@@ -24,7 +23,6 @@ import {RouterState, StoreRouterConnectingModule} from '@ngrx/router-store';
 import {EffectsModule} from '@ngrx/effects';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import {metaReducers, reducers} from './reducers';
-import {AuthGuard} from './auth/auth.guard';
 import {EntityDataModule} from '@ngrx/data'
 
 import { LoggerModule, NgxLoggerLevel } from 'ngx-logger';
@@ -45,37 +43,43 @@ import { entityConfig } from './entity-metadata';
 
 import { SidenavService } from './shared/services/sidenav.service';
 
+import {AuthModule} from './auth/auth.module';
+//import {AuthGuard} from './auth/auth.guard';
+//import {AuthorizationGuard as AuthGuard} from './auth/services/authorization.guard';
+
+
 const routes: Routes = [
     {
         path: 'courses',
         loadChildren: () => import('./courses/courses.module').then(m => m.CoursesModule),
-        canActivate: [AuthGuard]
+        //canActivate: [AuthGuard]
     },
     { 
         path: 'layout', 
         component: LayoutComponent,
-        canActivate: [AuthGuard]
+        canActivate: ["usersGuard"]
+        //canActivate: [AuthGuard]
     },
     {
         path: 'remoteDashes',
         loadChildren: () => import('./remote-dashes/remote-dashes.module').then(m => m.RemoteDashesModule),
-        canActivate: [AuthGuard]
+        canActivate: ["usersGuard"]
+        //canActivate: [AuthGuard]
     },
     { path: 'learnIRs', 
       loadChildren: () => import('./learn-irs/learn-irs.module').then(m => m.LearnIRsModule),
-      canActivate: [ AuthGuard]
+      canActivate: ["usersGuard"]
+      //canActivate: [ AuthGuard]
     },
     { path: 'IRSignals', 
       loadChildren: () => import('./ir-signals/ir-signals.module').then(m => m.IRSignalsModule),
-      canActivate: [ AuthGuard]
-    },
-    { path: 'learnIRsold', component: LearnirsComponent,
-      canActivate: [ AuthGuard]
+      canActivate: ["usersGuard"]
+      //canActivate: [ AuthGuard]
     },
     { 
         path: 'learnirs', 
         component: LearnirsComponent,
-        canActivate: [AuthGuard]
+        //canActivate: [AuthGuard]
     },
     //{ path: 'signup', 
     //  loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule),

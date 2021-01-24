@@ -27,7 +27,7 @@ export class LearnIRsDataService extends DefaultDataService<LearnIR> {
           .pipe(
              map(res => res["payload"]),
              tap(learnIRs => console.log("LearnIR.LearnIRsDataService: " + JSON.stringify(learnIRs))),
-             map(learnIRs => learnIRs.filter(learnIR => learnIR.user.id == JSON.parse(localStorage.getItem('user')).id)),
+             //map(learnIRs => learnIRs.filter(learnIR => learnIR.user.id == JSON.parse(localStorage.getItem('user')).id)),
              tap(learnIRs => console.log("LearnIR.LearnIRsDataService1: " + JSON.stringify(learnIRs))),
       );
     }

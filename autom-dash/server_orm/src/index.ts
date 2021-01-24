@@ -1,11 +1,27 @@
 import "reflect-metadata";
 import {createConnection} from "typeorm";
 import {Request, Response} from "express";
-import * as express from "express";
 import * as bodyParser from "body-parser";
 import {AppRoutes} from "./routes";
 import * as fs from 'fs';
 import * as https from 'https';
+
+import {Application} from "express";
+import {readAllLessons} from "./controller/read-all-lessons.route";
+import {createUser} from "./controller/create-user.route";
+import {getUser} from "./controller/get-user.route";
+import {logout} from "./controller/logout.route";
+import {login} from "./controller/login.route";
+import {retrieveUserIdFromRequest} from "./controller/get-user.middleware";
+import {checkIfAuthenticated} from "./controller/authentication.middleware";
+import {checkCsrfToken} from "./controller/csrf.middleware";
+import {checkIfAuthorized} from "./controller/authorization.middleware";
+import * as _ from 'lodash';
+import {loginAsUser} from "./controller/login-as-user.route";
+//const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+
+const express = require('express')
 
 import {loginUserAction} from "./controller/LoginUserAction";
 import {signupUserAction} from "./controller/SignupUserAction";
@@ -31,6 +47,9 @@ createConnection().then(async connection => {
 
     // create express app
     const app = express();
+
+    app.use(cookieParser());
+    app.use(retrieveUserIdFromRequest);
     app.use(bodyParser.json());
 
     const commandLineArgs = require('command-line-args');
@@ -51,47 +70,88 @@ createConnection().then(async connection => {
     //    });
     //});
 
-    app.route('/api/login')
-    .post(loginUserAction);
+    //app.route('/api/login')
+    //.post(loginUserAction);
 
-    app.route('/api/signup')
-    .post(signupUserAction);
+    //app.route('/api/signup')
+    //.post(signupUserAction);
 
     app.route('/api/learnir')
-    .post(learnIRCreateAction);
+    .post(checkIfAuthenticated,
+          _.partial(checkIfAuthorized, ['USER']),
+          learnIRCreateAction);
 
     app.route('/api/learnir/:id')
-    .put(learnIRUpdateAction);
+    .put(checkIfAuthenticated,
+          _.partial(checkIfAuthorized, ['USER']),
+          learnIRUpdateAction);
 
     app.route('/api/learnirs')
-    .get(learnIRGetAllAction);
+    .get(checkIfAuthenticated,
+          _.partial(checkIfAuthorized, ['USER']),
+          learnIRGetAllAction);
 
     app.route('/api/learnir/:id')
-    .delete(learnIRDeleteAction);
+    .delete(checkIfAuthenticated,
+          _.partial(checkIfAuthorized, ['USER']),
+          learnIRDeleteAction);
 
     app.route('/api/IRSignal')
-    .post(IRSignalCreateAction);
+    .post(checkIfAuthenticated,
+          _.partial(checkIfAuthorized, ['USER']),
+          IRSignalCreateAction);
 
     app.route('/api/IRSignal/:id')
-    .put(IRSignalUpdateAction);
+    .put(checkIfAuthenticated,
+         _.partial(checkIfAuthorized, ['USER']),
+         IRSignalUpdateAction);
 
     app.route('/api/IRSignals')
-    .get(IRSignalGetAllAction);
+    .get(checkIfAuthenticated,
+         _.partial(checkIfAuthorized, ['USER']),
+         IRSignalGetAllAction);
 
     app.route('/api/IRSignal/:id')
-    .delete(IRSignalDeleteAction);
+    .delete(checkIfAuthenticated,
+            _.partial(checkIfAuthorized, ['USER']),
+            IRSignalDeleteAction);
 
     app.route('/api/remoteDash')
-    .post(remoteDashCreateAction);
+    .post(checkIfAuthenticated,
+          _.partial(checkIfAuthorized, ['USER']),
+          remoteDashCreateAction);
 
     app.route('/api/remoteDash/:id')
-    .put(remoteDashUpdateAction);
+    .put(checkIfAuthenticated,
+         _.partial(checkIfAuthorized, ['USER']),
+         remoteDashUpdateAction);
 
     app.route('/api/remoteDashes')
-    .get(remoteDashGetAllAction);
+    .get(checkIfAuthenticated,
+         _.partial(checkIfAuthorized, ['USER']),
+         remoteDashGetAllAction);
 
     app.route('/api/remoteDash/:id')
-    .delete(remoteDashDeleteAction);
+    .delete(checkIfAuthenticated,
+            _.partial(checkIfAuthorized, ['USER']),
+            remoteDashDeleteAction);
+
+    app.route('/api/admin')
+        .post(checkIfAuthenticated,
+              _.partial(checkIfAuthorized,['ADMIN']),
+              loginAsUser);
+    
+    app.route('/api/signup')
+        .post(createUser);
+    
+    app.route('/api/user')
+        .get(getUser);
+    
+    app.route('/api/logout')
+        .post(checkIfAuthenticated, checkCsrfToken, logout);
+    
+    app.route('/api/login')
+        .post(login);
 
     // run app
     if (options.secure) {

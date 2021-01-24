@@ -18,13 +18,15 @@ const User_1 = require("../entity/User");
  */
 function learnIRCreateAction(request, response) {
     return __awaiter(this, void 0, void 0, function* () {
+        const user1 = request["user"];
         console.log("learnIRCreateAction: request.body=" + JSON.stringify(request.body));
-        const userId = request.body.userId;
-        console.log("learnIRCreateAction: userId=" + userId);
+        //const userId = request.body.userId;
+        console.log("learnIRCreateAction: userId=" + user1.sub);
         // get a user repository to perform operations with user 
         const userRepository = typeorm_1.getManager().getRepository(User_1.User);
         // load a user by a given user id
-        const user = yield userRepository.findOne(userId);
+        //const user = await userRepository. findOne(userId);
+        const user = yield userRepository.findOne(user1.sub);
         console.log("learnIRCreateAction: user= " + JSON.stringify(user));
         // get an item repository to perform operations
         const itemRepository = typeorm_1.getManager().getRepository(LearnIR_1.LearnIR);

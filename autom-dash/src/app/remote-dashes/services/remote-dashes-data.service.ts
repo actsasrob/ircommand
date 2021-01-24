@@ -21,7 +21,7 @@ export class RemoteDashesDataService extends DefaultDataService<RemoteDash> {
           .pipe(
              map(res => res["payload"]),
              tap(RemoteDashes => console.log("RemoteDash.RemoteDashesDataService: before filter: " + JSON.stringify(RemoteDashes))),
-             map(RemoteDashes => RemoteDashes.filter(RemoteDash => RemoteDash.user.id == JSON.parse(localStorage.getItem('user')).id)),
+             //map(RemoteDashes => RemoteDashes.filter(RemoteDash => RemoteDash.user.id == JSON.parse(localStorage.getItem('user')).id)),
              map(RemoteDashes => {
                 const rds = <any[]>RemoteDashes;
                 rds.forEach(rd => rd.learnIRId = rd.learnIR.id);

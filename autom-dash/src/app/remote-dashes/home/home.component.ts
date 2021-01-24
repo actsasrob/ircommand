@@ -33,13 +33,6 @@ export class HomeComponent implements OnInit {
   reload() {
 
     this.RemoteDashes$ = this.RemoteDashService.entities$;
-    /*this.RemoteDashes$ = this.RemoteDashService.entities$
-      .pipe(
-        tap(RemoteDashes => console.log("RemoteDash.HomeComponent.reload(): " + JSON.stringify(RemoteDashes))),
-        map(RemoteDashes => RemoteDashes.filter(RemoteDash => RemoteDash.userId == JSON.parse(localStorage.getItem('user')).id))
-      );
-     */
-
   }
 
   onAddRemoteDash() {

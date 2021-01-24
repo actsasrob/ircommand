@@ -12,19 +12,23 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.remoteDashGetAllAction = void 0;
 const typeorm_1 = require("typeorm");
 const RemoteDash_1 = require("../entity/RemoteDash");
+const User_1 = require("../entity/User");
 /**
- * Loads all RemoteDashs from the database.
+ * Loads all RemoteDashs (for currently logged in user) from the database.
  */
 function remoteDashGetAllAction(request, response) {
     return __awaiter(this, void 0, void 0, function* () {
-        // get item repository to perform operations  
+        const user = request["user"];
+        let tmpUser = new User_1.User();
+        tmpUser.id = user.sub;
+        console.log("remoteDashGetAllAction: user.sub=" + user.sub);
         const itemRepository = typeorm_1.getManager().getRepository(RemoteDash_1.RemoteDash);
-        // load items with associated relations
-        const items = yield itemRepository.find({ relations: ["user", "learnIR"] });
-        console.log("RemoteDashGetAllAction: " + JSON.stringify(items));
+        const items = yield itemRepository.find({
+            where: { user: tmpUser },
+            relations: ["user", "learnIR"]
+        });
         // return loaded items 
         response.status(200).json({ payload: Object.values(items) });
-        //response.send(items);
     });
 }
 exports.remoteDashGetAllAction = remoteDashGetAllAction;

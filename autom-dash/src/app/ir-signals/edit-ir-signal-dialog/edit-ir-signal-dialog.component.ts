@@ -181,7 +181,7 @@ export class EditIRSignalDialogComponent implements OnInit {
 
             this.dialogRef.close();
         } else if (this.mode == 'create') {
-            IRSignal.userId = JSON.parse(localStorage.getItem('user')).id;
+            //IRSignal.userId = JSON.parse(localStorage.getItem('user')).id;
             console.log("IRSignal before IRSignalsService.add(): " + JSON.stringify(IRSignal));
             this.IRSignalsService.add(IRSignal)
                 .subscribe(

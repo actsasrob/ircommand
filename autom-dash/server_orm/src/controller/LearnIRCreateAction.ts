@@ -8,17 +8,20 @@ import {User} from "../entity/User";
  */
 export async function learnIRCreateAction(request: Request, response: Response) {
 
+    const user1 = request["user"];
+
     console.log("learnIRCreateAction: request.body=" + JSON.stringify(request.body));
 
-    const userId = request.body.userId;
+    //const userId = request.body.userId;
 
-    console.log("learnIRCreateAction: userId=" + userId);
+    console.log("learnIRCreateAction: userId=" + user1.sub);
 
     // get a user repository to perform operations with user 
     const userRepository = getManager().getRepository(User);
 
     // load a user by a given user id
-    const user = await userRepository. findOne(userId);
+    //const user = await userRepository. findOne(userId);
+    const user = await userRepository. findOne(user1.sub);
 
     console.log("learnIRCreateAction: user= " + JSON.stringify(user));
     // get an item repository to perform operations

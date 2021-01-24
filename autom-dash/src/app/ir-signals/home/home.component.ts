@@ -33,13 +33,6 @@ export class HomeComponent implements OnInit {
   reload() {
 
     this.IRSignals$ = this.IRSignalService.entities$;
-    /*this.IRSignals$ = this.IRSignalService.entities$
-      .pipe(
-        tap(IRSignals => console.log("IRSignal.HomeComponent.reload(): " + JSON.stringify(IRSignals))),
-        map(IRSignals => IRSignals.filter(IRSignal => IRSignal.userId == JSON.parse(localStorage.getItem('user')).id))
-      );
-     */
-
   }
 
   onAddIRSignal() {

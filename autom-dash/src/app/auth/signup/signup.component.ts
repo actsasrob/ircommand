@@ -1,15 +1,10 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import {FormControl, FormBuilder, FormGroup, Validators} from "@angular/forms";
 
-import {Store} from "@ngrx/store";
-
-import {AuthService} from "../auth.service";
+import {AuthService} from "../services/auth.service";
 import {tap} from "rxjs/operators";
 import {noop} from "rxjs";
 import {Router} from "@angular/router";
-import {AppState} from '../../reducers';
-import {login} from '../auth.actions';
-import {AuthActions} from '../action-types';
 
 import { PasswordValidator } from './password.validator';
 
@@ -20,52 +15,55 @@ import { PasswordValidator } from './password.validator';
 })
 export class SignupComponent implements OnInit {
 
-  form: FormGroup;
-  matching_passwords_group: FormGroup;
+   form: FormGroup;
+   matching_passwords_group: FormGroup;
 
-  constructor(
-      private fb:FormBuilder,
-      private auth: AuthService,
-      private router:Router,
-      private store: Store<AppState>) {
+   errors:string[] = [];
 
-      this.form = fb.group({
-          email: new FormControl('', Validators.compose([
-  	     Validators.required,
-  	     Validators.email
-	  ])),
-          username: ['', Validators.required],
-          password: ['', Validators.required],
-          verify_password: ['', Validators.required],
-      }, { validators: PasswordValidator});
+   messagePerErrorCode = {
+       min: 'The minimum length is 10 characters',
+       uppercase: 'At least one upper case character',
+       digits: 'At least one numeric character',
+       "err_user": 'Could not create user'
+   };
+ 
+   constructor(
+       private fb:FormBuilder,
+       private authService: AuthService,
+       private router:Router) {
+ 
+       this.form = fb.group({
+           email: new FormControl('', Validators.compose([
+   	     Validators.required,
+   	     Validators.email
+ 	  ])),
+           password: ['', Validators.required],
+           confirm: ['', Validators.required],
+       }, { validators: PasswordValidator});
+ 
+   }
+ 
+   ngOnInit() {
+ 
+   }
 
-  }
+    signUp() {
+        const val = this.form.value;
 
-  ngOnInit() {
+        if (val.email && val.password && val.password === val.confirm) {
 
-  }
+            this.authService.signUp(val.email, val.password)
+                .subscribe(
+                    () => {
+                        this.router.navigateByUrl('/remoteDashes');
 
-  signup() {
-      const val = this.form.value;
+                        console.log("User created successfully")
+                    },
+                    response => this.errors = response.error.errors
+                );
 
-      //console.log("signup.signup(): val=" + JSON.stringify(val));
-      this.auth.signup(val.email, val.username, val.password)
-          .pipe(
-              tap(user => {
+        }
 
-                  console.log(user);
-
-                  this.store.dispatch(login({user}));
-
-                  this.router.navigateByUrl('/remoteDashes');
-
-              })
-          )
-          .subscribe(
-              noop,
-              () => alert('Login Failed')
-          );
-  }
-
+   }
 }
 

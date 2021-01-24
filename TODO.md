@@ -1,6 +1,9 @@
 # TODO List:
 
 ## autom-dash Items
+- Bug. After logging out wth no browser refresh the next login displays data for previous user
+  -- State store is not removed after logging out.
+--Signup password validation on client should enforce all constraints of server side checks.
 - Need to rethink double clicking RemoteDash item to delete. Single clicking items rapidly (e.g. navigating up/down in a menu) is interpreted as a double click and the item gets deleted
 - Create IRSignal dialog: Save button doesn't activate until you click in Name field after entering content.
 - The Edit IR Signal dialog should probably have a custom validator that takes into considerations

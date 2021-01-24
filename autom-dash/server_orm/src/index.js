@@ -1,4 +1,23 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -11,12 +30,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 require("reflect-metadata");
 const typeorm_1 = require("typeorm");
-const express = require("express");
-const bodyParser = require("body-parser");
-const fs = require("fs");
-const https = require("https");
-const LoginUserAction_1 = require("./controller/LoginUserAction");
-const SignupUserAction_1 = require("./controller/SignupUserAction");
+const bodyParser = __importStar(require("body-parser"));
+const fs = __importStar(require("fs"));
+const https = __importStar(require("https"));
+const create_user_route_1 = require("./controller/create-user.route");
+const get_user_route_1 = require("./controller/get-user.route");
+const logout_route_1 = require("./controller/logout.route");
+const login_route_1 = require("./controller/login.route");
+const get_user_middleware_1 = require("./controller/get-user.middleware");
+const authentication_middleware_1 = require("./controller/authentication.middleware");
+const csrf_middleware_1 = require("./controller/csrf.middleware");
+const authorization_middleware_1 = require("./controller/authorization.middleware");
+const _ = __importStar(require("lodash"));
+const login_as_user_route_1 = require("./controller/login-as-user.route");
+//const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const express = require('express');
 const LearnIRGetAllAction_1 = require("./controller/LearnIRGetAllAction");
 const LearnIRCreateAction_1 = require("./controller/LearnIRCreateAction");
 const LearnIRUpdateAction_1 = require("./controller/LearnIRUpdateAction");
@@ -36,6 +65,8 @@ const SERVER_PORT = 9000;
 typeorm_1.createConnection().then((connection) => __awaiter(void 0, void 0, void 0, function* () {
     // create express app
     const app = express();
+    app.use(cookieParser());
+    app.use(get_user_middleware_1.retrieveUserIdFromRequest);
     app.use(bodyParser.json());
     const commandLineArgs = require('command-line-args');
     const optionDefinitions = [
@@ -50,34 +81,44 @@ typeorm_1.createConnection().then((connection) => __awaiter(void 0, void 0, void
     //            .catch(err => next(err));
     //    });
     //});
-    app.route('/api/login')
-        .post(LoginUserAction_1.loginUserAction);
-    app.route('/api/signup')
-        .post(SignupUserAction_1.signupUserAction);
+    //app.route('/api/login')
+    //.post(loginUserAction);
+    //app.route('/api/signup')
+    //.post(signupUserAction);
     app.route('/api/learnir')
-        .post(LearnIRCreateAction_1.learnIRCreateAction);
+        .post(authentication_middleware_1.checkIfAuthenticated, _.partial(authorization_middleware_1.checkIfAuthorized, ['USER']), LearnIRCreateAction_1.learnIRCreateAction);
     app.route('/api/learnir/:id')
-        .put(LearnIRUpdateAction_1.learnIRUpdateAction);
+        .put(authentication_middleware_1.checkIfAuthenticated, _.partial(authorization_middleware_1.checkIfAuthorized, ['USER']), LearnIRUpdateAction_1.learnIRUpdateAction);
     app.route('/api/learnirs')
-        .get(LearnIRGetAllAction_1.learnIRGetAllAction);
+        .get(authentication_middleware_1.checkIfAuthenticated, _.partial(authorization_middleware_1.checkIfAuthorized, ['USER']), LearnIRGetAllAction_1.learnIRGetAllAction);
     app.route('/api/learnir/:id')
-        .delete(LearnIRDeleteAction_1.learnIRDeleteAction);
+        .delete(authentication_middleware_1.checkIfAuthenticated, _.partial(authorization_middleware_1.checkIfAuthorized, ['USER']), LearnIRDeleteAction_1.learnIRDeleteAction);
     app.route('/api/IRSignal')
-        .post(IRSignalCreateAction_1.IRSignalCreateAction);
+        .post(authentication_middleware_1.checkIfAuthenticated, _.partial(authorization_middleware_1.checkIfAuthorized, ['USER']), IRSignalCreateAction_1.IRSignalCreateAction);
     app.route('/api/IRSignal/:id')
-        .put(IRSignalUpdateAction_1.IRSignalUpdateAction);
+        .put(authentication_middleware_1.checkIfAuthenticated, _.partial(authorization_middleware_1.checkIfAuthorized, ['USER']), IRSignalUpdateAction_1.IRSignalUpdateAction);
     app.route('/api/IRSignals')
-        .get(IRSignalGetAllAction_1.IRSignalGetAllAction);
+        .get(authentication_middleware_1.checkIfAuthenticated, _.partial(authorization_middleware_1.checkIfAuthorized, ['USER']), IRSignalGetAllAction_1.IRSignalGetAllAction);
     app.route('/api/IRSignal/:id')
-        .delete(IRSignalDeleteAction_1.IRSignalDeleteAction);
+        .delete(authentication_middleware_1.checkIfAuthenticated, _.partial(authorization_middleware_1.checkIfAuthorized, ['USER']), IRSignalDeleteAction_1.IRSignalDeleteAction);
     app.route('/api/remoteDash')
-        .post(RemoteDashCreateAction_1.remoteDashCreateAction);
+        .post(authentication_middleware_1.checkIfAuthenticated, _.partial(authorization_middleware_1.checkIfAuthorized, ['USER']), RemoteDashCreateAction_1.remoteDashCreateAction);
     app.route('/api/remoteDash/:id')
-        .put(RemoteDashUpdateAction_1.remoteDashUpdateAction);
+        .put(authentication_middleware_1.checkIfAuthenticated, _.partial(authorization_middleware_1.checkIfAuthorized, ['USER']), RemoteDashUpdateAction_1.remoteDashUpdateAction);
     app.route('/api/remoteDashes')
-        .get(RemoteDashGetAllAction_1.remoteDashGetAllAction);
+        .get(authentication_middleware_1.checkIfAuthenticated, _.partial(authorization_middleware_1.checkIfAuthorized, ['USER']), RemoteDashGetAllAction_1.remoteDashGetAllAction);
     app.route('/api/remoteDash/:id')
-        .delete(RemoteDashDeleteAction_1.remoteDashDeleteAction);
+        .delete(authentication_middleware_1.checkIfAuthenticated, _.partial(authorization_middleware_1.checkIfAuthorized, ['USER']), RemoteDashDeleteAction_1.remoteDashDeleteAction);
+    app.route('/api/admin')
+        .post(authentication_middleware_1.checkIfAuthenticated, _.partial(authorization_middleware_1.checkIfAuthorized, ['ADMIN']), login_as_user_route_1.loginAsUser);
+    app.route('/api/signup')
+        .post(create_user_route_1.createUser);
+    app.route('/api/user')
+        .get(get_user_route_1.getUser);
+    app.route('/api/logout')
+        .post(authentication_middleware_1.checkIfAuthenticated, csrf_middleware_1.checkCsrfToken, logout_route_1.logout);
+    app.route('/api/login')
+        .post(login_route_1.login);
     // run app
     if (options.secure) {
         const httpsServer = https.createServer({

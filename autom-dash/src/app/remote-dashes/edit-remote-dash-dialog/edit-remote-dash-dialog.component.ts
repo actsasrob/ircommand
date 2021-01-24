@@ -103,7 +103,7 @@ export class EditRemoteDashDialogComponent implements OnInit {
 
             this.dialogRef.close();
         } else if (this.mode == 'create') {
-            RemoteDash.userId = JSON.parse(localStorage.getItem('user')).id;
+            //RemoteDash.userId = JSON.parse(localStorage.getItem('user')).id;
             //console.log("RemoteDash before remoteDashesService.add(): " + JSON.stringify(RemoteDash));
             this.remoteDashesService.add(RemoteDash)
                 .subscribe(

@@ -1,12 +1,10 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {select, Store} from '@ngrx/store';
-import {AppState} from './reducers';
-import {Observable} from 'rxjs';
-import {distinctUntilChanged, map} from 'rxjs/operators';
-import {NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router} from '@angular/router'; 
-import {isLoggedIn, isLoggedOut} from './auth/auth.selectors';
-import {login, logout} from './auth/auth.actions';
+import {Router, RouterModule} from "@angular/router";
+import {Observable} from "rxjs";
 import {MatSidenav} from '@angular/material/sidenav';
+
+import {AuthService} from "./auth/services/auth.service";
+import {User} from "./auth/model/user";
 import { SidenavService } from './shared/services/sidenav.service';
   
 @Component({
@@ -17,68 +15,34 @@ import { SidenavService } from './shared/services/sidenav.service';
 export class AppComponent implements OnInit {
     @ViewChild('sidenav') public sidenav: MatSidenav;
 
-    loading = true;
+    loading: boolean = false;
+    isLoggedIn$: Observable<boolean>;
+    isLoggedOut$: Observable<boolean>;
+    user$: Observable<User>;
 
-    isLoggedIn$: Observable<boolean>;           
-
-    isLoggedOut$: Observable<boolean>;      
-
-    constructor(private router: Router,
-                private store: Store<AppState>,
+    constructor(private router:Router,
+                private authService: AuthService,
                 private sidenavService: SidenavService
     ) {
 
     }
 
     ngOnInit() {
+        this.sidenavService.setSidenav(this.sidenav);
 
-        //this.sidenavService.setSidenav(this.sidenav);
-        const userProfile = localStorage.getItem("user");
-
-        if (userProfile) {
-            this.store.dispatch(login({user: JSON.parse(userProfile)}));
-        }
-
-        this.router.events.subscribe(event => {
-            switch (true) {
-                case event instanceof NavigationStart: {
-                    this.loading = true;
-                    break;
-                }
-
-                case event instanceof NavigationEnd:
-                case event instanceof NavigationCancel:
-                case event instanceof NavigationError: {
-                    this.loading = false;
-                    break;
-                }
-                default: {
-                    break;
-                }
-            }
-        });
-
-        this.isLoggedIn$ = this.store
-            .pipe(
-                select(isLoggedIn)
-            );
-
-        this.isLoggedOut$ = this.store
-            .pipe(
-                select(isLoggedOut)
-            );
-
-    }
-
-    ngAfterViewInit (): void {
-       this.sidenavService.setSidenav(this.sidenav);
-
+        this.isLoggedIn$ = this.authService.isLoggedIn$;
+        this.isLoggedOut$ = this.authService.isLoggedOut$;
+        this.user$ = this.authService.user$;
     }
 
     logout() {
 
-        this.store.dispatch(logout());
+        this.authService.logout().subscribe();
+        this.router.navigateByUrl('/');
+    }
 
+    ngAfterViewInit (): void {
+       this.sidenavService.setSidenav(this.sidenav);
     }
 
 }

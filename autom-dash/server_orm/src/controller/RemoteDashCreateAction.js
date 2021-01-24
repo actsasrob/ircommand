@@ -19,15 +19,16 @@ const LearnIR_1 = require("../entity/LearnIR");
  */
 function remoteDashCreateAction(request, response) {
     return __awaiter(this, void 0, void 0, function* () {
+        const user1 = request["user"];
         console.log("RemoteDashCreateAction: request.body=" + JSON.stringify(request.body));
-        const userId = request.body.userId;
+        //const userId = request.body.userId;
         const learnIRId = request.body.learnIRId;
-        console.log("RemoteDashCreateAction: userId=" + userId);
+        console.log("RemoteDashCreateAction: userId=" + user1.sub);
         console.log("RemoteDashCreateAction: learnIRId=" + learnIRId);
         // get a user repository to perform operations with user 
         const userRepository = typeorm_1.getManager().getRepository(User_1.User);
         // load a user by a given user id
-        const user = yield userRepository.findOne(userId);
+        const user = yield userRepository.findOne(user1.sub);
         console.log("RemoteDashCreateAction: user= " + JSON.stringify(user));
         const learnIRRepository = typeorm_1.getManager().getRepository(LearnIR_1.LearnIR);
         const learnIR = yield learnIRRepository.findOne(learnIRId);

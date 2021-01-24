@@ -33,13 +33,6 @@ export class HomeComponent implements OnInit {
   reload() {
 
     this.learnIRs$ = this.learnIRService.entities$;
-    /*this.learnIRs$ = this.learnIRService.entities$
-      .pipe(
-        tap(learnIRs => console.log("LearnIR.HomeComponent.reload(): " + JSON.stringify(learnIRs))),
-        map(learnIRs => learnIRs.filter(learnIR => learnIR.userId == JSON.parse(localStorage.getItem('user')).id))
-      );
-     */
-
   }
 
   onAddLearnIR() {
