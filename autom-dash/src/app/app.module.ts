@@ -42,7 +42,8 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { entityConfig } from './entity-metadata';
 
 import { SidenavService } from './shared/services/sidenav.service';
-
+import {AuthActions} from './auth/action-types';
+import {clearState} from './reducers';
 import {AuthModule} from './auth/auth.module';
 //import {AuthGuard} from './auth/auth.guard';
 //import {AuthorizationGuard as AuthGuard} from './auth/services/authorization.guard';
@@ -114,7 +115,7 @@ const routes: Routes = [
         AuthModule.forRoot(),
         SharedModule.forRoot(),
         StoreModule.forRoot(reducers, {
-            metaReducers,
+            metaReducers: [clearState],
             runtimeChecks : {
                 strictStateImmutability: true,
                 strictActionImmutability: true,

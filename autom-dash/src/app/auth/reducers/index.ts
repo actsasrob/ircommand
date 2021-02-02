@@ -29,9 +29,10 @@ export const authReducer = createReducer(
     }),
 
     on(AuthActions.logout, (state, action) => {
+        console.log("auth/reducers/index.ts on AuthActions.logout");
         return {
             user: undefined,
-            //state: undefined
+            state: undefined
         }
     })
 );

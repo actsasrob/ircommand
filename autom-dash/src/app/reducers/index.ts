@@ -30,7 +30,7 @@ export function logger(reducer:ActionReducer<any>)
 
 export function clearState(reducer) {
   return function (state, action) {
-    //console.log("reducers.clearState: action=" + JSON.stringify(action));
+    console.log("reducers.clearState: action=" + JSON.stringify(action));
     //console.log("reducers.clearState: action.type=" + action.type);
     if (action.type === AuthActions.logout) {
       state = undefined;

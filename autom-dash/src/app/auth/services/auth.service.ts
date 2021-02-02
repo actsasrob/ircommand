@@ -4,6 +4,10 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable, BehaviorSubject} from "rxjs";
 import {User} from "../model/user";
+import {Store} from "@ngrx/store";
+import {AppState} from '../../reducers';
+
+import {logout} from '../auth.actions';
 
 export const ANONYMOUS_USER: User = {
     id: undefined,
@@ -23,7 +27,8 @@ export class AuthService {
 
     isLoggedOut$: Observable<boolean> = this.isLoggedIn$.pipe(map(isLoggedIn => !isLoggedIn));
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient,
+                private store: Store<AppState>) {
         http.get<User>('/api/user').pipe(
             tap(console.log))
             .subscribe(user => this.subject.next(user ? user : ANONYMOUS_USER));
@@ -49,6 +54,10 @@ export class AuthService {
     }
 
     logout() : Observable<any> {
+        console.log("AuthService: logout()");
+        //this.store.dispatch(logout());
+        //localStorage.removeItem('entityCache');
+
         return this.http.post('/api/logout', null).pipe(
             shareReplay(),
             tap(user => this.subject.next(ANONYMOUS_USER)),);
