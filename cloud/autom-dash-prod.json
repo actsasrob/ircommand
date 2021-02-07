@@ -41,7 +41,7 @@
   }, 
   {
     "ParameterKey": "DBEndpoint",
-    "ParameterValue": "automdash-test.cluster-cmonrnqqoiqf.us-east-1.rds.amazonaws.com"
+    "ParameterValue": "automdash-prod.cluster-cmonrnqqoiqf.us-east-1.rds.amazonaws.com"
   }, 
   {
     "ParameterKey": "DBUser",

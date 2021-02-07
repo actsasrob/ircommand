@@ -7,4 +7,4 @@ export NVM_DIR="/home/aduser/.nvm"
 
 env >> $logfile
 cd /home/aduser/ircommand/autom-dash/server_orm 
-npm start >> $logfile 2>&1
+npm run server >> $logfile 2>&1

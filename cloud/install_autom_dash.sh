@@ -116,6 +116,11 @@ echo
 echo "info: changing ownership to ${THEUSER} on ${THEAPPINSTALL_DIR}..."
 chown -R $THEUSER: $THEAPPINSTALL_DIR
 
+#Logic below assumes automdash postgresql RDS database has been created:
+#postgres=> CREATE ROLE aduser PASSWORD 'changeme' CREATEROLE INHERIT LOGIN;
+#postgres=> grant aduser to postgres;
+#postgres=> CREATE DATABASE automdash OWNER aduser;
+
 echo
 echo "info: decrypt DB password..."
 echo "$THEENCRYPTED_DB_PASSWORD" | base64 --decode > secret.encrypted.txt

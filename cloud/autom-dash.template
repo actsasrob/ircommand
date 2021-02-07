@@ -50,7 +50,6 @@ Resources:
   WebServerGroup:
     Type: AWS::AutoScaling::AutoScalingGroup
     Properties: 
-      AssociatePublicIpAddress: True
       AutoScalingGroupName: !Join
                               - ''
                               - - 'AutomDash'
@@ -100,6 +99,7 @@ Resources:
       InstanceType: !Ref 'InstanceType'
       SecurityGroups: !Ref SecurityGroups
       IamInstanceProfile: !Ref 'WebServerInstanceProfile'
+      AssociatePublicIpAddress: True
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash -xe
