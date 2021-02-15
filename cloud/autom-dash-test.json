@@ -1,0 +1,58 @@
+[
+  {
+    "ParameterKey": "Environment",
+    "ParameterValue": "Prod"
+  }, 
+  {
+    "ParameterKey": "BucketName",
+    "ParameterValue": "autom-dash"
+  }, 
+  {
+    "ParameterKey": "KeyName",
+    "ParameterValue": "RobertHughes"
+  }, 
+  {
+    "ParameterKey": "InstanceType",
+    "ParameterValue": "t3.small"
+  },
+  {
+    "ParameterKey": "ImageId",
+    "ParameterValue": "ami-0885b1f6bd170450c"
+  }, 
+  {
+    "ParameterKey": "TargetGroupARN",
+    "ParameterValue": "arn:aws:elasticloadbalancing:us-east-1:524683554318:targetgroup/autom-dash-web-prod/938f74993e2c23bd"
+  }, 
+  {
+    "ParameterKey": "SecurityGroups",
+    "ParameterValue": "sg-059ae9c199487b715,sg-076e4352a51481c9d"
+  }, 
+  {
+    "ParameterKey": "Subnets",
+    "ParameterValue": "subnet-04ab0ea98ba53340a,subnet-03659f78e6b32ab1b"
+  }, 
+  {
+    "ParameterKey": "AZs",
+    "ParameterValue": "us-east-1a,us-east-1b"
+  }, 
+  {
+    "ParameterKey": "WebServerInstanceProfile",
+    "ParameterValue": "CUSTOM-AUTOMDASH-WEB"
+  }, 
+  {
+    "ParameterKey": "DBEndpoint",
+    "ParameterValue": "automdash-test.cluster-cmonrnqqoiqf.us-east-1.rds.amazonaws.com"
+  }, 
+  {
+    "ParameterKey": "DBUser",
+    "ParameterValue": "aduser"
+  }, 
+  {
+    "ParameterKey": "DBEncryptedPassword",
+    "ParameterValue": "AQICAHjKN3966zMXhlvT41lqVFl1Wof9OgcM5rTMqmPMDPIVAgE5De6pn8CsZAof6UU06vxFAAAAczBxBgkqhkiG9w0BBwagZDBiAgEAMF0GCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMvdUXziufqXpI8gMpAgEQgDBEYtmYHx/4AByLOrOT9y0Nz53UfphLt3enTG0Ek8ssTefk2zr4wdPVX611Z91zDR4="
+  }, 
+  {
+    "ParameterKey": "EncryptionKeyArn",
+    "ParameterValue": "arn:aws:kms:us-east-1:524683554318:key/59bd01de-038f-4e7c-8bf1-28bc3d14ede6"
+  } 
+]

@@ -3,9 +3,12 @@ import {Router, RouterModule} from "@angular/router";
 import {Observable} from "rxjs";
 import {MatSidenav} from '@angular/material/sidenav';
 
+import {AppState} from './reducers';
 import {AuthService} from "./auth/services/auth.service";
 import {User} from "./auth/model/user";
 import { SidenavService } from './shared/services/sidenav.service';
+import {select, Store} from '@ngrx/store';
+import {login, logout} from './auth/auth.actions';    
   
 @Component({
     selector: 'app-root',      
@@ -22,7 +25,8 @@ export class AppComponent implements OnInit {
 
     constructor(private router:Router,
                 private authService: AuthService,
-                private sidenavService: SidenavService
+                private sidenavService: SidenavService,
+                private store: Store<AppState>
     ) {
 
     }
@@ -38,6 +42,7 @@ export class AppComponent implements OnInit {
     logout() {
 
         this.authService.logout().subscribe();
+        this.store.dispatch(logout());
         this.router.navigateByUrl('/');
     }
 

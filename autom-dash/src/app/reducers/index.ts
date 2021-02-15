@@ -5,7 +5,9 @@ import {
   createSelector,
   MetaReducer
 } from '@ngrx/store';
-import {AuthActions} from '../auth/action-types';
+
+import { logout as auth_logout } from '../auth/auth.actions';
+
 import { environment } from '../../environments/environment';
 import {routerReducer} from '@ngrx/router-store';
 
@@ -28,19 +30,22 @@ export function logger(reducer:ActionReducer<any>)
 
 }
 
-export function clearState(reducer) {
-  return function (state, action) {
-    console.log("reducers.clearState: action=" + JSON.stringify(action));
-    //console.log("reducers.clearState: action.type=" + action.type);
-    if (action.type === AuthActions.logout) {
-      state = undefined;
-    }
+export function logout(reducer: ActionReducer<any>): ActionReducer<any> {
+    return function(state, action) {
 
-    return reducer(state, action);
-  };
+      //console.log("logout(): " + JSON.stringify(action));
+      switch (action.type) {
+          case auth_logout.type:          
+            console.log("logout action");   
+            state = undefined;
+      }
+
+      return reducer(state, action);  
+    }
 }
 
+
 export const metaReducers: MetaReducer<AppState>[] =
-    !environment.production ? [logger, clearState] : [clearState];
+    !environment.production ? [logger, logout] : [logger, logout];
 
 
