@@ -25,3 +25,19 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+### Start AutomDash running locally on Raspberry Pi
+
+- ssh in as 'pi' user
+- Download install_autom_dash.sh
+- sudo ./install_autom_dash.sh
+- sudo su - 'aduser'
+- cd ~/ircommand
+- Start RestfulLearnIR service:
+- nohup ./RestfulLearnIR.py > /tmp/RestfulLearnIR.out 2>&1 &
+- Start AutomDash backend express server and AutomDash frontend web service:
+- ./run_autom_dash.sh
+- Montoring
+- tail -f /tmp/RestfulLearnIR.out
+- tail -f ircommand/autom-dash/server_orm/nohup.out
+- psql --host=localhost -U aduser -d automdash --password
