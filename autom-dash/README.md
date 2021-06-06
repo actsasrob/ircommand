@@ -26,6 +26,18 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 
+### Start AutomDash on development server
+
+- start vagrant PostgreSql server
+- cd ~/dev/vagrant_postgresql/pg-app-dev-vm
+- vagrant up
+- instruction are in this directory for logging into PostgreSql instance
+- Start AutomDash backend express server and AutomDash frontend web service:
+- cd ~/dev/git/ircommand 
+- ./run_autom_dash.sh
+- Montoring
+- tail -f ircommand/autom-dash/server_orm/nohup.out
+
 ### Start AutomDash running locally on Raspberry Pi
 
 - ssh in as 'pi' user
