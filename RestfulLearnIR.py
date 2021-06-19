@@ -8,6 +8,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import logging
 import queue
 import serial
+import ssl
 import threading
 import time
 
@@ -54,6 +55,7 @@ class httpServer(BaseHTTPRequestHandler):
         self.end_headers()
 
     def do_GET(self):
+        '''Get IR Signal via LearnIR and return via HTTP'''
         global ReceivedIRSignal
         global WaitingForIRSignal
 
@@ -78,7 +80,7 @@ class httpServer(BaseHTTPRequestHandler):
         self.wfile.write(bytes("</body></html>", "utf-8"))
 
     def do_POST(self):
-        '''Send IR signal contained in post request body'''
+        '''Add IR signal contained in post request body to queue to be sent via LearnIR during next send window'''
         global SendIRSignalQueue
         content_length = int(self.headers['Content-Length']) # <--- Gets the size of data
         post_data = self.rfile.read(content_length) # <--- Gets the data itself
@@ -99,6 +101,10 @@ def run(server_class=HTTPServer, handler_class=httpServer, port=8080):
 
     server_address = ('', port)
     httpd = server_class(server_address, handler_class)
+    httpd.socket = ssl.wrap_socket (httpd.socket, 
+        keyfile="./key.pem", 
+        certfile='./cert.pem', server_side=True)
+
     logging.info('Starting httpd...\n')
     try:
         httpd.serve_forever()
