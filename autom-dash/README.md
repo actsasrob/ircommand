@@ -36,7 +36,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 - cd ~/dev/git/ircommand 
 - ./run_autom_dash.sh
 - Montoring
-- tail -f ircommand/autom-dash/server_orm/nohup.out
+- tail -f ~/dev/git/ircommand/autom-dash/server_orm/nohup.out
 
 ### Start AutomDash running locally on Raspberry Pi
 

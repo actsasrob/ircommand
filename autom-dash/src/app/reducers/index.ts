@@ -46,6 +46,6 @@ export function logout(reducer: ActionReducer<any>): ActionReducer<any> {
 
 
 export const metaReducers: MetaReducer<AppState>[] =
-    !environment.production ? [logger, logout] : [logger, logout];
+    !environment.production ? [logger, logout] : [logout];
 
 

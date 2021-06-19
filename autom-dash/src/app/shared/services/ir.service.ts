@@ -28,10 +28,10 @@ export class IRService {
   }
 
   public sendGetRequest(url){
-    return this.httpClient.get("http://" + url, {  params: new HttpParams({fromString: "_page=1&_limit=20"}), responseType: 'text', observe: "response"}).pipe(retry(0), catchError(this.handleError));
+    return this.httpClient.get("https://" + url, {  params: new HttpParams({fromString: "_page=1&_limit=20"}), responseType: 'text', observe: "response"}).pipe(retry(0), catchError(this.handleError));
   }
 
   public sendPostRequest(url, payload){
-    return this.httpClient.post("http://" + url, payload,{  params: new HttpParams({fromString: "_page=1&_limit=20"}), responseType: 'text', observe: "response"}).pipe(retry(0), catchError(this.handleError));
+    return this.httpClient.post("https://" + url, payload,{  params: new HttpParams({fromString: "_page=0&_limit=20"}), responseType: 'text', observe: "response"}).pipe(retry(0), catchError(this.handleError));
   }
 }
