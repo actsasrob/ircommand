@@ -6,7 +6,8 @@ export NVM_DIR="$HOME/.nvm"
 
 set -x
 
-nvm use 12.18.4
+#nvm use 12.18.4
+nvm use 12.22.11
 old_cwd=$(pwd)
 
 cd autom-dash 
