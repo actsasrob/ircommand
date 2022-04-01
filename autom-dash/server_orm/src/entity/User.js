@@ -17,31 +17,31 @@ const IRSignal_1 = require("./IRSignal");
 let User = class User {
 };
 __decorate([
-    typeorm_1.PrimaryGeneratedColumn(),
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
 ], User.prototype, "id", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], User.prototype, "passwordDigest", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], User.prototype, "email", void 0);
 __decorate([
-    typeorm_1.OneToMany(type => LearnIR_1.LearnIR, learnIR => learnIR.user),
+    (0, typeorm_1.OneToMany)(type => LearnIR_1.LearnIR, learnIR => learnIR.user),
     __metadata("design:type", Array)
 ], User.prototype, "learnIRs", void 0);
 __decorate([
-    typeorm_1.OneToMany(type => IRSignal_1.IRSignal, IRSignal => IRSignal.user),
+    (0, typeorm_1.OneToMany)(type => IRSignal_1.IRSignal, IRSignal => IRSignal.user),
     __metadata("design:type", Array)
 ], User.prototype, "IRSignals", void 0);
 __decorate([
-    typeorm_1.OneToMany(type => RemoteDash_1.RemoteDash, remoteDash => remoteDash.user),
+    (0, typeorm_1.OneToMany)(type => RemoteDash_1.RemoteDash, remoteDash => remoteDash.user),
     __metadata("design:type", Array)
 ], User.prototype, "remoteDashes", void 0);
 User = __decorate([
-    typeorm_1.Entity("users")
+    (0, typeorm_1.Entity)("users")
 ], User);
 exports.User = User;
 //# sourceMappingURL=User.js.map

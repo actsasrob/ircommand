@@ -1,7 +1,11 @@
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -14,7 +18,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
@@ -37,7 +41,7 @@ const password_validation_1 = require("./password-validation");
 const security_utils_1 = require("./security.utils");
 function createUser(req, res) {
     const credentials = req.body;
-    const errors = password_validation_1.validatePassword(credentials.password);
+    const errors = (0, password_validation_1.validatePassword)(credentials.password);
     if (errors.length > 0) {
         res.status(400).json({ errors });
     }
@@ -54,9 +58,9 @@ function createUserAndSession(res, credentials) {
     return __awaiter(this, void 0, void 0, function* () {
         const passwordDigest = yield argon2.hash(credentials.password);
         //const user = db.createUser(credentials.email, passwordDigest);
-        const userRepository = typeorm_1.getManager().getRepository(User_1.User);
+        const userRepository = (0, typeorm_1.getManager)().getRepository(User_1.User);
         // check for existing user by email address
-        const user = yield userRepository.findOne({ email: credentials.email });
+        const user = yield userRepository.findOneBy({ email: credentials.email });
         if (user) {
             const message = "User already exists with email " + credentials.email;
             console.error(message);
@@ -69,8 +73,8 @@ function createUserAndSession(res, credentials) {
         // save received object 
         const responseObject = yield userRepository.save(newUser);
         newUser.passwordDigest = undefined;
-        const sessionToken = yield security_utils_1.createSessionToken(newUser);
-        const csrfToken = yield security_utils_1.createCsrfToken();
+        const sessionToken = yield (0, security_utils_1.createSessionToken)(newUser);
+        const csrfToken = yield (0, security_utils_1.createCsrfToken)();
         res.cookie("SESSIONID", sessionToken, { httpOnly: true, secure: true });
         res.cookie("XSRF-TOKEN", csrfToken);
         res.status(200).json({ id: responseObject.id, email: responseObject.email, roles: ['USER'] });

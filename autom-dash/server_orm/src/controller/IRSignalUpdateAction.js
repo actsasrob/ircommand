@@ -18,7 +18,7 @@ const IRSignal_1 = require("../entity/IRSignal");
 function IRSignalUpdateAction(request, response) {
     return __awaiter(this, void 0, void 0, function* () {
         // get an item repository to perform operations
-        const itemRepository = typeorm_1.getManager().getRepository(IRSignal_1.IRSignal);
+        const itemRepository = (0, typeorm_1.getManager)().getRepository(IRSignal_1.IRSignal);
         // create a real object from json object sent over http
         const newObject = itemRepository.create(request.body);
         // save received object 

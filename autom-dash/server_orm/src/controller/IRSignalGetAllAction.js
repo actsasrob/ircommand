@@ -22,7 +22,7 @@ function IRSignalGetAllAction(request, response) {
         let tmpUser = new User_1.User();
         tmpUser.id = user.sub;
         // get item repository to perform operations  
-        const itemRepository = typeorm_1.getManager().getRepository(IRSignal_1.IRSignal);
+        const itemRepository = (0, typeorm_1.getManager)().getRepository(IRSignal_1.IRSignal);
         // load item by a given id
         //const items = await itemRepository.find({ relations: ["user"] });
         const items = yield itemRepository.find({

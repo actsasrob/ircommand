@@ -16,31 +16,31 @@ const RemoteDash_1 = require("./RemoteDash");
 let LearnIR = class LearnIR {
 };
 __decorate([
-    typeorm_1.PrimaryGeneratedColumn(),
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
 ], LearnIR.prototype, "id", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], LearnIR.prototype, "seqNo", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], LearnIR.prototype, "location", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], LearnIR.prototype, "address", void 0);
 __decorate([
-    typeorm_1.ManyToOne(type => User_1.User, user => user.learnIRs),
+    (0, typeorm_1.ManyToOne)(type => User_1.User, user => user.learnIRs),
     __metadata("design:type", User_1.User)
 ], LearnIR.prototype, "user", void 0);
 __decorate([
-    typeorm_1.OneToMany(type => RemoteDash_1.RemoteDash, remoteDash => remoteDash.learnIR),
+    (0, typeorm_1.OneToMany)(type => RemoteDash_1.RemoteDash, remoteDash => remoteDash.learnIR),
     __metadata("design:type", Array)
 ], LearnIR.prototype, "remoteDashes", void 0);
 LearnIR = __decorate([
-    typeorm_1.Entity()
+    (0, typeorm_1.Entity)()
 ], LearnIR);
 exports.LearnIR = LearnIR;
 //# sourceMappingURL=LearnIR.js.map

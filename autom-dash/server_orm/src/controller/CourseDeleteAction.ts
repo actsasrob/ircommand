@@ -10,11 +10,11 @@ export async function courseDeleteAction(request: Request, response: Response) {
     // get a course repository to perform operations with course
     const courseRepository = getManager().getRepository(Course);
 
-    const id = request.params.id;
+    const id = parseInt(request.params.id);
 
     console.log("courseDeleteAction: " + id);
     // load a course by a given course id
-    const course = await courseRepository.findOne(id);
+    const course = await courseRepository.findOneBy({id: id});
 
     if (!course) {
         console.log("courseDeleteAction: no matching course found to delete");

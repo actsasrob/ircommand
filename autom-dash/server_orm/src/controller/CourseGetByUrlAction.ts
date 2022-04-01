@@ -11,7 +11,7 @@ export async function courseGetByUrlAction(request: Request, response: Response)
     const courseRepository = getManager().getRepository(Course);
 
     // load a course by a given course id
-    const course = await courseRepository.findOne(request.params.url);
+    const course = await courseRepository.findOneBy({id: parseInt(request.params.url)});
 
     // if course was not found return 404 to the client
     if (!course) {

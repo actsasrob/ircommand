@@ -23,13 +23,13 @@ function learnIRCreateAction(request, response) {
         //const userId = request.body.userId;
         console.log("learnIRCreateAction: userId=" + user1.sub);
         // get a user repository to perform operations with user 
-        const userRepository = typeorm_1.getManager().getRepository(User_1.User);
+        const userRepository = (0, typeorm_1.getManager)().getRepository(User_1.User);
         // load a user by a given user id
         //const user = await userRepository. findOne(userId);
         const user = yield userRepository.findOne(user1.sub);
         console.log("learnIRCreateAction: user= " + JSON.stringify(user));
         // get an item repository to perform operations
-        const itemRepository = typeorm_1.getManager().getRepository(LearnIR_1.LearnIR);
+        const itemRepository = (0, typeorm_1.getManager)().getRepository(LearnIR_1.LearnIR);
         // create a real object from json object sent over http
         //const newObject = itemRepository.create(request.body)
         const newObject = new LearnIR_1.LearnIR();

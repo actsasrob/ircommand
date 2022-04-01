@@ -17,39 +17,39 @@ let RemoteDash = class RemoteDash {
     ;
 };
 __decorate([
-    typeorm_1.PrimaryGeneratedColumn(),
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
 ], RemoteDash.prototype, "id", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], RemoteDash.prototype, "seqNo", void 0);
 __decorate([
-    typeorm_1.Column("text"),
+    (0, typeorm_1.Column)("text"),
     __metadata("design:type", String)
 ], RemoteDash.prototype, "layout", void 0);
 __decorate([
-    typeorm_1.Column("text"),
+    (0, typeorm_1.Column)("text"),
     __metadata("design:type", String)
 ], RemoteDash.prototype, "components", void 0);
 __decorate([
-    typeorm_1.Column("text"),
+    (0, typeorm_1.Column)("text"),
     __metadata("design:type", String)
 ], RemoteDash.prototype, "iconUrl", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], RemoteDash.prototype, "name", void 0);
 __decorate([
-    typeorm_1.ManyToOne(type => LearnIR_1.LearnIR, learnIR => learnIR.remoteDashes),
+    (0, typeorm_1.ManyToOne)(type => LearnIR_1.LearnIR, learnIR => learnIR.remoteDashes),
     __metadata("design:type", LearnIR_1.LearnIR)
 ], RemoteDash.prototype, "learnIR", void 0);
 __decorate([
-    typeorm_1.ManyToOne(type => User_1.User, user => user.remoteDashes),
+    (0, typeorm_1.ManyToOne)(type => User_1.User, user => user.remoteDashes),
     __metadata("design:type", User_1.User)
 ], RemoteDash.prototype, "user", void 0);
 RemoteDash = __decorate([
-    typeorm_1.Entity()
+    (0, typeorm_1.Entity)()
 ], RemoteDash);
 exports.RemoteDash = RemoteDash;
 //# sourceMappingURL=RemoteDash.js.map

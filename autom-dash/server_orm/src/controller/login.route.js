@@ -1,7 +1,11 @@
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -14,7 +18,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
@@ -39,9 +43,9 @@ function login(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const credentials = req.body;
         //const user = db.findUserByEmail(credentials.email);
-        const userRepository = typeorm_1.getManager().getRepository(User_1.User);
+        const userRepository = (0, typeorm_1.getManager)().getRepository(User_1.User);
         // load a user by a given user id
-        const user = yield userRepository.findOne({ email: credentials.email });
+        const user = yield userRepository.findOneBy({ email: credentials.email });
         if (!user) {
             res.sendStatus(403);
         }
@@ -55,7 +59,7 @@ function loginAndBuildResponse(credentials, user, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const sessionToken = yield attemptLogin(credentials, user);
-            const csrfToken = yield security_utils_1.createCsrfToken();
+            const csrfToken = yield (0, security_utils_1.createCsrfToken)();
             console.log("Login successful");
             res.cookie("SESSIONID", sessionToken, { httpOnly: true, secure: true });
             res.cookie("XSRF-TOKEN", csrfToken);
@@ -74,7 +78,7 @@ function attemptLogin(credentials, user) {
         if (!isPasswordValid) {
             throw new Error("Password Invalid");
         }
-        return security_utils_1.createSessionToken(user);
+        return (0, security_utils_1.createSessionToken)(user);
     });
 }
 //# sourceMappingURL=login.route.js.map

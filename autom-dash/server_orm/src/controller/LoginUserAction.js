@@ -18,9 +18,9 @@ function loginUserAction(req, res) {
         const { email, passwordDigest } = req.body;
         console.log("loginUserAction: email=" + email);
         // get a user repository to perform operations with user 
-        const userRepository = typeorm_1.getManager().getRepository(User_1.User);
+        const userRepository = (0, typeorm_1.getManager)().getRepository(User_1.User);
         // load a user by a given user id
-        const user = yield userRepository.findOne({ email: email });
+        const user = yield userRepository.findOneBy({ email: email });
         //console.log("loginUserAction: " + JSON.stringify(user));
         if (!user) {
             res.sendStatus(403);

@@ -18,9 +18,9 @@ function getUser(req, res) {
         const userInfo = req["user"];
         if (userInfo) {
             //const user = db.findUserById(userInfo.sub);
-            const userRepository = typeorm_1.getManager().getRepository(User_1.User);
+            const userRepository = (0, typeorm_1.getManager)().getRepository(User_1.User);
             // check for existing user by email address
-            const user = yield userRepository.findOne({ id: userInfo.sub });
+            const user = yield userRepository.findOneBy({ id: userInfo.sub });
             //res.status(200).json({email:user.email, id:user.id, roles: user.roles});
             res.status(200).json({ email: user.email, id: user.id, roles: ['USER'] });
         }

@@ -18,7 +18,7 @@ const Course_1 = require("../entity/Course");
 function courseGetAllAction(request, response) {
     return __awaiter(this, void 0, void 0, function* () {
         // get a course repository to perform operations with course
-        const courseRepository = typeorm_1.getManager().getRepository(Course_1.Course);
+        const courseRepository = (0, typeorm_1.getManager)().getRepository(Course_1.Course);
         // load a course by a given course id
         const courses = yield courseRepository.find();
         console.log("courseGetAllAction: " + JSON.stringify(courses));

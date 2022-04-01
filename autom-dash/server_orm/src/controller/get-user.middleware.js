@@ -29,7 +29,7 @@ exports.retrieveUserIdFromRequest = retrieveUserIdFromRequest;
 function handleSessionCookie(jwt, req) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const payload = yield security_utils_1.decodeJwt(jwt);
+            const payload = yield (0, security_utils_1.decodeJwt)(jwt);
             req["user"] = payload;
         }
         catch (err) {

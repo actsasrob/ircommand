@@ -22,7 +22,7 @@ function remoteDashGetAllAction(request, response) {
         let tmpUser = new User_1.User();
         tmpUser.id = user.sub;
         console.log("remoteDashGetAllAction: user.sub=" + user.sub);
-        const itemRepository = typeorm_1.getManager().getRepository(RemoteDash_1.RemoteDash);
+        const itemRepository = (0, typeorm_1.getManager)().getRepository(RemoteDash_1.RemoteDash);
         const items = yield itemRepository.find({
             where: { user: tmpUser },
             relations: ["user", "learnIR"]

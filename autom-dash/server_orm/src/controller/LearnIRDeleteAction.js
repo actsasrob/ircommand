@@ -18,10 +18,10 @@ const LearnIR_1 = require("../entity/LearnIR");
 function learnIRDeleteAction(request, response) {
     return __awaiter(this, void 0, void 0, function* () {
         // get an item repository to perform operations
-        const itemRepository = typeorm_1.getManager().getRepository(LearnIR_1.LearnIR);
-        const id = request.params.id;
+        const itemRepository = (0, typeorm_1.getManager)().getRepository(LearnIR_1.LearnIR);
+        const id = parseInt(request.params.id);
         // load an object by a given id
-        const item = yield itemRepository.findOne(id);
+        const item = yield itemRepository.findOneBy({ id: id });
         if (!item) {
             response.status(404);
             response.end();

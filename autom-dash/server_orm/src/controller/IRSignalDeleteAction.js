@@ -18,10 +18,11 @@ const IRSignal_1 = require("../entity/IRSignal");
 function IRSignalDeleteAction(request, response) {
     return __awaiter(this, void 0, void 0, function* () {
         // get an item repository to perform operations
-        const itemRepository = typeorm_1.getManager().getRepository(IRSignal_1.IRSignal);
-        const id = request.params.id;
+        const itemRepository = (0, typeorm_1.getManager)().getRepository(IRSignal_1.IRSignal);
+        const id = parseInt(request.params.id);
         // load an object by a given id
-        const item = yield itemRepository.findOne(id);
+        //const item = await itemRepository.findOne(id);
+        const item = yield itemRepository.findOneBy({ id: id });
         if (!item) {
             response.status(404);
             response.end();

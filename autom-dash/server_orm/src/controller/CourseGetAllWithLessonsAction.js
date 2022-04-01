@@ -10,6 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.courseGetAllWithLessonsAction = void 0;
+//import {createConnection, ConnectionOptions} from "typeorm";
 const typeorm_1 = require("typeorm");
 const Course_1 = require("../entity/Course");
 const Lesson_1 = require("../entity/Lesson");
@@ -18,12 +19,13 @@ const Lesson_1 = require("../entity/Lesson");
  */
 function courseGetAllWithLessonsAction(request, response) {
     return __awaiter(this, void 0, void 0, function* () {
+        //const options: ConnectionOptions = {
         const options = {
             // ... other options
             type: "postgres",
             entities: [Course_1.Course, Lesson_1.Lesson]
         };
-        let connection = yield typeorm_1.createConnection(options);
+        let connection = yield (0, typeorm_1.createConnection)(options);
         // load a course by a given course id
         const courses = yield connection.getRepository(Course_1.Course).find({ relations: ["lessons"] });
         // return loaded courses

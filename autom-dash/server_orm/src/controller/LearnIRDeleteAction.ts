@@ -10,10 +10,10 @@ export async function learnIRDeleteAction(request: Request, response: Response) 
     // get an item repository to perform operations
     const itemRepository = getManager().getRepository(LearnIR);
 
-    const id = request.params.id;
+    const id = parseInt(request.params.id);
 
     // load an object by a given id
-    const item = await itemRepository.findOne(id);
+    const item = await itemRepository.findOneBy({id: id});
 
     if (!item) {
         response.status(404);

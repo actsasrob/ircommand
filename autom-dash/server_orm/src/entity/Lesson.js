@@ -15,27 +15,27 @@ const Course_1 = require("./Course");
 let Lesson = class Lesson {
 };
 __decorate([
-    typeorm_1.PrimaryGeneratedColumn(),
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
 ], Lesson.prototype, "id", void 0);
 __decorate([
-    typeorm_1.Column("text"),
+    (0, typeorm_1.Column)("text"),
     __metadata("design:type", String)
 ], Lesson.prototype, "description", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Lesson.prototype, "duration", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], Lesson.prototype, "seqNo", void 0);
 __decorate([
-    typeorm_1.ManyToOne(type => Course_1.Course, course => course.lessons),
+    (0, typeorm_1.ManyToOne)(type => Course_1.Course, course => course.lessons),
     __metadata("design:type", Course_1.Course)
 ], Lesson.prototype, "course", void 0);
 Lesson = __decorate([
-    typeorm_1.Entity()
+    (0, typeorm_1.Entity)()
 ], Lesson);
 exports.Lesson = Lesson;
 //# sourceMappingURL=Lesson.js.map

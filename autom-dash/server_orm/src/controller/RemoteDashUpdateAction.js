@@ -25,14 +25,14 @@ function remoteDashUpdateAction(request, response) {
         //console.log("RemoteDashUpdateAction: userId=" + userId);
         console.log("RemoteDashUpdateAction: learnIRId=" + learnIRId);
         // get a user repository to perform operations with user 
-        const userRepository = typeorm_1.getManager().getRepository(User_1.User);
+        const userRepository = (0, typeorm_1.getManager)().getRepository(User_1.User);
         // load a user by a given user id
         //const user = await userRepository. findOne(userId);
         //console.log("RemoteDashUpdateAction: user= " + JSON.stringify(user));
-        const learnIRRepository = typeorm_1.getManager().getRepository(LearnIR_1.LearnIR);
+        const learnIRRepository = (0, typeorm_1.getManager)().getRepository(LearnIR_1.LearnIR);
         const learnIR = yield learnIRRepository.findOne(learnIRId);
         // get an item repository to perform operations
-        const itemRepository = typeorm_1.getManager().getRepository(RemoteDash_1.RemoteDash);
+        const itemRepository = (0, typeorm_1.getManager)().getRepository(RemoteDash_1.RemoteDash);
         // create a real object from json object sent over http
         //const newObject = itemRepository.create(request.body)
         const newObject = new RemoteDash_1.RemoteDash();

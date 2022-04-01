@@ -14,7 +14,7 @@ export async function signupUserAction(req: Request, res: Response) {
     const userRepository = getManager().getRepository(User);
 
     // check for existing user by email address
-    const user = await userRepository.findOne({ email: email });
+    const user = await userRepository.findOneBy({ email: email });
     //console.log("signupUserAction: " + JSON.stringify(user));
 
     // if user already exists return with error status 

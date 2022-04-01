@@ -18,7 +18,7 @@ const Post_1 = require("../entity/Post");
 function postGetAllAction(request, response) {
     return __awaiter(this, void 0, void 0, function* () {
         // get a post repository to perform operations with post
-        const postRepository = typeorm_1.getManager().getRepository(Post_1.Post);
+        const postRepository = (0, typeorm_1.getManager)().getRepository(Post_1.Post);
         // load a post by a given post id
         const posts = yield postRepository.find();
         // return loaded posts

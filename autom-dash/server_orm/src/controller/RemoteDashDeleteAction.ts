@@ -10,10 +10,10 @@ export async function remoteDashDeleteAction(request: Request, response: Respons
     // get an item repository to perform operations
     const itemRepository = getManager().getRepository(RemoteDash);
 
-    const id = request.params.id;
+    const id = parseInt(request.params.id);
 
     // load an object by a given id
-    const item = await itemRepository.findOne(id);
+    const item = await itemRepository.findOneBy({id: id});
 
     if (!item) {
         response.status(404);

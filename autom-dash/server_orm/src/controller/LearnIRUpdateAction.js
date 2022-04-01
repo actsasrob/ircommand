@@ -18,7 +18,7 @@ const LearnIR_1 = require("../entity/LearnIR");
 function learnIRUpdateAction(request, response) {
     return __awaiter(this, void 0, void 0, function* () {
         // get an item repository to perform operations
-        const itemRepository = typeorm_1.getManager().getRepository(LearnIR_1.LearnIR);
+        const itemRepository = (0, typeorm_1.getManager)().getRepository(LearnIR_1.LearnIR);
         // create a real object from json object sent over http
         const newObject = itemRepository.create(request.body);
         // save received object 

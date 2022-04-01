@@ -23,13 +23,13 @@ function IRSignalCreateAction(request, response) {
         //const userId = request.body.userId;
         console.log("IRSignalCreateAction: userId=" + user1.sub);
         // get a user repository to perform operations with user 
-        const userRepository = typeorm_1.getManager().getRepository(User_1.User);
+        const userRepository = (0, typeorm_1.getManager)().getRepository(User_1.User);
         // load a user by a given user id
         //const user = await userRepository. findOne(userId);
         const user = yield userRepository.findOne(user1.sub);
         console.log("IRSignalCreateAction: user= " + JSON.stringify(user));
         // get an item repository to perform operations
-        const itemRepository = typeorm_1.getManager().getRepository(IRSignal_1.IRSignal);
+        const itemRepository = (0, typeorm_1.getManager)().getRepository(IRSignal_1.IRSignal);
         // create a real object from json object sent over http
         //const newObject = itemRepository.create(request.body)
         const newObject = new IRSignal_1.IRSignal();

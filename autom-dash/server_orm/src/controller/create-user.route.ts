@@ -41,7 +41,7 @@ async function createUserAndSession(res:Response, credentials) {
     const userRepository = getManager().getRepository(User);
 
     // check for existing user by email address
-    const user = await userRepository.findOne({ email: credentials.email });
+    const user = await userRepository.findOneBy({ email: credentials.email });
 
     if (user) {
 

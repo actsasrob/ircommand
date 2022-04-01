@@ -18,9 +18,9 @@ const Course_1 = require("../entity/Course");
 function courseGetByUrlAction(request, response) {
     return __awaiter(this, void 0, void 0, function* () {
         // get a course repository to perform operations with course
-        const courseRepository = typeorm_1.getManager().getRepository(Course_1.Course);
+        const courseRepository = (0, typeorm_1.getManager)().getRepository(Course_1.Course);
         // load a course by a given course id
-        const course = yield courseRepository.findOne(request.params.url);
+        const course = yield courseRepository.findOneBy({ id: parseInt(request.params.url) });
         // if course was not found return 404 to the client
         if (!course) {
             response.status(404);

@@ -15,26 +15,26 @@ const Category_1 = require("./Category");
 let Post = class Post {
 };
 __decorate([
-    typeorm_1.PrimaryGeneratedColumn(),
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
 ], Post.prototype, "id", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], Post.prototype, "title", void 0);
 __decorate([
-    typeorm_1.Column("text"),
+    (0, typeorm_1.Column)("text"),
     __metadata("design:type", String)
 ], Post.prototype, "text", void 0);
 __decorate([
-    typeorm_1.ManyToMany(type => Category_1.Category, {
+    (0, typeorm_1.ManyToMany)(type => Category_1.Category, {
         cascade: true
     }),
-    typeorm_1.JoinTable(),
+    (0, typeorm_1.JoinTable)(),
     __metadata("design:type", Array)
 ], Post.prototype, "categories", void 0);
 Post = __decorate([
-    typeorm_1.Entity()
+    (0, typeorm_1.Entity)()
 ], Post);
 exports.Post = Post;
 //# sourceMappingURL=Post.js.map

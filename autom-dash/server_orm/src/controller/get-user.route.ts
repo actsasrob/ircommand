@@ -17,7 +17,7 @@ export async function getUser(req:Request, res:Response) {
         const userRepository = getManager().getRepository(User);
 
         // check for existing user by email address
-        const user = await userRepository.findOne({ id: userInfo.sub });
+        const user = await userRepository.findOneBy({ id: userInfo.sub });
 
         //res.status(200).json({email:user.email, id:user.id, roles: user.roles});
         res.status(200).json({email:user.email, id:user.id, roles: [ 'USER' ]});

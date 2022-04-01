@@ -18,10 +18,10 @@ function loginAsUser(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const impersonatedUserEmail = req.body.email;
         //const impersonatedUser = db.findUserByEmail(impersonatedUserEmail);
-        const userRepository = typeorm_1.getManager().getRepository(User_1.User);
+        const userRepository = (0, typeorm_1.getManager)().getRepository(User_1.User);
         // load a user by a given user id
-        const impersonatedUser = yield userRepository.findOne({ email: impersonatedUserEmail });
-        security_utils_1.createSessionToken(impersonatedUser)
+        const impersonatedUser = yield userRepository.findOneBy({ email: impersonatedUserEmail });
+        (0, security_utils_1.createSessionToken)(impersonatedUser)
             .then(sessionToken => {
             res.cookie("SESSIONID", sessionToken, { httpOnly: true, secure: true });
             res.status(200).json({

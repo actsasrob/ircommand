@@ -15,51 +15,51 @@ const User_1 = require("./User");
 let IRSignal = class IRSignal {
 };
 __decorate([
-    typeorm_1.PrimaryGeneratedColumn(),
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
 ], IRSignal.prototype, "id", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], IRSignal.prototype, "seqNo", void 0);
 __decorate([
-    typeorm_1.Column("text"),
+    (0, typeorm_1.Column)("text"),
     __metadata("design:type", String)
 ], IRSignal.prototype, "signal", void 0);
 __decorate([
-    typeorm_1.Column("text"),
+    (0, typeorm_1.Column)("text"),
     __metadata("design:type", String)
 ], IRSignal.prototype, "iconUrl", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", String)
 ], IRSignal.prototype, "name", void 0);
 __decorate([
-    typeorm_1.Column("text", { nullable: true }),
+    (0, typeorm_1.Column)("text", { nullable: true }),
     __metadata("design:type", String)
 ], IRSignal.prototype, "alexaIntent", void 0);
 __decorate([
-    typeorm_1.Column("text", { nullable: true }),
+    (0, typeorm_1.Column)("text", { nullable: true }),
     __metadata("design:type", String)
 ], IRSignal.prototype, "alexaAction", void 0);
 __decorate([
-    typeorm_1.Column("text", { nullable: true }),
+    (0, typeorm_1.Column)("text", { nullable: true }),
     __metadata("design:type", String)
 ], IRSignal.prototype, "alexaComponent", void 0);
 __decorate([
-    typeorm_1.Column({ nullable: true }),
+    (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", String)
 ], IRSignal.prototype, "alexaDigit", void 0);
 __decorate([
-    typeorm_1.Column({ default: false }),
+    (0, typeorm_1.Column)({ default: false }),
     __metadata("design:type", Boolean)
 ], IRSignal.prototype, "alexaToggle", void 0);
 __decorate([
-    typeorm_1.ManyToOne(type => User_1.User, user => user.IRSignals),
+    (0, typeorm_1.ManyToOne)(type => User_1.User, user => user.IRSignals),
     __metadata("design:type", User_1.User)
 ], IRSignal.prototype, "user", void 0);
 IRSignal = __decorate([
-    typeorm_1.Entity()
+    (0, typeorm_1.Entity)()
 ], IRSignal);
 exports.IRSignal = IRSignal;
 //# sourceMappingURL=IRSignal.js.map

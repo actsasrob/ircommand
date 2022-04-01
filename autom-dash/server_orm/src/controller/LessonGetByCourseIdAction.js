@@ -18,7 +18,7 @@ const Lesson_1 = require("../entity/Lesson");
 function lessonGetByCourseIdAction(request, response) {
     return __awaiter(this, void 0, void 0, function* () {
         // get a lesson repository to perform operations with lesson
-        const lessonRepository = typeorm_1.getManager().getRepository(Lesson_1.Lesson);
+        const lessonRepository = (0, typeorm_1.getManager)().getRepository(Lesson_1.Lesson);
         // load a lesson by a given lesson id
         const lessons = yield lessonRepository
             .createQueryBuilder("lesson")

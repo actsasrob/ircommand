@@ -18,10 +18,10 @@ const RemoteDash_1 = require("../entity/RemoteDash");
 function remoteDashDeleteAction(request, response) {
     return __awaiter(this, void 0, void 0, function* () {
         // get an item repository to perform operations
-        const itemRepository = typeorm_1.getManager().getRepository(RemoteDash_1.RemoteDash);
-        const id = request.params.id;
+        const itemRepository = (0, typeorm_1.getManager)().getRepository(RemoteDash_1.RemoteDash);
+        const id = parseInt(request.params.id);
         // load an object by a given id
-        const item = yield itemRepository.findOne(id);
+        const item = yield itemRepository.findOneBy({ id: id });
         if (!item) {
             response.status(404);
             response.end();

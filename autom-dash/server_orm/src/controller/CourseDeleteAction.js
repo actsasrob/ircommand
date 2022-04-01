@@ -18,11 +18,11 @@ const Course_1 = require("../entity/Course");
 function courseDeleteAction(request, response) {
     return __awaiter(this, void 0, void 0, function* () {
         // get a course repository to perform operations with course
-        const courseRepository = typeorm_1.getManager().getRepository(Course_1.Course);
-        const id = request.params.id;
+        const courseRepository = (0, typeorm_1.getManager)().getRepository(Course_1.Course);
+        const id = parseInt(request.params.id);
         console.log("courseDeleteAction: " + id);
         // load a course by a given course id
-        const course = yield courseRepository.findOne(id);
+        const course = yield courseRepository.findOneBy({ id: id });
         if (!course) {
             console.log("courseDeleteAction: no matching course found to delete");
             response.status(404);

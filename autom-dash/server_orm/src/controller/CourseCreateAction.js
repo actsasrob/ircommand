@@ -19,7 +19,7 @@ function courseCreateAction(request, response) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log("courseCreateAtion:");
         // get a course repository to perform operations with course
-        const courseRepository = typeorm_1.getManager().getRepository(Course_1.Course);
+        const courseRepository = (0, typeorm_1.getManager)().getRepository(Course_1.Course);
         // create a real course object from course json object sent over http
         const newCourse = courseRepository.create(request.body);
         // save received course

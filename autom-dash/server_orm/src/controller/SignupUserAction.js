@@ -18,9 +18,9 @@ function signupUserAction(req, res) {
         const { email, passwordDigest } = req.body;
         console.log("signupUserAction: email=" + email);
         // get a user repository to perform operations with user 
-        const userRepository = typeorm_1.getManager().getRepository(User_1.User);
+        const userRepository = (0, typeorm_1.getManager)().getRepository(User_1.User);
         // check for existing user by email address
-        const user = yield userRepository.findOne({ email: email });
+        const user = yield userRepository.findOneBy({ email: email });
         //console.log("signupUserAction: " + JSON.stringify(user));
         // if user already exists return with error status 
         if (user) {

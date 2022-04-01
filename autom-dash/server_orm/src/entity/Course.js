@@ -15,43 +15,43 @@ const Lesson_1 = require("./Lesson");
 let Course = class Course {
 };
 __decorate([
-    typeorm_1.PrimaryGeneratedColumn(),
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
     __metadata("design:type", Number)
 ], Course.prototype, "id", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", Number)
 ], Course.prototype, "seqNo", void 0);
 __decorate([
-    typeorm_1.Column("text"),
+    (0, typeorm_1.Column)("text"),
     __metadata("design:type", String)
 ], Course.prototype, "url", void 0);
 __decorate([
-    typeorm_1.Column("text"),
+    (0, typeorm_1.Column)("text"),
     __metadata("design:type", String)
 ], Course.prototype, "iconUrl", void 0);
 __decorate([
-    typeorm_1.Column("text"),
+    (0, typeorm_1.Column)("text"),
     __metadata("design:type", String)
 ], Course.prototype, "description", void 0);
 __decorate([
-    typeorm_1.Column("text"),
+    (0, typeorm_1.Column)("text"),
     __metadata("design:type", String)
 ], Course.prototype, "longDescription", void 0);
 __decorate([
-    typeorm_1.Column("text"),
+    (0, typeorm_1.Column)("text"),
     __metadata("design:type", String)
 ], Course.prototype, "category", void 0);
 __decorate([
-    typeorm_1.Column(),
+    (0, typeorm_1.Column)(),
     __metadata("design:type", Boolean)
 ], Course.prototype, "promo", void 0);
 __decorate([
-    typeorm_1.OneToMany(type => Lesson_1.Lesson, lesson => lesson.course),
+    (0, typeorm_1.OneToMany)(type => Lesson_1.Lesson, lesson => lesson.course),
     __metadata("design:type", Array)
 ], Course.prototype, "lessons", void 0);
 Course = __decorate([
-    typeorm_1.Entity()
+    (0, typeorm_1.Entity)()
 ], Course);
 exports.Course = Course;
 //# sourceMappingURL=Course.js.map

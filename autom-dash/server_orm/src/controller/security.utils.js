@@ -1,7 +1,11 @@
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -14,7 +18,7 @@ var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
 };
@@ -40,7 +44,7 @@ const RSA_PUBLIC_KEY = fs.readFileSync('./automdash.com.crt');
 const SESSION_DURATION = 1000;
 function createSessionToken(user) {
     return __awaiter(this, void 0, void 0, function* () {
-        return exports.signJwt({
+        return (0, exports.signJwt)({
             //roles: user.roles
             roles: ['USER']
         }, RSA_PRIVATE_KEY, {
@@ -61,7 +65,7 @@ function decodeJwt(token) {
 exports.decodeJwt = decodeJwt;
 function createCsrfToken() {
     return __awaiter(this, void 0, void 0, function* () {
-        return yield exports.randomBytes(32).then(bytes => bytes.toString("hex"));
+        return yield (0, exports.randomBytes)(32).then(bytes => bytes.toString("hex"));
     });
 }
 exports.createCsrfToken = createCsrfToken;

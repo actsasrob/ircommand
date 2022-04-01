@@ -14,7 +14,7 @@ export async function loginUserAction(req: Request, res: Response) {
     const userRepository = getManager().getRepository(User);
 
     // load a user by a given user id
-    const user = await userRepository.findOne({ email: email });
+    const user = await userRepository.findOneBy({ email: email });
     //console.log("loginUserAction: " + JSON.stringify(user));
 
     if (!user) {

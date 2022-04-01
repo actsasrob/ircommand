@@ -1,5 +1,6 @@
 import {Request, Response} from "express";
-import {createConnection, ConnectionOptions} from "typeorm";
+//import {createConnection, ConnectionOptions} from "typeorm";
+import {createConnection, DataSourceOptions} from "typeorm";
 import {Course} from "../entity/Course";
 import {Lesson} from "../entity/Lesson";
 
@@ -8,7 +9,8 @@ import {Lesson} from "../entity/Lesson";
  */
 export async function courseGetAllWithLessonsAction(request: Request, response: Response) {
 
-    const options: ConnectionOptions = {
+    //const options: ConnectionOptions = {
+    const options: DataSourceOptions = {
     // ... other options
     type: "postgres",
     entities: [Course, Lesson]

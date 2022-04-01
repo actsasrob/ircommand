@@ -15,7 +15,7 @@ export async function loginAsUser(req, res) {
     const userRepository = getManager().getRepository(User);
 
     // load a user by a given user id
-    const impersonatedUser = await userRepository.findOne({ email: impersonatedUserEmail });
+    const impersonatedUser = await userRepository.findOneBy({ email: impersonatedUserEmail });
     createSessionToken(impersonatedUser)
         .then(sessionToken => {
 

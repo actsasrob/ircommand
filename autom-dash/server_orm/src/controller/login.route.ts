@@ -19,7 +19,7 @@ export async function login(req: Request, res: Response) {
     const userRepository = getManager().getRepository(User);
 
     // load a user by a given user id
-    const user = await userRepository.findOne({ email: credentials.email });
+    const user = await userRepository.findOneBy({ email: credentials.email });
     if (!user) {
         res.sendStatus(403);
     }
