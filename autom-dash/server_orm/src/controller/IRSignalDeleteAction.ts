@@ -13,7 +13,6 @@ export async function IRSignalDeleteAction(request: Request, response: Response)
     const id = parseInt(request.params.id);
 
     // load an object by a given id
-    //const item = await itemRepository.findOne(id);
     const item = await itemRepository.findOneBy({id: id});
 
     if (!item) {

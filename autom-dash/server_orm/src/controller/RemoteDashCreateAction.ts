@@ -23,12 +23,12 @@ export async function remoteDashCreateAction(request: Request, response: Respons
     const userRepository = getManager().getRepository(User);
 
     // load a user by a given user id
-    const user = await userRepository. findOne(user1.sub);
+    const user = await userRepository.findOneBy({ id: user1.sub});
 
     console.log("RemoteDashCreateAction: user= " + JSON.stringify(user));
 
     const learnIRRepository = getManager().getRepository(LearnIR);
-    const learnIR = await learnIRRepository. findOne(learnIRId);
+    const learnIR = await learnIRRepository.findOneBy({id: learnIRId});
 
     // get an item repository to perform operations
     const itemRepository = getManager().getRepository(RemoteDash);

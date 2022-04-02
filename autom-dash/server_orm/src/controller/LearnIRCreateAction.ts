@@ -20,8 +20,7 @@ export async function learnIRCreateAction(request: Request, response: Response) 
     const userRepository = getManager().getRepository(User);
 
     // load a user by a given user id
-    //const user = await userRepository. findOne(userId);
-    const user = await userRepository. findOne(user1.sub);
+    const user = await userRepository. findOneBy({id: user1.sub});
 
     console.log("learnIRCreateAction: user= " + JSON.stringify(user));
     // get an item repository to perform operations

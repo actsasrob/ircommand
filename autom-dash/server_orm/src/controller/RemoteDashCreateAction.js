@@ -28,10 +28,10 @@ function remoteDashCreateAction(request, response) {
         // get a user repository to perform operations with user 
         const userRepository = (0, typeorm_1.getManager)().getRepository(User_1.User);
         // load a user by a given user id
-        const user = yield userRepository.findOne(user1.sub);
+        const user = yield userRepository.findOneBy({ id: user1.sub });
         console.log("RemoteDashCreateAction: user= " + JSON.stringify(user));
         const learnIRRepository = (0, typeorm_1.getManager)().getRepository(LearnIR_1.LearnIR);
-        const learnIR = yield learnIRRepository.findOne(learnIRId);
+        const learnIR = yield learnIRRepository.findOne({ id: learnIRId });
         // get an item repository to perform operations
         const itemRepository = (0, typeorm_1.getManager)().getRepository(RemoteDash_1.RemoteDash);
         // create a real object from json object sent over http
