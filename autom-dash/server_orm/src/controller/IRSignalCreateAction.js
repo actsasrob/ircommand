@@ -26,7 +26,7 @@ function IRSignalCreateAction(request, response) {
         const userRepository = (0, typeorm_1.getManager)().getRepository(User_1.User);
         // load a user by a given user id
         //const user = await userRepository. findOne(userId);
-        const user = yield userRepository.findOne(user1.sub);
+        const user = yield userRepository.findOneBy({ id: user1.sub });
         console.log("IRSignalCreateAction: user= " + JSON.stringify(user));
         // get an item repository to perform operations
         const itemRepository = (0, typeorm_1.getManager)().getRepository(IRSignal_1.IRSignal);
